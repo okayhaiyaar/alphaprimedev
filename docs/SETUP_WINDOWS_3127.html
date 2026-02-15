@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ALPHA-PRIME Local Setup (Windows 11 + Python 3.12.7)</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #121933;
+      --panel2: #192347;
+      --text: #e8ecff;
+      --muted: #a9b3d9;
+      --accent: #60a5fa;
+      --ok: #34d399;
+      --warn: #fbbf24;
+      --danger: #fb7185;
+      --code: #0a0f1f;
+      --border: #2d3a67;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Segoe UI, Roboto, Arial, sans-serif;
+      background: linear-gradient(180deg, #070b17 0%, #0b1020 100%);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    a { color: #93c5fd; }
+    .layout { display: grid; grid-template-columns: 320px 1fr; gap: 24px; max-width: 1600px; margin: 0 auto; padding: 20px; }
+    .toc {
+      position: sticky; top: 12px; align-self: start;
+      background: rgba(18,25,51,.95); border: 1px solid var(--border); border-radius: 14px; padding: 16px;
+      max-height: calc(100vh - 24px); overflow: auto;
+    }
+    .toc h2 { margin: 0 0 10px; font-size: 18px; }
+    .toc a { text-decoration: none; color: var(--muted); display: block; padding: 4px 0; font-size: 14px; }
+    .toc a:hover { color: #c7d2fe; }
+    .main { min-width: 0; }
+    .hero, section {
+      background: rgba(18,25,51,.8); border: 1px solid var(--border); border-radius: 14px; padding: 20px; margin-bottom: 18px;
+    }
+    h1, h2, h3 { line-height: 1.25; }
+    h1 { margin: 0 0 8px; font-size: 30px; }
+    h2 { margin-top: 0; font-size: 24px; }
+    h3 { margin-bottom: 8px; font-size: 18px; }
+    .meta { color: var(--muted); font-size: 14px; }
+    .controls {
+      display: grid; grid-template-columns: repeat(3, minmax(220px,1fr)); gap: 12px; margin-top: 14px;
+      background: var(--panel2); border: 1px solid var(--border); border-radius: 10px; padding: 12px;
+    }
+    label { font-weight: 600; font-size: 13px; display: block; margin-bottom: 6px; }
+    select, input[type="search"] {
+      width: 100%; background: #0d142b; color: var(--text); border: 1px solid var(--border); border-radius: 8px; padding: 8px;
+    }
+    .callout { border-left: 4px solid var(--accent); padding: 10px 12px; background: #0f1734; border-radius: 8px; margin: 10px 0; }
+    .callout.warn { border-left-color: var(--warn); }
+    .callout.danger { border-left-color: var(--danger); }
+    .callout.ok { border-left-color: var(--ok); }
+    ul { margin-top: 6px; }
+    .cmd {
+      margin: 10px 0 14px; border: 1px solid var(--border); border-radius: 10px; overflow: hidden;
+      background: var(--code);
+    }
+    .cmd-head {
+      display: flex; justify-content: space-between; align-items: center;
+      font-size: 12px; color: var(--muted); padding: 8px 10px; border-bottom: 1px solid var(--border); background: #111b38;
+    }
+    .cmd button {
+      background: #1d4ed8; color: #fff; border: 0; border-radius: 6px; padding: 5px 8px; cursor: pointer; font-size: 12px;
+    }
+    pre { margin: 0; padding: 12px; overflow: auto; font-size: 13px; }
+    code { font-family: Consolas, "Courier New", monospace; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 12px; margin-right: 6px; }
+    .req { background: #3f1d3c; color: #fbcfe8; }
+    .opt { background: #1d3f3a; color: #a7f3d0; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .small { font-size: 13px; color: var(--muted); }
+    .hidden-by-filter { display: none !important; }
+    @media (max-width: 1150px) { .layout { grid-template-columns: 1fr; } .toc { position: static; max-height: none; } .grid2 { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <div class="layout">
+    <nav class="toc">
+      <h2>Table of Contents</h2>
+      <a href="#header">0) Header</a>
+      <a href="#quickstart">1) Fastest Path</a>
+      <a href="#prereqs">2) Prerequisites</a>
+      <a href="#clone">3) Download / Clone</a>
+      <a href="#venv">4) Environment Setup (venv)</a>
+      <a href="#install">5) Installation Paths</a>
+      <a href="#env">6) Configuration (.env)</a>
+      <a href="#run">7) Run Commands</a>
+      <a href="#verify">8) Verification & Diagnostics</a>
+      <a href="#troubleshooting">9) Troubleshooting</a>
+      <a href="#reset">10) Reset / Clean Reinstall</a>
+      <a href="#index">11) Appendix: Full Command Index</a>
+    </nav>
+
+    <main class="main">
+      <section class="hero" id="header">
+        <h1>ALPHA-PRIME Local Setup (Windows 11 + Python 3.12.7)</h1>
+        <div class="meta">Project: <strong>alpha-prime</strong> | Version: <strong>2.0.0</strong> (from <code>pyproject.toml</code>) | Last updated: <strong>2026-02-15 20:15 UTC</strong>.</div>
+        <div class="callout ok">Goal: get local UI running fast (MOCK mode), then optionally API and scheduler. This runbook is local-only (no Docker required).</div>
+        <div class="controls">
+          <div>
+            <label for="networkFilter">Toggle: Online / Restricted Network</label>
+            <select id="networkFilter">
+              <option value="all">Show All</option>
+              <option value="online">Online Only</option>
+              <option value="restricted">Restricted Network Only</option>
+            </select>
+          </div>
+          <div>
+            <label for="tierFilter">Toggle: Core / API / Full</label>
+            <select id="tierFilter">
+              <option value="all">Show All Tiers</option>
+              <option value="core">Core</option>
+              <option value="api">API</option>
+              <option value="full">Full</option>
+            </select>
+          </div>
+          <div>
+            <label for="searchBox">Search (headings + text)</label>
+            <input id="searchBox" type="search" placeholder="e.g. wheelhouse, scheduler, execution policy" />
+          </div>
+        </div>
+      </section>
+
+      <section id="quickstart" data-net="all" data-tier="all" class="filterable">
+        <h2>1) Fastest Path (Quickstart: ~10 minutes)</h2>
+        <div class="callout"><span class="badge req">REQUIRED</span>Python 3.12.7 already installed and on PATH.</div>
+
+        <h3>Quickstart A: Online Core Tier (recommended)</h3>
+        <div class="cmd" data-net="online" data-tier="core"><div class="cmd-head">PowerShell<button class="copy-btn">Copy</button></div><pre><code>python --version
+where python
+git --version
+mkdir C:\dev -ErrorAction SilentlyContinue
+cd C:\dev
+git clone https://github.com/okayhaiyaar/alphaprimedev.git
+cd .\alphaprimedev
+.\scripts\bootstrap_windows.ps1 -Tier core -Mode online -Mock $true
+.\.venv\Scripts\alphaprime doctor
+python .\scripts\selfcheck.py
+.\scripts\run_ui.ps1 -Port 8501</code></pre></div>
+        <ul>
+          <li>Expected URL: <code>http://127.0.0.1:8501</code>.</li>
+          <li>Expected selfcheck: <code>Self-check PASSED.</code></li>
+          <li>Expected doctor highlights: <code>MOCK_API_CALLS: on</code>, wheelhouse presence yes/no, API deps status.</li>
+        </ul>
+
+        <h3>Quickstart B: Restricted Network Core Tier (pip 403 path)</h3>
+        <div class="grid2">
+          <div>
+            <p class="small">On an internet-enabled Windows machine:</p>
+            <div class="cmd" data-net="restricted" data-tier="core"><div class="cmd-head">PowerShell<button class="copy-btn">Copy</button></div><pre><code>cd C:\dev\alphaprimedev
+.\.venv\Scripts\Activate.ps1
+.\scripts\build_wheelhouse.ps1 -Tier core -PythonVersion 3.12 -Platform win_amd64
+# Copy project + wheelhouse to restricted machine</code></pre></div>
+          </div>
+          <div>
+            <p class="small">On restricted machine:</p>
+            <div class="cmd" data-net="restricted" data-tier="core"><div class="cmd-head">PowerShell<button class="copy-btn">Copy</button></div><pre><code>cd C:\dev\alphaprimedev
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+.\scripts\install_offline.ps1 -Tier core
+python -m pip install --no-build-isolation --no-deps -e .
+Copy-Item .env.example .env
+.\scripts\run_ui.ps1 -Port 8501</code></pre></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="prereqs" class="filterable" data-net="all" data-tier="all">
+        <h2>2) Prerequisites (Windows)</h2>
+        <h3>Python 3.12.7 checks</h3>
+        <div class="cmd"><div class="cmd-head">PowerShell<button class="copy-btn">Copy</button></div><pre><code>python --version
+where python
+python -m pip --version</code></pre></div>
+        <div class="callout warn">If version is not 3.12.7, fix PATH or use the Python Launcher: <code>py -3.12 --version</code>.</div>
+
+        <h3>Git check</h3>
+        <div class="cmd"><div class="cmd-head">PowerShell<button class="copy-btn">Copy</button></div><pre><code>git --version</code></pre></div>
+
+        <h3>PowerShell execution policy (for <code>.ps1</code> scripts)</h3>
+        <div class="cmd"><div class="cmd-head">PowerShell<button class="copy-btn">Copy</button></div><pre><code>Get-ExecutionPolicy -List
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser</code></pre></div>
+
+        <h3>Windows long paths (recommended once)</h3>
+        <div class="cmd"><div class="cmd-head">PowerShell<button class="copy-btn">Copy</button></div><pre><code>git config --global core.longpaths true
+# optional admin-level:
+# git config --system core.longpaths true</code></pre></div>
+
+        <h3>Recommended install location + default ports</h3>
+        <ul>
+          <li>Use short path: <code>C:\dev\alphaprimedev</code>.</li>
+          <li>UI default port: <code>8501</code>.</li>
+          <li>API default port: <code>8000</code>.</li>
+        </ul>
+      </section>
+
+      <section id="clone" class="filterable" data-net="all" data-tier="all">
+        <h2>3) Download / Clone</h2>
+        <div class="cmd"><div class="cmd-head">PowerShell<button class="copy-btn">Copy</button></div><pre><code>mkdir C:\dev -ErrorAction SilentlyContinue
+cd C:\dev
+git clone https://github.com/okayhaiyaar/alphaprimedev.git
+cd .\alphaprimedev</code></pre></div>
+        <h3>Update later</h3>
+        <div class="cmd"><div class="cmd-head">PowerShell<button class="copy-btn">Copy</button></div><pre><code>cd C:\dev\alphaprimedev
+git pull</code></pre></div>
+        <p>Rebuild venv if Python minor version changed, dependency set changed heavily, or imports start failing.</p>
+      </section>
+
+      <section id="venv" class="filterable" data-net="all" data-tier="all">
+        <h2>4) Environment Setup (venv)</h2>
+        <div class="cmd"><div class="cmd-head">PowerShell<button class="copy-btn">Copy</button></div><pre><code>cd C:\dev\alphaprimedev
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip setuptools wheel</code></pre></div>
+        <h3>Verify venv active</h3>
+        <div class="cmd"><div class="cmd-head">PowerShell<button class="copy-btn">Copy</button></div><pre><code>$env:VIRTUAL_ENV
+python -c "import sys; print(sys.prefix)"
+where python</code></pre></div>
+      </section>
+
+      <section id="install" class="filterable" data-net="all" data-tier="all">
+        <h2>5) Installation Paths (Online vs Restricted Network)</h2>
+
+        <h3>A) Online install (tier-aware)</h3>
+        <div class="callout"><span class="badge req">REQUIRED</span>Tier mapping from scripts/docs: <code>core=requirements.txt</code>, <code>api=requirements.txt + requirements-api.txt</code>, <code>full=requirements-full.txt</code>.</div>
+
+        <div class="cmd" data-net="online" data-tier="core"><div class="cmd-head">Core tier (online)<button class="copy-btn">Copy</button></div><pre><code>cd C:\dev\alphaprimedev
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python -m pip install --no-build-isolation --no-deps -e .
+alphaprime-version
+python .\scripts\selfcheck.py</code></pre></div>
+
+        <div class="cmd" data-net="online" data-tier="api"><div class="cmd-head">API tier (online)<button class="copy-btn">Copy</button></div><pre><code>cd C:\dev\alphaprimedev
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python -m pip install -r requirements-api.txt
+python -m pip install --no-build-isolation --no-deps -e .
+python .\scripts\selfcheck.py --api</code></pre></div>
+
+        <div class="cmd" data-net="online" data-tier="full"><div class="cmd-head">Full tier (online)<button class="copy-btn">Copy</button></div><pre><code>cd C:\dev\alphaprimedev
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements-full.txt
+python -m pip install --no-build-isolation --no-deps -e .
+python .\scripts\selfcheck.py --full</code></pre></div>
+
+        <h3>B) Restricted network / pip 403</h3>
+        <p>Common causes: blocked PyPI, SSL interception, proxy auth, required internal index.</p>
+
+        <div class="cmd" data-net="restricted" data-tier="all"><div class="cmd-head">Quick diagnostics<button class="copy-btn">Copy</button></div><pre><code>python -m pip --version
+python -m pip config debug
+python -m pip index versions streamlit</code></pre></div>
+
+        <div class="cmd" data-net="restricted" data-tier="all"><div class="cmd-head">Proxy env vars (session-only example)<button class="copy-btn">Copy</button></div><pre><code>$env:HTTPS_PROXY="http://username:password@proxy.company.local:8080"
+$env:HTTP_PROXY="http://username:password@proxy.company.local:8080"
+python -m pip install -r requirements.txt</code></pre></div>
+
+        <div class="cmd" data-net="restricted" data-tier="all"><div class="cmd-head">pip.ini template path<button class="copy-btn">Copy</button></div><pre><code>notepad $env:APPDATA\pip\pip.ini</code></pre></div>
+
+        <div class="cmd" data-net="restricted" data-tier="all"><div class="cmd-head">Wheelhouse build (online machine)<button class="copy-btn">Copy</button></div><pre><code>cd C:\dev\alphaprimedev
+.\.venv\Scripts\Activate.ps1
+.\scripts\build_wheelhouse.ps1 -Tier core -PythonVersion 3.12 -Platform win_amd64
+.\scripts\build_wheelhouse.ps1 -Tier api -PythonVersion 3.12 -Platform win_amd64
+.\scripts\build_wheelhouse.ps1 -Tier full -PythonVersion 3.12 -Platform win_amd64</code></pre></div>
+
+        <div class="cmd" data-net="restricted" data-tier="all"><div class="cmd-head">Transfer wheelhouse to restricted machine<button class="copy-btn">Copy</button></div><pre><code>Copy-Item -Recurse .\wheelhouse \\restricted-host\drop\alphaprimedev\wheelhouse</code></pre></div>
+
+        <div class="cmd" data-net="restricted" data-tier="core"><div class="cmd-head">Offline install core<button class="copy-btn">Copy</button></div><pre><code>cd C:\dev\alphaprimedev
+.\.venv\Scripts\Activate.ps1
+.\scripts\install_offline.ps1 -Tier core
+python -m pip install --no-build-isolation --no-deps -e .
+python .\scripts\selfcheck.py
+.\.venv\Scripts\alphaprime doctor</code></pre></div>
+
+        <div class="cmd" data-net="restricted" data-tier="api"><div class="cmd-head">Offline install api<button class="copy-btn">Copy</button></div><pre><code>cd C:\dev\alphaprimedev
+.\.venv\Scripts\Activate.ps1
+.\scripts\install_offline.ps1 -Tier api
+python -m pip install --no-build-isolation --no-deps -e .
+python .\scripts\selfcheck.py --api
+.\.venv\Scripts\alphaprime doctor</code></pre></div>
+
+        <div class="cmd" data-net="restricted" data-tier="full"><div class="cmd-head">Offline install full<button class="copy-btn">Copy</button></div><pre><code>cd C:\dev\alphaprimedev
+.\.venv\Scripts\Activate.ps1
+.\scripts\install_offline.ps1 -Tier full
+python -m pip install --no-build-isolation --no-deps -e .
+python .\scripts\selfcheck.py --full
+.\.venv\Scripts\alphaprime doctor</code></pre></div>
+      </section>
+
+      <section id="env" class="filterable" data-net="all" data-tier="all">
+        <h2>6) Configuration (.env)</h2>
+        <div class="callout danger"><span class="badge req">REQUIRED</span><code>.env</code> is local machine config. Do NOT commit it. Never paste real secrets into docs or source control.</div>
+
+        <div class="cmd"><div class="cmd-head">Create local .env<button class="copy-btn">Copy</button></div><pre><code>cd C:\dev\alphaprimedev
+Copy-Item .env.example .env
+notepad .env</code></pre></div>
+
+        <h3>Minimal startup .env (MOCK mode, safest)</h3>
+        <div class="cmd"><div class="cmd-head">.env minimal block<button class="copy-btn">Copy</button></div><pre><code>OPENAI_API_KEY=sk-test
+MOCK_API_CALLS=true
+PAPER_TRADING_ONLY=true
+SCHEDULER_ARMED=false
+LOG_LEVEL=INFO
+TIMEZONE=Asia/Kolkata
+MARKET_OPEN_TIME=09:30
+MARKET_CLOSE_TIME=15:30</code></pre></div>
+
+        <h3>Optional .env keys (only if needed)</h3>
+        <ul>
+          <li><span class="badge opt">OPTIONAL</span><code>DISCORD_WEBHOOK_URL</code>, <code>ALERT_MIN_CONFIDENCE</code>.</li>
+          <li><span class="badge opt">OPTIONAL</span><code>REDDIT_CLIENT_ID</code>, <code>REDDIT_CLIENT_SECRET</code>, <code>NEWS_API_KEY</code>.</li>
+          <li><span class="badge opt">OPTIONAL</span><code>CACHE_DIR</code>, <code>LOG_DIR</code>, <code>PORTFOLIO_PATH</code>, <code>TRADE_HISTORY_PATH</code>.</li>
+          <li><span class="badge opt">OPTIONAL</span><code>DATABASE_URL</code>, <code>REDIS_URL</code> (not required for local core flow).</li>
+        </ul>
+
+        <h3>Common misconfigurations</h3>
+        <ul>
+          <li><code>OPENAI_API_KEY=sk-test</code> with <code>MOCK_API_CALLS=false</code> ⇒ config validation fails.</li>
+          <li>Missing <code>.env</code> ⇒ startup validation fails and asks to copy from <code>.env.example</code>.</li>
+          <li>Using quotes incorrectly in dotenv values can break parsing; use plain <code>KEY=VALUE</code>.</li>
+        </ul>
+      </section>
+
+      <section id="run" class="filterable" data-net="all" data-tier="all">
+        <h2>7) Run Commands (UI, API, Scheduler)</h2>
+
+        <h3>A) UI (Streamlit)</h3>
+        <div class="cmd" data-tier="core"><div class="cmd-head">Run UI<button class="copy-btn">Copy</button></div><pre><code>cd C:\dev\alphaprimedev
+.\.venv\Scripts\Activate.ps1
+python -m streamlit run app.py --server.port 8501 --server.address 127.0.0.1
+# wrapper
+.\scripts\run_ui.ps1 -Port 8501
+# console
+alphaprime-ui --port 8501</code></pre></div>
+        <p>Success signals: browser opens on <code>http://127.0.0.1:8501</code>; logs written to <code>logs\alpha_prime.log</code>.</p>
+
+        <h3>B) API (FastAPI factory)</h3>
+        <div class="callout warn"><span class="badge req">REQUIRED</span>API tier dependencies must be installed first.</div>
+        <div class="cmd" data-tier="api"><div class="cmd-head">Run API<button class="copy-btn">Copy</button></div><pre><code>cd C:\dev\alphaprimedev
+.\.venv\Scripts\Activate.ps1
+python .\scripts\selfcheck.py --api
+python -m uvicorn dashboard.app_v2:create_app --factory --reload --port 8000
+# wrapper
+.\scripts\run_api.ps1 -Port 8000
+# console
+alphaprime-api --port 8000 --reload</code></pre></div>
+        <div class="cmd" data-tier="api"><div class="cmd-head">Verify API<button class="copy-btn">Copy</button></div><pre><code>Invoke-WebRequest http://127.0.0.1:8000/health
+Start-Process http://127.0.0.1:8000/docs</code></pre></div>
+        <p>Look for RUN_ID and mock mode status in logs/doctor output.</p>
+
+        <h3>C) Scheduler</h3>
+        <div class="callout"><span class="badge req">SAFE DEFAULT</span>Analysis-only unless explicitly armed; execution gate also checks <code>PAPER_TRADING_ONLY=true</code>.</div>
+        <div class="cmd"><div class="cmd-head">Run once (analysis-only)<button class="copy-btn">Copy</button></div><pre><code>cd C:\dev\alphaprimedev
+.\.venv\Scripts\Activate.ps1
+.\scripts\run_scheduler.ps1 -Mode once
+# console equivalent
+alphaprime-scheduler once</code></pre></div>
+
+        <div class="cmd"><div class="cmd-head">Armed mode (paper only; explicit warning)<button class="copy-btn">Copy</button></div><pre><code>cd C:\dev\alphaprimedev
+.\.venv\Scripts\Activate.ps1
+$env:SCHEDULER_ARMED="true"
+$env:PAPER_TRADING_ONLY="true"
+alphaprime-scheduler once --armed --execute
+# wrapper alternative
+.\scripts\run_scheduler.ps1 -Mode once -Armed</code></pre></div>
+        <p>Logs to inspect: cycle start/finish, action counts, warnings about execution gate.</p>
+      </section>
+
+      <section id="verify" class="filterable" data-net="all" data-tier="all">
+        <h2>8) Verification &amp; Diagnostics</h2>
+        <div class="cmd"><div class="cmd-head">Doctor + selfcheck<button class="copy-btn">Copy</button></div><pre><code>cd C:\dev\alphaprimedev
+.\.venv\Scripts\Activate.ps1
+alphaprime doctor
+python -m alphaprime.cli doctor
+python .\scripts\selfcheck.py
+python .\scripts\selfcheck.py --api
+python .\scripts\selfcheck.py --full</code></pre></div>
+        <ul>
+          <li><code>selfcheck.py</code> returns non-zero on missing required deps for chosen mode.</li>
+          <li><code>doctor</code> prints masked secret display and RUN_ID, plus wheelhouse/api-deps hints.</li>
+          <li>If command not found, reactivate venv and re-run editable install (<code>python -m pip install --no-build-isolation --no-deps -e .</code>).</li>
+        </ul>
+      </section>
+
+      <section id="troubleshooting" class="filterable" data-net="all" data-tier="all">
+        <h2>9) Troubleshooting (Windows-first)</h2>
+
+        <h3>pip 403 / restricted network</h3>
+        <ul><li>Preferred fix: wheelhouse flow (<code>build_wheelhouse.ps1</code> + <code>install_offline.ps1</code>).</li></ul>
+
+        <h3>PowerShell blocks script execution</h3>
+        <div class="cmd"><div class="cmd-head">Execution policy fix<button class="copy-btn">Copy</button></div><pre><code>Get-ExecutionPolicy -List
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser</code></pre></div>
+
+        <h3>venv activation issues</h3>
+        <div class="cmd"><div class="cmd-head">Manual checks<button class="copy-btn">Copy</button></div><pre><code>Test-Path .\.venv\Scripts\python.exe
+.\.venv\Scripts\Activate.ps1
+where python
+python --version</code></pre></div>
+
+        <h3>Port already in use (8501/8000)</h3>
+        <div class="cmd"><div class="cmd-head">Find and stop process<button class="copy-btn">Copy</button></div><pre><code>Get-NetTCPConnection -LocalPort 8501 | Select-Object LocalAddress,LocalPort,State,OwningProcess
+Get-NetTCPConnection -LocalPort 8000 | Select-Object LocalAddress,LocalPort,State,OwningProcess
+Stop-Process -Id &lt;pid&gt; -Force</code></pre></div>
+
+        <h3>Streamlit blank page / stale session / widget collisions</h3>
+        <ul>
+          <li>Hard refresh (<code>Ctrl+F5</code>), restart UI process.</li>
+          <li>Clear local cache folder (<code>data\cache</code>), then restart.</li>
+        </ul>
+
+        <h3>yfinance/network timeouts</h3>
+        <ul><li>Expect warnings/errors in logs; analysis may skip symbols and continue. Validate internet/DNS and retry.</li></ul>
+
+        <h3>OpenAI key errors</h3>
+        <ul><li><code>sk-test</code> is valid only with <code>MOCK_API_CALLS=true</code>.</li></ul>
+
+        <h3>Editable install / console command not recognized</h3>
+        <div class="cmd"><div class="cmd-head">Repair command entrypoints<button class="copy-btn">Copy</button></div><pre><code>.\.venv\Scripts\Activate.ps1
+python -m pip install --no-build-isolation --no-deps -e .
+alphaprime-version</code></pre></div>
+
+        <h3>Path issues (Windows long paths)</h3>
+        <ul><li>Enable longpaths; keep repo under short path like <code>C:\dev</code>.</li></ul>
+      </section>
+
+      <section id="reset" class="filterable" data-net="all" data-tier="all">
+        <h2>10) Reset / Clean Reinstall (fast)</h2>
+        <div class="callout warn">These commands remove local environment and cache. They do not delete your git history.</div>
+
+        <h3>Recreate venv</h3>
+        <div class="cmd"><div class="cmd-head">Clean venv + reinstall<button class="copy-btn">Copy</button></div><pre><code>cd C:\dev\alphaprimedev
+if (Test-Path .\.venv) { Remove-Item -Recurse -Force .\.venv }
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip setuptools wheel
+.\scripts\bootstrap_windows.ps1 -Tier core -Mode online -Mock $true</code></pre></div>
+
+        <h3>Clear caches and optional local state</h3>
+        <div class="cmd"><div class="cmd-head">Safe local reset helper<button class="copy-btn">Copy</button></div><pre><code>cd C:\dev\alphaprimedev
+.\scripts\reset_local.ps1 -ClearCache -Force
+.\scripts\reset_local.ps1 -ClearCache -ResetPortfolio -Force</code></pre></div>
+
+        <h3>Manual clear (if needed)</h3>
+        <div class="cmd"><div class="cmd-head">Manual cleanup<button class="copy-btn">Copy</button></div><pre><code>if (Test-Path .\data\cache) { Remove-Item -Recurse -Force .\data\cache\* }
+# careful: remove only local runtime files if you want a portfolio reset
+if (Test-Path .\data\portfolio.json) { Remove-Item .\data\portfolio.json -Force }
+if (Test-Path .\data\trade_history.csv) { Remove-Item .\data\trade_history.csv -Force }</code></pre></div>
+      </section>
+
+      <section id="index" class="filterable" data-net="all" data-tier="all">
+        <h2>11) Appendix: Full Command Index</h2>
+
+        <h3>Download</h3>
+        <div class="cmd"><div class="cmd-head">PowerShell<button class="copy-btn">Copy</button></div><pre><code>mkdir C:\dev -ErrorAction SilentlyContinue
+cd C:\dev
+git clone https://github.com/okayhaiyaar/alphaprimedev.git
+cd .\alphaprimedev
+git pull</code></pre></div>
+
+        <h3>venv</h3>
+        <div class="cmd"><div class="cmd-head">PowerShell<button class="copy-btn">Copy</button></div><pre><code>python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install --upgrade pip setuptools wheel</code></pre></div>
+
+        <h3>Install online (core/api/full)</h3>
+        <div class="cmd"><div class="cmd-head">PowerShell<button class="copy-btn">Copy</button></div><pre><code>python -m pip install -r requirements.txt
+python -m pip install -r requirements-api.txt
+python -m pip install -r requirements-full.txt
+python -m pip install --no-build-isolation --no-deps -e .</code></pre></div>
+
+        <h3>Wheelhouse build/install</h3>
+        <div class="cmd"><div class="cmd-head">PowerShell<button class="copy-btn">Copy</button></div><pre><code>.\scripts\build_wheelhouse.ps1 -Tier core -PythonVersion 3.12 -Platform win_amd64
+.\scripts\build_wheelhouse.ps1 -Tier api -PythonVersion 3.12 -Platform win_amd64
+.\scripts\build_wheelhouse.ps1 -Tier full -PythonVersion 3.12 -Platform win_amd64
+.\scripts\install_offline.ps1 -Tier core
+.\scripts\install_offline.ps1 -Tier api
+.\scripts\install_offline.ps1 -Tier full</code></pre></div>
+
+        <h3>Configure .env</h3>
+        <div class="cmd"><div class="cmd-head">PowerShell<button class="copy-btn">Copy</button></div><pre><code>Copy-Item .env.example .env
+notepad .env</code></pre></div>
+
+        <h3>Run UI / API / Scheduler</h3>
+        <div class="cmd"><div class="cmd-head">PowerShell<button class="copy-btn">Copy</button></div><pre><code>.\scripts\run_ui.ps1 -Port 8501
+.\scripts\run_api.ps1 -Port 8000
+.\scripts\run_scheduler.ps1 -Mode once
+.\scripts\run_scheduler.ps1 -Mode once -Armed
+alphaprime-ui --port 8501
+alphaprime-api --port 8000 --reload
+alphaprime-scheduler once
+alphaprime-scheduler once --armed --execute</code></pre></div>
+
+        <h3>Diagnostics</h3>
+        <div class="cmd"><div class="cmd-head">PowerShell<button class="copy-btn">Copy</button></div><pre><code>alphaprime doctor
+python -m alphaprime.cli doctor
+python .\scripts\selfcheck.py
+python .\scripts\selfcheck.py --api
+python .\scripts\selfcheck.py --full</code></pre></div>
+
+        <h3>Troubleshooting utilities</h3>
+        <div class="cmd"><div class="cmd-head">PowerShell<button class="copy-btn">Copy</button></div><pre><code>Get-ExecutionPolicy -List
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+Get-NetTCPConnection -LocalPort 8501
+Get-NetTCPConnection -LocalPort 8000
+Stop-Process -Id &lt;pid&gt; -Force</code></pre></div>
+      </section>
+    </main>
+  </div>
+
+  <script>
+    function copyText(btn) {
+      const code = btn.closest('.cmd').querySelector('pre code').innerText;
+      navigator.clipboard.writeText(code).then(() => {
+        const old = btn.textContent;
+        btn.textContent = 'Copied!';
+        setTimeout(() => btn.textContent = old, 1200);
+      });
+    }
+
+    document.querySelectorAll('.copy-btn').forEach(btn => btn.addEventListener('click', () => copyText(btn)));
+
+    const networkFilter = document.getElementById('networkFilter');
+    const tierFilter = document.getElementById('tierFilter');
+    const searchBox = document.getElementById('searchBox');
+    const blocks = [...document.querySelectorAll('.filterable, .cmd')];
+
+    function matchAttr(el, key, wanted) {
+      if (wanted === 'all') return true;
+      const val = el.getAttribute(key) || 'all';
+      return val === 'all' || val.split(',').includes(wanted);
+    }
+
+    function applyFilters() {
+      const net = networkFilter.value;
+      const tier = tierFilter.value;
+      const q = searchBox.value.trim().toLowerCase();
+
+      blocks.forEach(el => {
+        const netOk = matchAttr(el, 'data-net', net);
+        const tierOk = matchAttr(el, 'data-tier', tier);
+        const textOk = !q || (el.textContent || '').toLowerCase().includes(q);
+        el.classList.toggle('hidden-by-filter', !(netOk && tierOk && textOk));
+      });
+    }
+
+    [networkFilter, tierFilter].forEach(x => x.addEventListener('change', applyFilters));
+    searchBox.addEventListener('input', applyFilters);
+    applyFilters();
+  </script>
+</body>
+</html>

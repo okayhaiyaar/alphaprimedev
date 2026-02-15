@@ -8,9 +8,13 @@ import sys
 from pathlib import Path
 from typing import Any
 
-from config import get_run_id, get_settings, is_mock_mode, mask_openai_key, mask_webhook_url
-
 from . import __version__
+
+_REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+
+from config import get_run_id, get_settings, is_mock_mode, mask_openai_key, mask_webhook_url
 
 
 def _repo_root() -> Path:
