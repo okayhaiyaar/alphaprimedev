@@ -4,7 +4,7 @@ ALPHA-PRIME Risk Management Submodule
 Components:
 - circuit_breakers.py: Trading halt conditions
 - position_sizer.py: ATR/Kelly/Fixed position sizing
-- correlation_check.py: Portfolio correlation limits
+- correlation_monitor.py: Portfolio correlation limits
 
 This package exposes a clean, optional risk management API.
 Importing `alpha_prime.risk` will not fail if individual
@@ -55,14 +55,14 @@ except ImportError:
 
 # Correlation checks
 try:
-    from .correlation_check import (  # type: ignore[attr-defined]
+    from .correlation_monitor import (  # type: ignore[attr-defined]
         calculate_correlation_matrix,
-        check_portfolio_correlation,
+        check_correlation_risk,
     )
 
     __all__.extend(
         [
-            "check_portfolio_correlation",
+            "check_correlation_risk",
             "calculate_correlation_matrix",
         ]
     )

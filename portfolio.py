@@ -61,8 +61,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
-import fcntl
 import numpy as np
+from filelock import FileLock
 
 from config import get_logger, get_settings
 
@@ -308,18 +308,14 @@ def file_lock(file_path: Path):
         file_path: Path for which to acquire lock.
 
     Yields:
-        A file handle on the lock file (do not close it manually).
+        None while the lock is held.
     """
     lock_file = file_path.parent / f"{file_path.name}.lock"
     lock_file.parent.mkdir(parents=True, exist_ok=True)
-    lock_file.touch(exist_ok=True)
+    lock = FileLock(str(lock_file))
 
-    with open(lock_file, "r") as fh:
-        try:
-            fcntl.flock(fh.fileno(), fcntl.LOCK_EX)
-            yield fh
-        finally:
-            fcntl.flock(fh.fileno(), fcntl.LOCK_UN)
+    with lock:
+        yield
 
 
 def atomic_write_json(file_path: Path, data: Dict[str, object]) -> None:

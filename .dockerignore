@@ -362,3 +362,7 @@ Ensure essential templates, code, and configs remain in context.
 # If you run tests in-container, keep fixtures
 !tests/fixtures/
 !tests/fixtures/**
+
+# Offline wheel cache (generated)
+wheelhouse/
+wheelhouse/**

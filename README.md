@@ -48,6 +48,27 @@
 
 ---
 
+
+## 60-second Windows quickstart
+
+```powershell
+.\scripts\bootstrap_windows.ps1
+```
+
+Offline (if `./wheelhouse` is present):
+
+```powershell
+.\scripts\bootstrap_windows.ps1 -Mode offline
+```
+
+Verification:
+
+```powershell
+python scripts/selfcheck.py
+python scripts/selfcheck.py --api   # optional API validation
+alphaprime doctor
+```
+
 ## Overview
 
 ALPHA-PRIME v2.0 is an institutional-style, Python-based **AI trading research system** that combines GPT‑4o reasoning with deterministic quantitative analysis and strict risk management. It is built as a full-stack workflow: **research → analysis → decision → execution → monitoring**, with an emphasis on robustness, observability, and safety.
@@ -145,7 +166,7 @@ Core modules:
 - **research_engine.py** – “Hunter” that collects intel from SEC, news, social APIs.  
 - **data_engine.py** – “Mathematician” that pulls market data and computes indicators.  
 - **brain.py** – “Oracle” that calls GPT‑4o under strict constraints and risk rules.  
-- **app.py / dashboard/app_v2.py** – Streamlit “War Room” dashboard.  
+- **app.py** – Streamlit “War Room” dashboard.  
 - **alerts.py** – Discord and other notifications.  
 - **portfolio.py** – Paper trading ledger with atomic JSON state and CSV trade history.  
 - **scheduler.py** – Cron-like orchestrator for daily scan and signal generation.  
@@ -162,9 +183,12 @@ Extended modules (Tiered):
 
 ## 🚀 Quick Start (5 minutes)
 
+For a Windows 11 + PowerShell walkthrough, see [`docs/RUN_WINDOWS.md`](docs/RUN_WINDOWS.md).
+
+
 ### Prerequisites
 
-- Python **3.10+** (3.11 recommended)  
+- Python **3.12.x** (recommended for Windows 11 local setup)  
 - Git  
 - OpenAI API key (create one at <https://platform.openai.com/api-keys>)  
 - Docker & Docker Compose (optional but recommended for reproducible runtime)
@@ -212,24 +236,53 @@ docker-compose down
 
 ---
 
-### Option 2: Local Python
+### Option 2: Local Python (Windows-first)
+
+```powershell
+# Online bootstrap (recommended)
+.\scripts\bootstrap_windows.ps1
+
+# Offline bootstrap (uses .\wheelhouse)
+.\scripts\bootstrap_windows.ps1 -Mode offline
+```
+
+Manual path (if needed):
 
 ```bash
 # Clone repository
 git clone https://github.com/yourusername/alpha-prime.git
 cd alpha-prime
 
-# Create and activate virtual environment
 python -m venv .venv
 source .venv/bin/activate        # Windows: .venv\Scripts\activate
-
-# Install dependencies
 pip install --upgrade pip
 pip install -r requirements.txt
-
-# Install Playwright browser (Chromium)
-playwright install chromium
 ```
+
+
+
+### Offline API (tiered wheelhouse)
+
+```powershell
+# Build API-capable wheelhouse on online machine
+.\scripts\build_wheelhouse.ps1 -Tier api
+
+# On restricted machine
+.\scripts\install_offline.ps1 -Tier api
+python scripts/selfcheck.py --api
+alphaprime-api --port 8000 --reload
+```
+
+### If pip fails with 403 / behind proxy
+
+If `pip install -r requirements.txt` returns `403 Forbidden`, this is usually a network/proxy/index policy issue (not a requirements formatting issue). Use the Windows restricted-network paths in [`docs/RUN_WINDOWS.md`](docs/RUN_WINDOWS.md):
+
+- Proxy configuration (`HTTPS_PROXY` / `HTTP_PROXY`)
+- `pip.ini` internal-index setup
+- Offline wheelhouse workflow (`scripts/build_wheelhouse.ps1 -Tier core|api|full` + `scripts/install_offline.ps1 -Tier core|api|full`)
+- Verify install readiness with `python scripts/selfcheck.py` (UI), `--api` (FastAPI), or `--full` (strict full stack).
+- For optional heavy/dev dependencies use `pip install -r requirements-full.txt`.
+
 
 Configure environment:
 
@@ -250,9 +303,7 @@ python config.py  # should log INFO and exit cleanly
 Run dashboard:
 
 ```bash
-streamlit run dashboard/app_v2.py \
-  --server.port=8501 \
-  --server.address=0.0.0.0
+streamlit run app.py --server.port=8501 --server.address=0.0.0.0
 ```
 
 Run scheduler (separate terminal):
@@ -262,7 +313,21 @@ source .venv/bin/activate
 python scheduler.py
 ```
 
+Optional: run FastAPI service:
+
+```bash
+python scripts/selfcheck.py --api
+uvicorn dashboard.app_v2:create_app --factory --reload --port 8000
+```
+
 ---
+
+
+## Architecture / Entrypoints
+
+- **UI**: `app.py` (run via `streamlit run app.py` or `./scripts/run_ui.ps1`).
+- **API**: `dashboard/app_v2.py` FastAPI factory (run via `uvicorn dashboard.app_v2:create_app --factory ...` or `./scripts/run_api.ps1`).
+- **Scheduler**: `scheduler.py` with `scheduled`, `once`, `ticker`, `test` modes (safe analysis-only by default unless armed).
 
 ## Configuration
 
@@ -740,3 +805,8 @@ This software is for **educational and research** purposes only and does **not**
 
 If you deploy or extend ALPHA-PRIME in your own research stack, consider sharing anonymized learnings and improvements via issues or pull requests.
 ```
+
+
+## Release hygiene
+
+See `docs/RELEASE.md` for version bump, changelog, and tagging steps.

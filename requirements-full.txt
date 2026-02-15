@@ -1,0 +1,22 @@
+# Full environment (runtime + API + optional heavy analytics + dev tooling)
+-r requirements.txt
+-r requirements-api.txt
+
+# Optional/heavy analytics stack
+pyportfolioopt>=1.5.5,<2.0.0
+quantstats>=0.0.62,<0.1.0
+evidently>=0.4.15,<0.5.0
+great-expectations>=0.18.8,<0.19.0
+scikit-learn>=1.4.0,<2.0.0
+xgboost>=2.0.3,<3.0.0
+playwright>=1.41.0,<2.0.0
+
+# Development/testing tools
+pytest>=7.4.0,<8.0.0
+pytest-cov>=4.1.0,<5.0.0
+pytest-asyncio>=0.23.0,<0.24.0
+black>=23.12.0,<24.0.0
+flake8>=7.0.0,<8.0.0
+mypy>=1.8.0,<2.0.0
+isort>=5.13.0,<6.0.0
+pre-commit>=3.6.0,<4.0.0

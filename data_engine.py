@@ -53,17 +53,27 @@ from typing import Dict, List, Optional
 
 import numpy as np
 import pandas as pd
-import pandas_ta as ta
 import yfinance as yf
 from diskcache import Cache
 from tenacity import retry, stop_after_attempt, wait_exponential
 
 from config import get_logger, get_settings
 
+try:
+    import pandas_ta as ta  # type: ignore
+
+    HAS_PANDAS_TA = True
+except ImportError:  # pragma: no cover - optional dependency path
+    ta = None
+    HAS_PANDAS_TA = False
+
 # Initialize module-level objects
 settings = get_settings()
 logger = get_logger(__name__)
 cache = Cache(f"{settings.cache_dir}/market_data")
+
+if not HAS_PANDAS_TA:
+    logger.warning("pandas_ta not installed; using built-in indicator fallback.")
 
 # ──────────────────────────────────────────────────────────
 # DATA SCHEMAS
@@ -226,7 +236,8 @@ def _fetch_yfinance(
     """
     logger.info("Fetching market data via yfinance: %s %s %s", ticker, period, interval)
     t = yf.Ticker(ticker)
-    df = t.history(period=period, interval=interval, auto_adjust=True)
+    timeout_s = int(getattr(settings, "request_timeout_seconds", 30))
+    df = t.history(period=period, interval=interval, auto_adjust=True, timeout=timeout_s)
     if df.empty:
         raise ValueError(f"No data returned from yfinance for {ticker}.")
     return df
@@ -234,11 +245,17 @@ def _fetch_yfinance(
 
 def _fallback_fetch(ticker: str, period: str, interval: str) -> pd.DataFrame:
     """
-    Fallback data fetcher (placeholder for future APIs).
+    Fallback data fetcher returning empty data when primary providers fail.
 
-    Currently just re-raises; hook for adding alternate data providers.
+    This keeps UI/scheduler paths resilient under restricted-network conditions.
     """
-    raise RuntimeError(f"No fallback data provider configured for {ticker}.")
+    logger.warning(
+        "Returning empty fallback market data for %s (%s, %s).",
+        ticker,
+        period,
+        interval,
+    )
+    return pd.DataFrame(columns=["Date", "Open", "High", "Low", "Close", "Volume"])
 
 
 def _cache_key(ticker: str, period: str, interval: str) -> str:
@@ -463,15 +480,26 @@ def _compute_trend(df: pd.DataFrame) -> TrendIndicators:
     """Compute EMA/SMA-based trend indicators."""
     df = df.copy()
 
-    df.ta.ema(length=9, append=True)
-    df.ta.ema(length=20, append=True)
-    df.ta.ema(length=50, append=True)
-    if len(df) >= 200:
-        df.ta.ema(length=200, append=True)
+    if HAS_PANDAS_TA:
+        df.ta.ema(length=9, append=True)
+        df.ta.ema(length=20, append=True)
+        df.ta.ema(length=50, append=True)
+        if len(df) >= 200:
+            df.ta.ema(length=200, append=True)
 
-    df.ta.sma(length=50, append=True)
-    if len(df) >= 200:
-        df.ta.sma(length=200, append=True)
+        df.ta.sma(length=50, append=True)
+        if len(df) >= 200:
+            df.ta.sma(length=200, append=True)
+    else:
+        df["EMA_9"] = df["Close"].ewm(span=9, adjust=False).mean()
+        df["EMA_20"] = df["Close"].ewm(span=20, adjust=False).mean()
+        df["EMA_50"] = df["Close"].ewm(span=50, adjust=False).mean()
+        if len(df) >= 200:
+            df["EMA_200"] = df["Close"].ewm(span=200, adjust=False).mean()
+
+        df["SMA_50"] = df["Close"].rolling(window=50, min_periods=1).mean()
+        if len(df) >= 200:
+            df["SMA_200"] = df["Close"].rolling(window=200, min_periods=1).mean()
 
     last = df.iloc[-1]
     close = float(last["Close"])
@@ -514,8 +542,23 @@ def _compute_momentum(df: pd.DataFrame) -> MomentumIndicators:
     """Compute RSIs and Stochastics."""
     df = df.copy()
 
-    df.ta.rsi(length=14, append=True)
-    df.ta.stoch(append=True)
+    if HAS_PANDAS_TA:
+        df.ta.rsi(length=14, append=True)
+        df.ta.stoch(append=True)
+    else:
+        delta = df["Close"].diff()
+        gain = delta.where(delta > 0, 0.0)
+        loss = -delta.where(delta < 0, 0.0)
+        avg_gain = gain.rolling(window=14, min_periods=14).mean()
+        avg_loss = loss.rolling(window=14, min_periods=14).mean()
+        rs = avg_gain / avg_loss.replace(0, np.nan)
+        df["RSI_14"] = 100 - (100 / (1 + rs))
+
+        lowest_low = df["Low"].rolling(window=14, min_periods=14).min()
+        highest_high = df["High"].rolling(window=14, min_periods=14).max()
+        stoch_k = ((df["Close"] - lowest_low) / (highest_high - lowest_low).replace(0, np.nan)) * 100
+        df["STOCHk_14_3_3"] = stoch_k
+        df["STOCHd_14_3_3"] = stoch_k.rolling(window=3, min_periods=3).mean()
 
     last = df.iloc[-1]
     rsi = float(last.get("RSI_14", np.nan))
@@ -556,8 +599,21 @@ def _compute_volatility(df: pd.DataFrame) -> VolatilityIndicators:
     """Compute ATR and Bollinger Bands."""
     df = df.copy()
 
-    df.ta.atr(length=14, append=True)
-    df.ta.bbands(length=20, std=2, append=True)
+    if HAS_PANDAS_TA:
+        df.ta.atr(length=14, append=True)
+        df.ta.bbands(length=20, std=2, append=True)
+    else:
+        high_low = df["High"] - df["Low"]
+        high_close = (df["High"] - df["Close"].shift()).abs()
+        low_close = (df["Low"] - df["Close"].shift()).abs()
+        tr = pd.concat([high_low, high_close, low_close], axis=1).max(axis=1)
+        df["ATRr_14"] = tr.rolling(window=14, min_periods=14).mean()
+
+        bb_mid = df["Close"].rolling(window=20, min_periods=20).mean()
+        bb_std = df["Close"].rolling(window=20, min_periods=20).std()
+        df["BBM_20_2.0"] = bb_mid
+        df["BBU_20_2.0"] = bb_mid + 2 * bb_std
+        df["BBL_20_2.0"] = bb_mid - 2 * bb_std
 
     last = df.iloc[-1]
     close = float(last["Close"])
@@ -594,14 +650,21 @@ def _compute_volume(df: pd.DataFrame) -> VolumeIndicators:
     """Compute OBV, VWAP, and volume ratios."""
     df = df.copy()
 
-    df.ta.obv(append=True)
-    df.ta.vwap(append=True)
+    if HAS_PANDAS_TA:
+        df.ta.obv(append=True)
+        df.ta.vwap(append=True)
+    else:
+        direction = np.sign(df["Close"].diff().fillna(0.0))
+        df["OBV"] = (direction * df["Volume"]).cumsum()
+        typical_price = (df["High"] + df["Low"] + df["Close"]) / 3
+        cumulative_vol = df["Volume"].cumsum().replace(0, np.nan)
+        df["VWAP_D"] = (typical_price * df["Volume"]).cumsum() / cumulative_vol
 
     last = df.iloc[-1]
     close = float(last["Close"])
 
     obv = float(last.get("OBV", 0.0))
-    vwap = float(last.get("VWAP", close))
+    vwap = float(last.get("VWAP", last.get("VWAP_D", close)))
 
     if len(df) >= 20:
         obv_20 = float(df.iloc[-20].get("OBV", 0.0))
@@ -628,7 +691,17 @@ def _compute_volume(df: pd.DataFrame) -> VolumeIndicators:
 def _compute_macd(df: pd.DataFrame) -> MACDData:
     """Compute MACD line, signal, and histogram."""
     df = df.copy()
-    df.ta.macd(append=True)
+
+    if HAS_PANDAS_TA:
+        df.ta.macd(append=True)
+    else:
+        ema_12 = df["Close"].ewm(span=12, adjust=False).mean()
+        ema_26 = df["Close"].ewm(span=26, adjust=False).mean()
+        macd_line = ema_12 - ema_26
+        signal_line = macd_line.ewm(span=9, adjust=False).mean()
+        df["MACD_12_26_9"] = macd_line
+        df["MACDs_12_26_9"] = signal_line
+        df["MACDh_12_26_9"] = macd_line - signal_line
 
     last = df.iloc[-1]
     macd_line = float(last.get("MACD_12_26_9", 0.0))

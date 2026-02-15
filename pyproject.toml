@@ -18,7 +18,7 @@
 
 
 [build-system]
-requires = ["setuptools>=68.0.0", "wheel"]
+requires = ["setuptools", "wheel"]
 build-backend = "setuptools.build_meta"
 
 
@@ -29,6 +29,7 @@ description = "AI-powered autonomous trading system combining LLM reasoning with
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
+dynamic = ["dependencies"]
 
 authors = [
   { name = "Your Name", email = "your.email@example.com" },
@@ -77,61 +78,6 @@ Repository = "https://github.com/yourusername/alpha-prime"
 Changelog = "https://github.com/yourusername/alpha-prime/blob/main/CHANGELOG.md"
 
 
-[project.dependencies]
-# Core trading stack
-streamlit = ">=1.31.0"
-yfinance = ">=0.2.36"
-pandas = ">=2.2.0"
-"pandas-ta" = ">=0.3.14b0"
-numpy = ">=1.26.0"
-plotly = ">=5.18.0"
-scipy = ">=1.12.0"
-statsmodels = ">=0.14.1"
-
-# HTTP & scraping
-requests = ">=2.31.0"
-beautifulsoup4 = ">=4.12.0"
-playwright = ">=1.41.0"
-
-# AI & LLM
-openai = ">=1.10.0"
-praw = ">=7.7.1"
-vaderSentiment = ">=3.3.2"
-
-# Data validation & settings
-pydantic = ">=2.5.0"
-"pydantic-settings" = ">=2.1.0"
-
-# Config & env
-"python-dotenv" = ">=1.0.0"
-
-# Scheduling & resilience
-schedule = ">=1.2.0"
-tenacity = ">=8.2.3"
-
-# Risk & portfolio
-pyportfolioopt = ">=1.5.5"
-empyrical = ">=0.5.5"
-quantstats = ">=0.0.62"
-
-# Data quality & drift
-evidently = ">=0.4.15"
-
-# SEC & filings
-edgartools = ">=2.0.0"
-
-# Caching
-diskcache = ">=5.6.3"
-
-# ML & analytics
-"scikit-learn" = ">=1.4.0"
-
-# Ops & monitoring
-"python-json-logger" = ">=2.0.7"
-psutil = ">=5.9.8"
-watchdog = ">=4.0.0"
-
-
 [project.optional-dependencies]
 dev = [
   "pytest>=7.4.0",
@@ -166,11 +112,20 @@ all = [
 
 
 [project.scripts]
-alpha-prime = "dashboard.app_v2:main"
-alpha-scheduler = "scheduler:start_scheduler"
-alpha-backtest = "scripts.run_backtest:main"
-alpha-report = "scripts.generate_report:main"
+alphaprime = "alphaprime.cli:main"
+alphaprime-doctor = "alphaprime.cli:doctor"
+alphaprime-ui = "alphaprime.cli:ui"
+alphaprime-api = "alphaprime.cli:api"
+alphaprime-scheduler = "alphaprime.cli:scheduler"
+alphaprime-version = "alphaprime.cli:main_version"
 
+
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+
+[tool.setuptools.packages.find]
+include = ["alphaprime*"]
 
 [tool.black]
 line-length = 100
