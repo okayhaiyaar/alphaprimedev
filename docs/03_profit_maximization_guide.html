@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALPHA-PRIME v2.0 - Profit Maximization Guide</title>
+    <style>
+        :root {
+            /* Color Palette - Tech/Trading Theme */
+            --bg-body: #0f1115;
+            --bg-sidebar: #161b22;
+            --bg-card: #1c2128;
+            --bg-terminal: #0d1117;
+            --border-color: #30363d;
+            
+            --accent-primary: #2ea043; /* Success Green */
+            --accent-glow: #3fb950;
+            --accent-secondary: #58a6ff; /* Tech Blue */
+            --accent-warning: #d29922;
+            --accent-danger: #f85149;
+            --accent-gold: #f1e05a; /* For wealth/profit theme */
+            
+            --text-main: #c9d1d9;
+            --text-header: #ffffff;
+            --text-muted: #8b949e;
+            
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            --font-mono: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Layout */
+        .layout-container {
+            display: flex;
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 2rem 1.5rem;
+            display: none; /* Hidden on mobile by default */
+        }
+
+        @media (min-width: 1024px) {
+            .sidebar {
+                display: block;
+            }
+        }
+
+        .sidebar h3 {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .sidebar h3:first-child { margin-top: 0; }
+
+        .nav-link {
+            display: block;
+            color: var(--text-main);
+            text-decoration: none;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            border-left: 2px solid transparent;
+            padding-left: 1rem;
+            margin-bottom: 0.25rem;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-secondary);
+        }
+
+        .nav-link.active {
+            color: var(--accent-gold);
+            border-left-color: var(--accent-gold);
+            background: linear-gradient(90deg, rgba(241, 224, 90, 0.1) 0%, transparent 100%);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem 1.5rem;
+            max-width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .main-content {
+                padding: 4rem;
+            }
+        }
+
+        /* Headers */
+        h1 {
+            font-size: 2.5rem;
+            color: var(--text-header);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--accent-gold);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .meta-info {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            color: var(--text-header);
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+        }
+
+        h2::before {
+            content: '$';
+            color: var(--accent-gold);
+            margin-right: 0.5rem;
+            font-family: var(--font-mono);
+            font-weight: bold;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--text-header);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        h4 {
+            font-size: 1.1rem;
+            color: var(--text-main);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: var(--accent-secondary);
+        }
+
+        /* Sections & Cards */
+        .step-block {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .philosophy-card {
+            background: linear-gradient(135deg, rgba(30,30,30,1) 0%, rgba(20,20,20,1) 100%);
+            border-left: 4px solid var(--accent-gold);
+            padding: 2rem;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        
+        .philosophy-core {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+            display: block;
+            text-align: center;
+        }
+
+        /* Inputs & Interactive */
+        input.interactive-blank {
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--accent-gold);
+            color: var(--accent-gold);
+            font-family: var(--font-mono);
+            font-size: 1rem;
+            padding: 0 5px;
+            width: 120px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        input.interactive-blank:focus {
+            outline: none;
+            width: 150px;
+            border-bottom-color: var(--accent-secondary);
+            color: var(--accent-secondary);
+        }
+        
+        input.long { width: 300px; }
+        input.long:focus { width: 320px; }
+
+        /* Lists */
+        ul, ol {
+            margin-bottom: 1rem;
+            padding-left: 1.5rem;
+        }
+        
+        ul { list-style: none; padding-left: 0; }
+
+        li {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+        
+        ul li { padding-left: 1.5rem; }
+        ul li::before {
+            content: '•';
+            color: var(--accent-gold);
+            position: absolute;
+            left: 0;
+            font-weight: bold;
+        }
+
+        /* Checkbox styling */
+        li.checklist-item {
+            display: flex;
+            align-items: flex-start;
+            padding-left: 0;
+            cursor: pointer;
+        }
+        
+        li.checklist-item::before { content: none; }
+
+        .checkbox-mock {
+            min-width: 18px;
+            height: 18px;
+            border: 2px solid var(--text-muted);
+            border-radius: 4px;
+            margin-right: 12px;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            background: var(--bg-body);
+        }
+
+        .checklist-item.done .checkbox-mock {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .checklist-item.done .checkbox-mock::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Code Blocks */
+        .code-wrapper {
+            background-color: var(--bg-terminal);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background-color: #21262d;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: var(--font-main);
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 2px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--border-color);
+            color: var(--text-main);
+        }
+
+        pre {
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: #e6edf3;
+        }
+        
+        /* Math/Formulas */
+        .formula-box {
+            background-color: rgba(88, 166, 255, 0.1);
+            border: 1px solid var(--accent-secondary);
+            color: var(--text-header);
+            padding: 1rem;
+            font-family: var(--font-mono);
+            text-align: center;
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            font-size: 1.1rem;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+            background: var(--bg-terminal);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        th {
+            background-color: #21262d;
+            color: var(--text-header);
+            font-weight: 600;
+        }
+        
+        tr:last-child td { border-bottom: none; }
+
+        /* Golden Rules Card */
+        .golden-card {
+            background-color: #000;
+            border: 2px solid var(--accent-gold);
+            padding: 2rem;
+            border-radius: 12px;
+            margin: 3rem 0;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 0 30px rgba(241, 224, 90, 0.15);
+        }
+        
+        .golden-card h3 {
+            color: var(--accent-gold);
+            margin-top: 0;
+            font-size: 1.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+        
+        .golden-list {
+            text-align: left;
+            margin: 2rem auto;
+            max-width: 600px;
+        }
+        
+        .golden-list li {
+            margin-bottom: 0.8rem;
+            color: #fff;
+            font-size: 1.1rem;
+        }
+        
+        .golden-list li::before {
+            color: var(--accent-gold);
+            content: '➜';
+            margin-right: 10px;
+        }
+        
+        .golden-footer {
+            color: var(--accent-gold);
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 2rem;
+            border-top: 1px dashed var(--accent-gold);
+            padding-top: 1rem;
+        }
+
+        /* Utilities */
+        a { color: var(--accent-secondary); text-decoration: none; }
+        strong { color: var(--text-header); font-weight: 600; }
+        hr { border: 0; height: 1px; background: var(--border-color); margin: 3rem 0; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.4rem; }
+            .interactive-blank { width: 80px; }
+            .interactive-blank:focus { width: 100px; }
+            input.long { width: 100%; }
+            input.long:focus { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="layout-container">
+    <!-- Navigation Sidebar -->
+    <nav class="sidebar">
+        <h3>Menu</h3>
+        <a href="#philosophy" class="nav-link">Philosophy</a>
+        <a href="#part1" class="nav-link">1. Prop Firm Challenge</a>
+        <a href="#part2" class="nav-link">2. Risk Management</a>
+        <a href="#part3" class="nav-link">3. Backtesting</a>
+        <a href="#part4" class="nav-link">4. Strategy Optimization</a>
+        <a href="#part5" class="nav-link">5. Daily Execution</a>
+        <a href="#part6" class="nav-link">6. Funded Account</a>
+        <a href="#part7" class="nav-link">7. Common Pitfalls</a>
+        <a href="#part8" class="nav-link">8. Performance Tracking</a>
+        <a href="#part9" class="nav-link">9. Market Adaptation</a>
+        <a href="#part10" class="nav-link active">10. My Playbook</a>
+        <a href="#golden" class="nav-link" style="color: var(--accent-gold);">★ Golden Rules</a>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        
+        <header>
+            <h1>ALPHA-PRIME v2.0 <br><span style="font-weight: 300; font-size: 0.6em; color: var(--text-muted)">Profit Maximization & Funded Account Master Guide</span></h1>
+            <div class="subtitle">Turn disciplined execution into consistent profits</div>
+            <div class="meta-info">Last updated: February 11, 2026</div>
+        </header>
+
+        <section id="philosophy">
+            <h2>Philosophy: The Path to Consistent Profits</h2>
+            <div class="philosophy-card">
+                <span class="philosophy-core">"You don't get rich from one big trade. You get rich from not blowing up."</span>
+                <p>The ALPHA-PRIME system is built to execute a statistical <strong>edge</strong> with machine-like discipline. Your edge only matters if you:</p>
+                <ol style="margin-top: 1rem;">
+                    <li>Configure risk correctly</li>
+                    <li>Only run <strong>proven</strong> strategies</li>
+                    <li>Let the system work without emotional interference</li>
+                    <li>Scale up <strong>slowly</strong> and systematically</li>
+                </ol>
+                <p style="margin-top: 1rem;">This guide is your <strong>operating manual</strong> to convert ALPHA-PRIME’s edge into <strong>consistent income</strong>, while protecting your funded accounts from catastrophic loss.</p>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="part1">
+            <h2>Part 1: Prop Firm Challenge Strategy</h2>
+
+            <h3>1.1 Know Your Prop Firm Rules (Fill This First)</h3>
+            <div class="step-block">
+                <p><strong>Typical prop firm rules (example, you MUST confirm your own):</strong></p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rule Type</th>
+                            <th>Typical Limit</th>
+                            <th>Your Firm Limit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Daily Loss Limit</td><td>5% of account</td><td><input type="text" class="interactive-blank" placeholder="%"></td></tr>
+                        <tr><td>Max Total Drawdown</td><td>10% of account</td><td><input type="text" class="interactive-blank" placeholder="%"></td></tr>
+                        <tr><td>Max Trailing Drawdown</td><td>5% from peak</td><td><input type="text" class="interactive-blank" placeholder="%"></td></tr>
+                        <tr><td>Min Trading Days</td><td>5–10 days</td><td><input type="text" class="interactive-blank" placeholder="days"></td></tr>
+                        <tr><td>Max Trading Days</td><td>30–60 days</td><td><input type="text" class="interactive-blank" placeholder="days"></td></tr>
+                        <tr><td>Profit Target</td><td>8–10%</td><td><input type="text" class="interactive-blank" placeholder="%"></td></tr>
+                    </tbody>
+                </table>
+
+                <p><strong>Before doing ANYTHING:</strong></p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Fill your firm’s exact rules in the table above</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Write the <strong>actual rupee amounts</strong> for daily loss and max drawdown</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Keep those numbers visible next to your screen</div></li>
+                </ul>
+            </div>
+
+            <h3>1.2 The “Bulletproof Pass” Risk Settings</h3>
+            <p>For challenges, <strong>you never push the firm limits</strong>. You operate at <strong>40% of what they allow</strong>.</p>
+            <p><strong>Recommended <code>config/risk_config.yaml</code> for prop challenges:</strong></p>
+            <div class="code-wrapper">
+                <div class="code-header"><span>YAML</span> <button class="copy-btn">Copy</button></div>
+                <pre><code>risk_limits:
+  # USE ONLY ~40% OF FIRM'S LIMITS
+
+  # If firm daily loss limit = 5%, set:
+  daily_max_loss: 2.0        # 2% of account
+
+  # If firm max total DD = 10%, set:
+  total_max_drawdown: 4.0    # 4% of account
+
+  # Per-trade risk (CRITICAL)
+  per_trade_risk: 0.25       # 0.25% of account per trade (NEVER exceed 0.5%)
+
+  # Position limits
+  max_open_positions: 3
+  max_correlated_positions: 1
+
+  # Kill switch (hard stop BEFORE limits)
+  kill_switch_daily_loss: 1.8    # auto-stop day before 2% reached
+  kill_switch_total_dd: 3.5      # auto-stop account before 4% reached</code></pre>
+            </div>
+            <p><strong>Why this works:</strong></p>
+            <ul>
+                <li>40% of firm limits leaves buffer for <strong>slippage, spreads, gaps, errors</strong></li>
+                <li>Hitting your internal limit <strong>never</strong> equals blowing the account</li>
+                <li>You can have a <strong>bad day</strong> and still stay in the game</li>
+            </ul>
+
+            <h3>1.3 Strategy Selection for Challenges</h3>
+            <p>Rule: <strong>Run ONLY 1–2 uncorrelated, stable strategies</strong> during evaluation.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Strategy Type</th>
+                        <th>Win Rate (typical)</th>
+                        <th>Risk:Reward</th>
+                        <th>Max DD</th>
+                        <th>Use in Challenge?</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Mean Reversion</td><td>60–70%</td><td>1:1.5</td><td>3–5%</td><td>✅ Primary</td></tr>
+                    <tr><td>Breakout Scalper</td><td>55–65%</td><td>1:1.2</td><td>5–8%</td><td>✅ Secondary</td></tr>
+                    <tr><td>Trend Following</td><td>40–50%</td><td>1:2+</td><td>10%+</td><td>❌ Too volatile</td></tr>
+                    <tr><td>Swing / Position</td><td>45–55%</td><td>1:3+</td><td>15%+</td><td>❌ Too slow</td></tr>
+                </tbody>
+            </table>
+            
+            <p><strong>Configuration example (challenge mode):</strong></p>
+            <div class="code-wrapper">
+                <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                <pre><code># Enable ONLY proven, stable strategies
+python scripts/configure_strategies.py \
+  --enable MeanReversion_NIFTY50 \
+  --enable Scalper_BANKNIFTY \
+  --disable-all-others
+
+# Verify:
+python scripts/show_config.py --strategies
+# Expect: Exactly 1–2 strategies ENABLED</code></pre>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="part2">
+            <h2>Part 2: Risk Management (The Foundation)</h2>
+
+            <h3>2.1 Non-Negotiable Rules</h3>
+
+            <h4>Rule #1 – Fixed Fractional Position Sizing</h4>
+            <div class="formula-box">
+                Position Size = (Account Size × Risk %) / Stop Loss (points × value/point)
+            </div>
+            <p><strong>Example (NIFTY futures):</strong></p>
+            <ul>
+                <li>Account: ₹1,00,000</li>
+                <li>Risk per trade: 0.25% → ₹250</li>
+                <li>Stop loss: 50 points, value = ₹5/point</li>
+            </ul>
+            <div class="code-wrapper"><pre><code>Risk amount = 100,000 × 0.0025 = ₹250
+Loss per lot at SL = 50 × 5 = ₹250
+Position = 1 lot</code></pre></div>
+            <p><strong>Rules:</strong></p>
+            <ul>
+                <li>Always size via formula, <strong>never</strong> via “1 lot looks fine”.</li>
+                <li>Never risk more than <strong>0.25%</strong> during challenge; absolute max <strong>0.5%</strong> even later.</li>
+            </ul>
+
+            <h4>Rule #2 – Daily Loss Circuit Breaker</h4>
+            <p><strong>3-Strike Rule:</strong></p>
+            <ul>
+                <li>After <strong>2 consecutive losing trades</strong> → reduce risk to <strong>50%</strong> for next 3 trades</li>
+                <li>After <strong>3 consecutive losses</strong> → <strong>stop trading for the day</strong></li>
+                <li>After <strong>50% of daily loss limit</strong> hit → <strong>no new trades</strong>, only manage open trades</li>
+            </ul>
+            <div class="code-wrapper">
+                <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                <pre><code>python scripts/configure_risk.py --enable-loss-circuit-breaker \
+  --consecutive-losses 3 \
+  --half-daily-limit-action pause</code></pre>
+            </div>
+
+            <h4>Rule #3 – Correlation Limits</h4>
+            <p>You treat NIFTY, BANKNIFTY, and a basket of NIFTY-heavy stocks as <strong>one risk cluster</strong>.</p>
+            <ul>
+                <li>Never hold more than <strong>1 correlated index exposure</strong> at a time</li>
+                <li>Multiple stocks in same sector = correlated → count as 1</li>
+                <li>Long equity + short India VIX = correlated</li>
+            </ul>
+
+            <h4>Rule #4 – Time-Based Risk Reduction</h4>
+            <table>
+                <thead><tr><th>Time Window</th><th>Multiplier</th><th>Rule</th></tr></thead>
+                <tbody>
+                    <tr><td>9:15–9:30 AM</td><td>0.5×</td><td>Half size (open volatility)</td></tr>
+                    <tr><td>12:00–1:00 PM</td><td>0×</td><td>No new trades (illiquid)</td></tr>
+                    <tr><td>3:15–3:30 PM</td><td>0.5×</td><td>Half size (close volatility)</td></tr>
+                    <tr><td>Major news/RBI</td><td>0×</td><td>No trades</td></tr>
+                </tbody>
+            </table>
+
+            <h3>2.2 Position Sizing Frameworks</h3>
+            <p>You will <strong>not</strong> actually trade full Kelly, but you should understand it.</p>
+            <div class="formula-box">Kelly % = W - [(1 - W) / R]</div>
+            <ul>
+                <li>W = win rate</li>
+                <li>R = avg win / avg loss</li>
+            </ul>
+            <p>You never go above <strong>25–50% of Kelly</strong>. During challenges, you ignore Kelly and stick to <strong>fixed 0.25%</strong>.</p>
+            <ul>
+                <li class="checklist-item"><div class="checkbox-mock"></div><div><strong>Fixed fractional 0.25% risk per trade</strong> (prop challenge & early funded)</div></li>
+            </ul>
+
+            <h3>2.3 Drawdown Management</h3>
+            <table>
+                <thead><tr><th>Drawdown vs Equity Peak</th><th>Action</th></tr></thead>
+                <tbody>
+                    <tr><td>0–1%</td><td>Normal</td></tr>
+                    <tr><td>1–2%</td><td>Review trades</td></tr>
+                    <tr><td>2–3%</td><td>Size to 75%</td></tr>
+                    <tr><td>3–4%</td><td>Size to 50%</td></tr>
+                    <tr><td>4–5%</td><td>Stop new trades</td></tr>
+                    <tr><td>>5%</td><td>Full stop + review</td></tr>
+                </tbody>
+            </table>
+        </section>
+
+        <hr>
+
+        <section id="part3">
+            <h2>Part 3: Backtesting for Profitability</h2>
+            <h3>3.1 What to Backtest</h3>
+            <div class="code-wrapper">
+                <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                <pre><code>python scripts/backtest.py --strategy MeanReversion_NIFTY50 \
+  --start 2023-01-01 \
+  --end 2026-02-11 \
+  --metrics all \
+  --report detailed</code></pre>
+            </div>
+            <p><strong>Critical metrics and thresholds:</strong></p>
+            <table>
+                <thead><tr><th>Metric</th><th>Goal</th><th>Hard Stop (no trade)</th></tr></thead>
+                <tbody>
+                    <tr><td>Annualized Return</td><td>> 20%</td><td>< 8%</td></tr>
+                    <tr><td>Max Drawdown</td><td>< 8%</td><td>> 10%</td></tr>
+                    <tr><td>Worst Single Day</td><td>< 2%</td><td>> 5%</td></tr>
+                    <tr><td>Win Rate</td><td>> 50%</td><td>< 40%</td></tr>
+                    <tr><td>Profit Factor</td><td>> 1.5</td><td>< 1.2</td></tr>
+                    <tr><td>Consecutive Losses</td><td>< 5</td><td>> 8</td></tr>
+                    <tr><td>Sharpe Ratio</td><td>> 1.5</td><td>< 1.0</td></tr>
+                </tbody>
+            </table>
+            
+            <h3>3.2 Walk-Forward Optimization</h3>
+            <p>Use <strong>walk‑forward</strong> instead of optimizing on all data to avoid curve fitting.</p>
+            <div class="code-wrapper"><pre><code>python scripts/backtest.py --walk-forward \
+  --train-period 365 \
+  --test-period 90 \
+  --step 30 \
+  --strategy MeanReversion_NIFTY50</code></pre></div>
+
+            <h3>3.3 Regime Testing</h3>
+            <p>Test across different market regimes (Bull, Bear, Sideways). Rule: strategy must be at least <strong>breakeven</strong> in all regimes.</p>
+
+            <h3>3.4 Monte Carlo Stress Testing</h3>
+            <div class="code-wrapper"><pre><code>python scripts/backtest.py --monte-carlo \
+  --simulations 10000 \
+  --strategy MeanReversion_NIFTY50</code></pre></div>
+            <ul>
+                <li>95th percentile <strong>max drawdown</strong> < firm limit</li>
+                <li>5th percentile <strong>return</strong> ≥ 0%</li>
+            </ul>
+        </section>
+
+        <hr>
+
+        <section id="part4">
+            <h2>Part 4: Strategy Optimization</h2>
+            <h3>4.1 What to Optimize For</h3>
+            <div class="code-wrapper"><pre><code># ✅ Better
+objective = maximize(
+    risk_adjusted_return
+)  # e.g. return / (max_drawdown ** 2)</code></pre></div>
+            
+            <h3>4.2 Catching Overfitting</h3>
+            <p><strong>Rule:</strong> out-of-sample metrics should be within <strong>80–120%</strong> of in-sample.</p>
+            
+            <h3>4.3 Volatility Filters</h3>
+            <p>Avoid trading when volatility is too low or too insane.</p>
+            <div class="code-wrapper"><pre><code>python scripts/configure_strategy.py --strategy MeanReversion_NIFTY50 \
+  --enable-volatility-filter \
+  --min-volatility 0.5 \
+  --max-volatility 2.5 \
+  --volatility-lookback 20</code></pre></div>
+        </section>
+
+        <hr>
+
+        <section id="part5">
+            <h2>Part 5: Daily Execution Rules</h2>
+            <h3>5.1 Pre-Market Routine (8:45–9:15 AM)</h3>
+            <ul>
+                <li class="checklist-item"><div class="checkbox-mock"></div><div>Check global markets (US, Asia) – general trend</div></li>
+                <li class="checklist-item"><div class="checkbox-mock"></div><div>Check India VIX:
+                    <ul>
+                        <li>VIX > 25 → <strong>half size</strong></li>
+                        <li>VIX > 35 → <strong>no trades</strong></li>
+                    </ul>
+                </div></li>
+                <li class="checklist-item"><div class="checkbox-mock"></div><div>Check calendar (RBI, CPI, GDP, budget days)</div></li>
+                <li class="checklist-item"><div class="checkbox-mock"></div><div>Quick NIFTY / BANKNIFTY chart scan – any obvious regime shift?</div></li>
+                <li class="checklist-item"><div class="checkbox-mock"></div><div>Review yesterday’s ALPHA‑PRIME report</div></li>
+                <li class="checklist-item"><div class="checkbox-mock"></div><div>Confirm margin and leverage are fine</div></li>
+                <li class="checklist-item"><div class="checkbox-mock"></div><div>Check broker status page, no ongoing issues</div></li>
+            </ul>
+            <p>If <strong>multiple red flags</strong> → reduce size or skip day.</p>
+
+            <h3>5.2 Intraday Monitoring</h3>
+            <p><strong>Frequency:</strong></p>
+            <ul>
+                <li>9:15–9:45 → every 10 minutes</li>
+                <li>9:45–3:00 → every 30 minutes</li>
+                <li>3:00–3:30 → every 10 minutes</li>
+            </ul>
+            <p><strong>Intervene only when:</strong> System/broker error, Risk limit misbehavior, Connection broken, Extreme news.</p>
+            <p><strong>Do NOT intervene when:</strong> Trade is losing but stop intact, Strategy skipped a "good" trade, Daily P&L slightly negative.</p>
+
+            <h3>5.3 End-of-Day Review</h3>
+            <div class="code-wrapper"><pre><code>python scripts/generate_report.py --today</code></pre></div>
+        </section>
+
+        <hr>
+
+        <section id="part6">
+            <h2>Part 6: Funded Account Management</h2>
+            <h3>6.1 Transition from Challenge to Funded</h3>
+            <p><strong>Do not</strong> instantly double risk when you pass.</p>
+            <table>
+                <thead><tr><th>Weeks Funded</th><th>Per-Trade Risk</th><th>Max Positions</th><th>Daily Max Loss</th></tr></thead>
+                <tbody>
+                    <tr><td>1–2</td><td>0.25%</td><td>3</td><td>2%</td></tr>
+                    <tr><td>3–4</td><td>0.30%</td><td>4</td><td>2.5%</td></tr>
+                    <tr><td>5–8</td><td>0.35%</td><td>4</td><td>3%</td></tr>
+                    <tr><td>9+</td><td>0.40%</td><td>5</td><td>3.5%</td></tr>
+                </tbody>
+            </table>
+            <p>Never go beyond <strong>0.5% risk per trade</strong>, even fully funded.</p>
+
+            <h3>6.2 Scaling Rules</h3>
+            <div class="formula-box">New Risk % = Base Risk % × (1 + Cumulative Return / 20)</div>
+            <p><strong>Hard rule:</strong> never increase risk more than <strong>0.05% per month</strong>.</p>
+
+            <h3>6.3 Withdrawal Policy</h3>
+            <p><strong>Monthly rule of thumb:</strong></p>
+            <ul>
+                <li>Withdraw <strong>50–70% of net monthly profit</strong></li>
+                <li>Leave <strong>30–50%</strong> to compound slowly</li>
+            </ul>
+        </section>
+
+        <hr>
+
+        <section id="part7">
+            <h2>Part 7: Common Ways to Blow Up (Avoid These)</h2>
+            <div class="step-block" style="border-left: 4px solid var(--accent-danger);">
+                <h4>1. Revenge Trading</h4>
+                <p>Losing day → doubling size next day to “make it back”. <strong>Fix:</strong> always follow fixed fractional risk.</p>
+                
+                <h4>2. Override Syndrome</h4>
+                <p>System says “no trade” → you trade anyway. <strong>Fix:</strong> hard rule – no manual orders.</p>
+                
+                <h4>3. Martingale / Averaging Down</h4>
+                <p>Adding position to a loser. <strong>Fix:</strong> never add size to a losing trade.</p>
+                
+                <h4>4. Over-Optimization</h4>
+                <p>Strategy with 90% win rate in backtest. <strong>Fix:</strong> require walk-forward tests.</p>
+                
+                <h4>5. Ignoring Correlation</h4>
+                <p>Stacking NIFTY, BANKNIFTY, and stocks all same direction. <strong>Fix:</strong> enforce <code>max_correlated_positions = 1</code>.</p>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="part8">
+            <h2>Part 8: Performance Tracking & Analytics</h2>
+            <h3>8.1 Daily Metrics</h3>
+            <div class="code-wrapper"><pre><code>python scripts/show_performance.py --today</code></pre></div>
+            <ul>
+                <li class="checklist-item"><div class="checkbox-mock"></div><div>Daily P&L (%)</div></li>
+                <li class="checklist-item"><div class="checkbox-mock"></div><div>Win rate vs backtest expectation</div></li>
+                <li class="checklist-item"><div class="checkbox-mock"></div><div>Avg win vs avg loss</div></li>
+            </ul>
+
+            <h3>8.2 Weekly & Monthly Review</h3>
+            <div class="code-wrapper"><pre><code>python scripts/generate_report.py --week --detailed
+python scripts/generate_report.py --month --pdf --detailed</code></pre></div>
+        </section>
+
+        <hr>
+
+        <section id="part9">
+            <h2>Part 9: Market Conditions & Adaptation</h2>
+            <h3>9.1 Detecting the Current Regime</h3>
+            <div class="code-wrapper"><pre><code>python scripts/detect_regime.py --current</code></pre></div>
+            <p><strong>Your adjustments:</strong></p>
+            <ul>
+                <li>Trend regime → favor trend / breakout, slightly higher risk</li>
+                <li>Choppy regime → favor mean reversion, normal risk</li>
+                <li>High vol regime → reduce size 50%, fewer trades</li>
+            </ul>
+        </section>
+
+        <hr>
+
+        <section id="part10">
+            <h2>Part 10: My Personal Playbook (Fill This)</h2>
+            <div class="step-block">
+                <h3>10.1 My Prop Firm Rules</h3>
+                <ul>
+                    <li>Firm name: <input type="text" class="interactive-blank long" placeholder="Name"></li>
+                    <li>Account size: ₹<input type="text" class="interactive-blank" placeholder="Amount"></li>
+                    <li>Daily loss limit: <input type="text" class="interactive-blank" placeholder="%"> = ₹<input type="text" class="interactive-blank" placeholder="Amount"></li>
+                    <li>Max total drawdown: <input type="text" class="interactive-blank" placeholder="%"> = ₹<input type="text" class="interactive-blank" placeholder="Amount"></li>
+                    <li>Profit target: <input type="text" class="interactive-blank" placeholder="%"> = ₹<input type="text" class="interactive-blank" placeholder="Amount"></li>
+                    <li>Min trading days: <input type="text" class="interactive-blank" placeholder="Days"></li>
+                    <li>Evaluation period: <input type="text" class="interactive-blank" placeholder="Days"> days</li>
+                </ul>
+
+                <h3>10.2 My Risk Configuration (Live Settings)</h3>
+                <div class="code-wrapper"><pre><code>per_trade_risk:        <input type="text" class="interactive-blank" placeholder="0.25"> %
+daily_max_loss:        <input type="text" class="interactive-blank" placeholder="2.0"> %
+max_drawdown:          <input type="text" class="interactive-blank" placeholder="4.0"> %
+max_positions:         <input type="text" class="interactive-blank" placeholder="3">
+max_correlated:        <input type="text" class="interactive-blank" placeholder="1">
+kill_switch_daily:     <input type="text" class="interactive-blank" placeholder="1.8"> %
+kill_switch_total:     <input type="text" class="interactive-blank" placeholder="3.5"> %</code></pre></div>
+
+                <h3>10.3 My Enabled Strategies</h3>
+                <ul>
+                    <li>Primary: <input type="text" class="interactive-blank long" placeholder="Strategy Name"></li>
+                    <li>Secondary: <input type="text" class="interactive-blank long" placeholder="Strategy Name"></li>
+                    <li>All others: <strong>DISABLED</strong></li>
+                </ul>
+
+                <h3>10.4 My No-Trade Times</h3>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>9:15–9:25 AM (open)</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>RBI policy days</div></li>
+                    <li><input type="text" class="interactive-blank long" placeholder="Add custom time..."></li>
+                </ul>
+
+                <h3>10.5 My Red Lines (Never Cross)</h3>
+                <ul>
+                    <li>Never trade if India VIX > <input type="text" class="interactive-blank" placeholder="35"></li>
+                    <li>Never exceed <input type="text" class="interactive-blank" placeholder="3"> open positions</li>
+                    <li>Never risk more than <input type="text" class="interactive-blank" placeholder="0.5"> % per trade</li>
+                    <li>Never trade during <input type="text" class="interactive-blank long" placeholder="Event"></li>
+                    <li>Never override system stop losses</li>
+                    <li>Never add to losing positions</li>
+                    <li>Never trade when angry / tired / tilted</li>
+                </ul>
+
+                <h3>10.7 My Monthly Targets</h3>
+                <p><strong>This month (<input type="text" class="interactive-blank" placeholder="MM">/<input type="text" class="interactive-blank" placeholder="YYYY">):</strong></p>
+                <ul>
+                    <li>Target return: <input type="text" class="interactive-blank" placeholder="%"> %</li>
+                    <li>Max acceptable drawdown: <input type="text" class="interactive-blank" placeholder="%"> %</li>
+                    <li>Minimum win rate: <input type="text" class="interactive-blank" placeholder="%"> %</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="golden">
+            <div class="golden-card">
+                <h3>★ ALPHA-PRIME GOLDEN RULES ★</h3>
+                <ul class="golden-list">
+                    <li>Never risk more than 0.25% per trade</li>
+                    <li>Never exceed your daily loss limit</li>
+                    <li>Never override the system's stops</li>
+                    <li>Never add to losing positions</li>
+                    <li>Never trade on emotion or tilt</li>
+                    <li>Never change parameters mid-challenge</li>
+                    <li>Never ignore correlation limits</li>
+                    <li>Never trade high VIX without reducing size</li>
+                    <li>Never revenge trade after a loss</li>
+                    <li>Never forget: <strong>SURVIVAL > PROFITS</strong></li>
+                </ul>
+                <div class="golden-footer">
+                    WHEN IN DOUBT: DO NOTHING.<br>
+                    PRESERVATION OF CAPITAL IS JOB #1.
+                </div>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<script>
+    // Copy to clipboard functionality
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const codeBlock = btn.parentElement.nextElementSibling;
+            const code = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.style.color = 'var(--accent-glow)';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.color = '';
+                }, 2000);
+            });
+        });
+    });
+
+    // Checkbox interaction
+    document.querySelectorAll('.checklist-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            if (e.target.tagName !== 'INPUT') {
+                item.classList.toggle('done');
+            }
+        });
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // Active state for sidebar
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= (sectionTop - 200)) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').includes(current)) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

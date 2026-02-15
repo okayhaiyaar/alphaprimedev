@@ -1,0 +1,228 @@
+# ============================================================
+# ALPHA-PRIME v2.0 - Docker Compose Configuration
+# ============================================================
+# Orchestrates multi-service trading system:
+# - dashboard: Streamlit UI (port 8501)
+# - scheduler: Background trading automation
+# - watchdog: Health monitoring (optional)
+#
+# Quick Start:
+#   docker-compose up -d
+#   docker-compose logs -f dashboard
+#   docker-compose down
+#
+# Production:
+#   docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# ============================================================
+
+version: '3.8'
+
+services:
+  # ────────────────────────────────────────────────────────
+  # PRIMARY SERVICES
+  # ────────────────────────────────────────────────────────
+  dashboard:
+    container_name: alpha-prime-dashboard
+    build: .
+    image: alpha-prime:v2
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - TZ=Asia/Kolkata
+      # Service-specific overrides (optional)
+      # - LOG_LEVEL=INFO
+      # - PAPER_TRADING_ONLY=true
+    ports:
+      - "8501:8501"
+    volumes:
+      # Bind mounts for development; switch to named volumes for production
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./backups:/app/backups
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8501/_stcore/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2G
+        reservations:
+          cpus: "0.5"
+          memory: 512M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - alpha-network
+    stop_grace_period: 30s
+    security_opt:
+      - no-new-privileges:true
+
+  scheduler:
+    container_name: alpha-prime-scheduler
+    build: .
+    image: alpha-prime:v2
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - TZ=Asia/Kolkata
+      # Scheduler-specific overrides (optional)
+      # - LOG_LEVEL=INFO
+    command: ["python", "scheduler.py"]
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+    # No explicit healthcheck: process exit status is used
+    deploy:
+      resources:
+        limits:
+          cpus: "1.0"
+          memory: 1G
+        reservations:
+          cpus: "0.25"
+          memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    networks:
+      - alpha-network
+    stop_grace_period: 30s
+    security_opt:
+      - no-new-privileges:true
+
+  watchdog:
+    container_name: alpha-prime-watchdog
+    build: .
+    image: alpha-prime:v2
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - TZ=Asia/Kolkata
+      # WATCHDOG_INTERVAL_SECONDS, ALERT channels, etc. can be added here
+    command: ["python", "ops/watchdog.py"]
+    depends_on:
+      dashboard:
+        condition: service_started
+      scheduler:
+        condition: service_started
+    volumes:
+      - ./logs:/app/logs
+    deploy:
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 256M
+        reservations:
+          cpus: "0.1"
+          memory: 64M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "5m"
+        max-file: "3"
+    networks:
+      - alpha-network
+    stop_grace_period: 30s
+    security_opt:
+      - no-new-privileges:true
+
+# ────────────────────────────────────────────────────────
+# SHARED RESOURCES
+# ────────────────────────────────────────────────────────
+
+# For production you can switch volumes to named volumes instead of bind mounts:
+#
+#   dashboard:
+#     volumes:
+#       - alpha_data:/app/data
+#       - alpha_logs:/app/logs
+#       - alpha_backups:/app/backups
+#
+#   scheduler:
+#     volumes:
+#       - alpha_data:/app/data
+#       - alpha_logs:/app/logs
+#
+#   watchdog:
+#     volumes:
+#       - alpha_logs:/app/logs
+#
+# And declare them at the bottom (uncomment to use):
+#
+# volumes:
+#   alpha_data:
+#     driver: local
+#   alpha_logs:
+#     driver: local
+#   alpha_backups:
+#     driver: local
+
+volumes: {}
+
+networks:
+  alpha-network:
+    driver: bridge
+
+# ============================================================
+# ENVIRONMENT-SPECIFIC OVERRIDES
+# ============================================================
+# Development: docker-compose.override.yml (auto-loaded)
+# Example override:
+#   services:
+#     dashboard:
+#       volumes:
+#         - .:/app    # Live code reload (dev only)
+#       environment:
+#         - DEBUG_MODE=true
+#
+# Production:
+#   docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+# ============================================================
+
+# ============================================================
+# COMMON COMMANDS
+# ============================================================
+# Start all services:
+#   docker-compose up -d
+#
+# View logs (all services):
+#   docker-compose logs -f
+#
+# View logs (specific service):
+#   docker-compose logs -f dashboard
+#
+# Stop all services:
+#   docker-compose stop
+#
+# Stop and remove containers:
+#   docker-compose down
+#
+# Stop and remove containers + volumes (CAUTION: deletes data):
+#   docker-compose down -v
+#
+# Rebuild after code changes:
+#   docker-compose up -d --build
+#
+# Scale scheduler (run multiple instances):
+#   docker-compose up -d --scale scheduler=2
+#
+# Check service health and status:
+#   docker-compose ps
+#
+# Execute command in running container:
+#   docker-compose exec dashboard python scripts/generate_report.py
+#
+# View resource usage:
+#   docker stats
+# ============================================================

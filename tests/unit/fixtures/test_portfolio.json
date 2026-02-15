@@ -1,0 +1,2154 @@
+{
+  "metadata": {
+    "version": "2.0.0",
+    "generated_at": "2026-02-11T20:30:00Z",
+    "total_portfolios": 15,
+    "description": "Test portfolio fixtures for ALPHA-PRIME v2.0"
+  },
+  "portfolios": [
+    {
+      "portfolio_id": "PF_EMPTY_001",
+      "name": "Empty Test Portfolio",
+      "account_type": "CASH",
+      "status": "ACTIVE",
+      "created_at": "2026-01-01T00:00:00Z",
+      "last_updated": "2026-02-11T20:30:00Z",
+      "capital": {
+        "initial_capital": 100000.00,
+        "current_equity": 100000.00,
+        "cash": 100000.00,
+        "cash_reserved": 0.00,
+        "margin_used": 0.00,
+        "margin_available": 0.00,
+        "buying_power": 100000.00
+      },
+      "positions": [],
+      "closed_trades": [],
+      "metrics": {
+        "total_pnl": 0.00,
+        "total_pnl_pct": 0.00,
+        "realized_pnl": 0.00,
+        "unrealized_pnl": 0.00,
+        "win_rate": 0.00,
+        "profit_factor": 0.00,
+        "sharpe_ratio": 0.00,
+        "sortino_ratio": 0.00,
+        "max_drawdown": 0.00,
+        "max_drawdown_pct": 0.00,
+        "current_drawdown": 0.00,
+        "total_trades": 0,
+        "winning_trades": 0,
+        "losing_trades": 0,
+        "avg_win": 0.00,
+        "avg_loss": 0.00,
+        "largest_win": 0.00,
+        "largest_loss": 0.00
+      },
+      "exposure": {
+        "gross_exposure": 0.00,
+        "net_exposure": 0.00,
+        "long_exposure": 0.00,
+        "short_exposure": 0.00,
+        "leverage": 0.00,
+        "concentration_top3": 0.00,
+        "number_of_positions": 0
+      },
+      "allocation": {
+        "by_sector": {},
+        "by_asset_class": {},
+        "by_strategy": {}
+      }
+    },
+
+    {
+      "portfolio_id": "PF_NEW_ACTIVE_002",
+      "name": "New Active Portfolio",
+      "account_type": "CASH",
+      "status": "ACTIVE",
+      "created_at": "2026-02-05T00:00:00Z",
+      "last_updated": "2026-02-11T20:30:00Z",
+      "capital": {
+        "initial_capital": 50000.00,
+        "current_equity": 50320.00,
+        "cash": 35200.00,
+        "cash_reserved": 1200.00,
+        "margin_used": 0.00,
+        "margin_available": 0.00,
+        "buying_power": 35200.00
+      },
+      "positions": [
+        {
+          "position_id": "POS_NEW_001",
+          "symbol": "AAPL",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 80,
+          "avg_entry_price": 150.25,
+          "current_price": 152.40,
+          "cost_basis": 12020.00,
+          "market_value": 12192.00,
+          "unrealized_pnl": 172.00,
+          "unrealized_pnl_pct": 1.43,
+          "entry_date": "2026-02-08T09:30:00Z",
+          "holding_days": 3,
+          "stop_loss": 145.00,
+          "take_profit": 158.00,
+          "strategy_id": "EMA_Cross_Momentum_v2"
+        },
+        {
+          "position_id": "POS_NEW_002",
+          "symbol": "MSFT",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 40,
+          "avg_entry_price": 380.50,
+          "current_price": 383.20,
+          "cost_basis": 15220.00,
+          "market_value": 15328.00,
+          "unrealized_pnl": 108.00,
+          "unrealized_pnl_pct": 0.71,
+          "entry_date": "2026-02-09T10:00:00Z",
+          "holding_days": 2,
+          "stop_loss": 372.00,
+          "take_profit": 395.00,
+          "strategy_id": "Pullback_Buy_v1"
+        }
+      ],
+      "closed_trades": [],
+      "metrics": {
+        "total_pnl": 280.00,
+        "total_pnl_pct": 0.56,
+        "realized_pnl": 0.00,
+        "unrealized_pnl": 280.00,
+        "win_rate": 0.00,
+        "profit_factor": 0.00,
+        "sharpe_ratio": 0.00,
+        "sortino_ratio": 0.00,
+        "max_drawdown": -220.00,
+        "max_drawdown_pct": -0.44,
+        "current_drawdown": -40.00,
+        "total_trades": 0,
+        "winning_trades": 0,
+        "losing_trades": 0,
+        "avg_win": 0.00,
+        "avg_loss": 0.00,
+        "largest_win": 0.00,
+        "largest_loss": 0.00
+      },
+      "exposure": {
+        "gross_exposure": 27520.00,
+        "net_exposure": 27520.00,
+        "long_exposure": 27520.00,
+        "short_exposure": 0.00,
+        "leverage": 0.55,
+        "concentration_top3": 1.00,
+        "number_of_positions": 2
+      },
+      "allocation": {
+        "by_sector": {
+          "Technology": 1.00
+        },
+        "by_asset_class": {
+          "Equities": 1.00
+        },
+        "by_strategy": {
+          "EMA_Cross_Momentum_v2": 0.44,
+          "Pullback_Buy_v1": 0.56
+        }
+      }
+    },
+
+    {
+      "portfolio_id": "PF_BALANCED_003",
+      "name": "Profitable Balanced Portfolio",
+      "account_type": "MARGIN",
+      "status": "ACTIVE",
+      "created_at": "2025-06-01T00:00:00Z",
+      "last_updated": "2026-02-11T20:30:00Z",
+      "capital": {
+        "initial_capital": 100000.00,
+        "current_equity": 115234.50,
+        "cash": 35420.00,
+        "cash_reserved": 5000.00,
+        "margin_used": 18500.00,
+        "margin_available": 81500.00,
+        "buying_power": 150000.00
+      },
+      "positions": [
+        {
+          "position_id": "POS_BAL_001",
+          "symbol": "AAPL",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 100,
+          "avg_entry_price": 148.50,
+          "current_price": 155.20,
+          "cost_basis": 14850.00,
+          "market_value": 15520.00,
+          "unrealized_pnl": 670.00,
+          "unrealized_pnl_pct": 4.51,
+          "entry_date": "2026-01-15T09:30:00Z",
+          "holding_days": 27,
+          "stop_loss": 142.00,
+          "take_profit": 162.00,
+          "strategy_id": "EMA_Cross_v2"
+        },
+        {
+          "position_id": "POS_BAL_002",
+          "symbol": "MSFT",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 50,
+          "avg_entry_price": 378.20,
+          "current_price": 392.50,
+          "cost_basis": 18910.00,
+          "market_value": 19625.00,
+          "unrealized_pnl": 715.00,
+          "unrealized_pnl_pct": 3.78,
+          "entry_date": "2026-01-22T10:15:00Z",
+          "holding_days": 20,
+          "stop_loss": 365.00,
+          "take_profit": 405.00,
+          "strategy_id": "EMA_Cross_v2"
+        },
+        {
+          "position_id": "POS_BAL_003",
+          "symbol": "TSLA",
+          "exchange": "NASDAQ",
+          "side": "SHORT",
+          "quantity": -30,
+          "avg_entry_price": 252.80,
+          "current_price": 248.30,
+          "cost_basis": -7584.00,
+          "market_value": -7449.00,
+          "unrealized_pnl": 135.00,
+          "unrealized_pnl_pct": 1.78,
+          "entry_date": "2026-02-05T14:30:00Z",
+          "holding_days": 6,
+          "stop_loss": 260.00,
+          "take_profit": 240.00,
+          "strategy_id": "Breakdown_Short_v1"
+        },
+        {
+          "position_id": "POS_BAL_004",
+          "symbol": "GOOGL",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 60,
+          "avg_entry_price": 140.20,
+          "current_price": 148.10,
+          "cost_basis": 8412.00,
+          "market_value": 8886.00,
+          "unrealized_pnl": 474.00,
+          "unrealized_pnl_pct": 5.64,
+          "entry_date": "2025-12-20T10:00:00Z",
+          "holding_days": 53,
+          "stop_loss": 134.00,
+          "take_profit": 155.00,
+          "strategy_id": "Breakout_v1"
+        },
+        {
+          "position_id": "POS_BAL_005",
+          "symbol": "SPY",
+          "exchange": "NYSE",
+          "side": "LONG",
+          "quantity": 80,
+          "avg_entry_price": 470.50,
+          "current_price": 482.30,
+          "cost_basis": 37640.00,
+          "market_value": 38584.00,
+          "unrealized_pnl": 944.00,
+          "unrealized_pnl_pct": 2.51,
+          "entry_date": "2025-10-10T09:30:00Z",
+          "holding_days": 124,
+          "stop_loss": 455.00,
+          "take_profit": 495.00,
+          "strategy_id": "Index_Trend_v1"
+        },
+        {
+          "position_id": "POS_BAL_006",
+          "symbol": "NVDA",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 30,
+          "avg_entry_price": 480.00,
+          "current_price": 505.50,
+          "cost_basis": 14400.00,
+          "market_value": 15165.00,
+          "unrealized_pnl": 765.00,
+          "unrealized_pnl_pct": 5.31,
+          "entry_date": "2026-01-05T09:45:00Z",
+          "holding_days": 37,
+          "stop_loss": 468.00,
+          "take_profit": 520.00,
+          "strategy_id": "Momentum_v3"
+        },
+        {
+          "position_id": "POS_BAL_007",
+          "symbol": "XLF",
+          "exchange": "NYSE",
+          "side": "SHORT",
+          "quantity": -200,
+          "avg_entry_price": 39.80,
+          "current_price": 38.90,
+          "cost_basis": -7960.00,
+          "market_value": -7780.00,
+          "unrealized_pnl": 180.00,
+          "unrealized_pnl_pct": 2.26,
+          "entry_date": "2026-01-28T14:00:00Z",
+          "holding_days": 14,
+          "stop_loss": 41.00,
+          "take_profit": 37.00,
+          "strategy_id": "Sector_Rotation_v1"
+        },
+        {
+          "position_id": "POS_BAL_008",
+          "symbol": "RELIANCE.NS",
+          "exchange": "NSE",
+          "side": "LONG",
+          "quantity": 30,
+          "avg_entry_price": 2820.00,
+          "current_price": 2895.00,
+          "cost_basis": 84600.00,
+          "market_value": 86850.00,
+          "unrealized_pnl": 2250.00,
+          "unrealized_pnl_pct": 2.66,
+          "entry_date": "2025-11-15T04:30:00Z",
+          "holding_days": 88,
+          "stop_loss": 2720.00,
+          "take_profit": 3000.00,
+          "strategy_id": "India_Blue_Chip_v1"
+        }
+      ],
+      "closed_trades": [
+        {
+          "trade_id": "TRADE_BAL_001",
+          "symbol": "GOOGL",
+          "side": "LONG",
+          "quantity": 40,
+          "entry_price": 138.50,
+          "exit_price": 145.20,
+          "entry_date": "2025-12-10T09:30:00Z",
+          "exit_date": "2026-01-08T15:45:00Z",
+          "holding_days": 29,
+          "realized_pnl": 268.00,
+          "realized_pnl_pct": 4.84,
+          "commission": 12.00,
+          "slippage": 8.00,
+          "exit_reason": "TAKE_PROFIT"
+        },
+        {
+          "trade_id": "TRADE_BAL_002",
+          "symbol": "NVDA",
+          "side": "LONG",
+          "quantity": 25,
+          "entry_price": 485.30,
+          "exit_price": 502.80,
+          "entry_date": "2025-11-20T10:00:00Z",
+          "exit_date": "2025-12-18T14:30:00Z",
+          "holding_days": 28,
+          "realized_pnl": 437.50,
+          "realized_pnl_pct": 3.61,
+          "commission": 10.00,
+          "slippage": 5.00,
+          "exit_reason": "TAKE_PROFIT"
+        },
+        {
+          "trade_id": "TRADE_BAL_003",
+          "symbol": "AAPL",
+          "side": "LONG",
+          "quantity": 80,
+          "entry_price": 142.20,
+          "exit_price": 151.00,
+          "entry_date": "2025-10-05T09:30:00Z",
+          "exit_date": "2025-11-10T15:45:00Z",
+          "holding_days": 36,
+          "realized_pnl": 704.00,
+          "realized_pnl_pct": 6.19,
+          "commission": 16.00,
+          "slippage": 10.00,
+          "exit_reason": "TAKE_PROFIT"
+        },
+        {
+          "trade_id": "TRADE_BAL_004",
+          "symbol": "MSFT",
+          "side": "LONG",
+          "quantity": 60,
+          "entry_price": 360.00,
+          "exit_price": 375.50,
+          "entry_date": "2025-09:15T10:00:00Z",
+          "exit_date": "2025-10-20T15:00:00Z",
+          "holding_days": 35,
+          "realized_pnl": 930.00,
+          "realized_pnl_pct": 4.28,
+          "commission": 12.00,
+          "slippage": 8.00,
+          "exit_reason": "TAKE_PROFIT"
+        }
+      ],
+      "metrics": {
+        "total_pnl": 15234.50,
+        "total_pnl_pct": 15.23,
+        "realized_pnl": 13714.50,
+        "unrealized_pnl": 1520.00,
+        "win_rate": 0.72,
+        "profit_factor": 2.85,
+        "sharpe_ratio": 1.84,
+        "sortino_ratio": 2.42,
+        "max_drawdown": -5234.20,
+        "max_drawdown_pct": -5.02,
+        "current_drawdown": -820.00,
+        "total_trades": 25,
+        "winning_trades": 18,
+        "losing_trades": 7,
+        "avg_win": 1245.80,
+        "avg_loss": -456.30,
+        "largest_win": 3450.00,
+        "largest_loss": -1234.50
+      },
+      "exposure": {
+        "gross_exposure": 152080.00,
+        "net_exposure": 115234.00,
+        "long_exposure": 167770.00,
+        "short_exposure": -15690.00,
+        "leverage": 1.32,
+        "concentration_top3": 0.58,
+        "number_of_positions": 8
+      },
+      "allocation": {
+        "by_sector": {
+          "Technology": 0.62,
+          "Financials": 0.08,
+          "Automotive": 0.06,
+          "Index": 0.24
+        },
+        "by_asset_class": {
+          "Equities": 1.00
+        },
+        "by_strategy": {
+          "EMA_Cross_v2": 0.32,
+          "Breakdown_Short_v1": 0.12,
+          "Breakout_v1": 0.18,
+          "Index_Trend_v1": 0.20,
+          "Momentum_v3": 0.10,
+          "India_Blue_Chip_v1": 0.08
+        }
+      }
+    },
+
+    {
+      "portfolio_id": "PF_LOSS_004",
+      "name": "Loss-Making Portfolio",
+      "account_type": "MARGIN",
+      "status": "ACTIVE",
+      "created_at": "2025-09-01T00:00:00Z",
+      "last_updated": "2026-02-11T20:30:00Z",
+      "capital": {
+        "initial_capital": 80000.00,
+        "current_equity": 70400.00,
+        "cash": 15200.00,
+        "cash_reserved": 2000.00,
+        "margin_used": 28000.00,
+        "margin_available": 52000.00,
+        "buying_power": 60000.00
+      },
+      "positions": [
+        {
+          "position_id": "POS_LOSS_001",
+          "symbol": "TSLA",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 60,
+          "avg_entry_price": 260.00,
+          "current_price": 235.00,
+          "cost_basis": 15600.00,
+          "market_value": 14100.00,
+          "unrealized_pnl": -1500.00,
+          "unrealized_pnl_pct": -9.62,
+          "entry_date": "2025-12-15T10:00:00Z",
+          "holding_days": 58,
+          "stop_loss": 245.00,
+          "take_profit": 285.00,
+          "strategy_id": "Momentum_v1"
+        },
+        {
+          "position_id": "POS_LOSS_002",
+          "symbol": "AAPL",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 120,
+          "avg_entry_price": 157.00,
+          "current_price": 143.80,
+          "cost_basis": 18840.00,
+          "market_value": 17256.00,
+          "unrealized_pnl": -1584.00,
+          "unrealized_pnl_pct": -8.41,
+          "entry_date": "2025-11-20T09:30:00Z",
+          "holding_days": 83,
+          "stop_loss": 149.00,
+          "take_profit": 168.00,
+          "strategy_id": "Breakout_v2"
+        },
+        {
+          "position_id": "POS_LOSS_003",
+          "symbol": "MSFT",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 70,
+          "avg_entry_price": 395.00,
+          "current_price": 372.40,
+          "cost_basis": 27650.00,
+          "market_value": 26068.00,
+          "unrealized_pnl": -1582.00,
+          "unrealized_pnl_pct": -5.72,
+          "entry_date": "2025-11-28T10:00:00Z",
+          "holding_days": 75,
+          "stop_loss": 382.00,
+          "take_profit": 418.00,
+          "strategy_id": "TrendFollow_v1"
+        },
+        {
+          "position_id": "POS_LOSS_004",
+          "symbol": "GOOGL",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 50,
+          "avg_entry_price": 150.50,
+          "current_price": 137.20,
+          "cost_basis": 7525.00,
+          "market_value": 6860.00,
+          "unrealized_pnl": -665.00,
+          "unrealized_pnl_pct": -8.84,
+          "entry_date": "2025-10-30T09:45:00Z",
+          "holding_days": 104,
+          "stop_loss": 144.00,
+          "take_profit": 162.00,
+          "strategy_id": "MeanReversion_v1"
+        },
+        {
+          "position_id": "POS_LOSS_005",
+          "symbol": "SPY",
+          "exchange": "NYSE",
+          "side": "LONG",
+          "quantity": 90,
+          "avg_entry_price": 482.00,
+          "current_price": 460.20,
+          "cost_basis": 43380.00,
+          "market_value": 41418.00,
+          "unrealized_pnl": -1962.00,
+          "unrealized_pnl_pct": -4.52,
+          "entry_date": "2025-09-15T09:30:00Z",
+          "holding_days": 149,
+          "stop_loss": 470.00,
+          "take_profit": 505.00,
+          "strategy_id": "Index_Trend_v2"
+        }
+      ],
+      "closed_trades": [
+        {
+          "trade_id": "TRADE_LOSS_001",
+          "symbol": "NVDA",
+          "side": "LONG",
+          "quantity": 40,
+          "entry_price": 510.00,
+          "exit_price": 480.00,
+          "entry_date": "2025-11-01T09:30:00Z",
+          "exit_date": "2025-12-05T15:45:00Z",
+          "holding_days": 34,
+          "realized_pnl": -1220.00,
+          "realized_pnl_pct": -5.98,
+          "commission": 12.00,
+          "slippage": 8.00,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "TRADE_LOSS_002",
+          "symbol": "TSLA",
+          "side": "LONG",
+          "quantity": 30,
+          "entry_price": 280.00,
+          "exit_price": 250.00,
+          "entry_date": "2025-10-20T10:00:00Z",
+          "exit_date": "2025-11-25T15:30:00Z",
+          "holding_days": 36,
+          "realized_pnl": -900.00,
+          "realized_pnl_pct": -10.71,
+          "commission": 10.00,
+          "slippage": 10.00,
+          "exit_reason": "STOP_LOSS"
+        }
+      ],
+      "metrics": {
+        "total_pnl": -9600.00,
+        "total_pnl_pct": -12.00,
+        "realized_pnl": -3200.00,
+        "unrealized_pnl": -6400.00,
+        "win_rate": 0.35,
+        "profit_factor": 0.58,
+        "sharpe_ratio": -0.75,
+        "sortino_ratio": -1.10,
+        "max_drawdown": -20000.00,
+        "max_drawdown_pct": -22.00,
+        "current_drawdown": -9600.00,
+        "total_trades": 18,
+        "winning_trades": 6,
+        "losing_trades": 12,
+        "avg_win": 420.00,
+        "avg_loss": -520.00,
+        "largest_win": 1100.00,
+        "largest_loss": -2400.00
+      },
+      "exposure": {
+        "gross_exposure": 105702.00,
+        "net_exposure": 105702.00,
+        "long_exposure": 105702.00,
+        "short_exposure": 0.00,
+        "leverage": 1.50,
+        "concentration_top3": 0.72,
+        "number_of_positions": 5
+      },
+      "allocation": {
+        "by_sector": {
+          "Technology": 0.64,
+          "Index": 0.36
+        },
+        "by_asset_class": {
+          "Equities": 1.00
+        },
+        "by_strategy": {
+          "Momentum_v1": 0.22,
+          "Breakout_v2": 0.20,
+          "TrendFollow_v1": 0.28,
+          "MeanReversion_v1": 0.10,
+          "Index_Trend_v2": 0.20
+        }
+      }
+    },
+
+    {
+      "portfolio_id": "PF_CONCENTRATED_005",
+      "name": "Over-Concentrated Portfolio",
+      "account_type": "CASH",
+      "status": "ACTIVE",
+      "created_at": "2025-10-01T00:00:00Z",
+      "last_updated": "2026-02-11T20:30:00Z",
+      "capital": {
+        "initial_capital": 60000.00,
+        "current_equity": 61250.00,
+        "cash": 5000.00,
+        "cash_reserved": 0.00,
+        "margin_used": 0.00,
+        "margin_available": 0.00,
+        "buying_power": 5000.00
+      },
+      "positions": [
+        {
+          "position_id": "POS_CONC_001",
+          "symbol": "TSLA",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 150,
+          "avg_entry_price": 240.00,
+          "current_price": 250.50,
+          "cost_basis": 36000.00,
+          "market_value": 37575.00,
+          "unrealized_pnl": 1575.00,
+          "unrealized_pnl_pct": 4.38,
+          "entry_date": "2025-12-01T10:00:00Z",
+          "holding_days": 72,
+          "stop_loss": 230.00,
+          "take_profit": 270.00,
+          "strategy_id": "HighConviction_TSLA_v1"
+        },
+        {
+          "position_id": "POS_CONC_002",
+          "symbol": "AAPL",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 80,
+          "avg_entry_price": 148.00,
+          "current_price": 152.20,
+          "cost_basis": 11840.00,
+          "market_value": 12176.00,
+          "unrealized_pnl": 336.00,
+          "unrealized_pnl_pct": 2.84,
+          "entry_date": "2025-11-10T09:30:00Z",
+          "holding_days": 93,
+          "stop_loss": 142.00,
+          "take_profit": 160.00,
+          "strategy_id": "MegaCap_Growth_v1"
+        },
+        {
+          "position_id": "POS_CONC_003",
+          "symbol": "MSFT",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 40,
+          "avg_entry_price": 380.00,
+          "current_price": 387.50,
+          "cost_basis": 15200.00,
+          "market_value": 15500.00,
+          "unrealized_pnl": 300.00,
+          "unrealized_pnl_pct": 1.97,
+          "entry_date": "2025-11-20T10:00:00Z",
+          "holding_days": 83,
+          "stop_loss": 368.00,
+          "take_profit": 400.00,
+          "strategy_id": "MegaCap_Growth_v1"
+        }
+      ],
+      "closed_trades": [],
+      "metrics": {
+        "total_pnl": 1250.00,
+        "total_pnl_pct": 2.08,
+        "realized_pnl": 0.00,
+        "unrealized_pnl": 2211.00,
+        "win_rate": 0.00,
+        "profit_factor": 0.00,
+        "sharpe_ratio": 0.40,
+        "sortino_ratio": 0.60,
+        "max_drawdown": -4500.00,
+        "max_drawdown_pct": -7.50,
+        "current_drawdown": -900.00,
+        "total_trades": 0,
+        "winning_trades": 0,
+        "losing_trades": 0,
+        "avg_win": 0.00,
+        "avg_loss": 0.00,
+        "largest_win": 0.00,
+        "largest_loss": 0.00
+      },
+      "exposure": {
+        "gross_exposure": 65251.00,
+        "net_exposure": 65251.00,
+        "long_exposure": 65251.00,
+        "short_exposure": 0.00,
+        "leverage": 1.07,
+        "concentration_top3": 0.88,
+        "number_of_positions": 3
+      },
+      "allocation": {
+        "by_sector": {
+          "Technology": 0.34,
+          "Automotive": 0.66
+        },
+        "by_asset_class": {
+          "Equities": 1.00
+        },
+        "by_strategy": {
+          "HighConviction_TSLA_v1": 0.62,
+          "MegaCap_Growth_v1": 0.38
+        }
+      }
+    },
+
+    {
+      "portfolio_id": "PF_HIGH_LEV_006",
+      "name": "High Leverage Portfolio",
+      "account_type": "PORTFOLIO_MARGIN",
+      "status": "ACTIVE",
+      "created_at": "2025-11-01T00:00:00Z",
+      "last_updated": "2026-02-11T20:30:00Z",
+      "capital": {
+        "initial_capital": 120000.00,
+        "current_equity": 118500.00,
+        "cash": 8000.00,
+        "cash_reserved": 5000.00,
+        "margin_used": 85000.00,
+        "margin_available": 15000.00,
+        "buying_power": 30000.00
+      },
+      "positions": [
+        {
+          "position_id": "POS_LEV_001",
+          "symbol": "SPY",
+          "exchange": "NYSE",
+          "side": "LONG",
+          "quantity": 250,
+          "avg_entry_price": 470.00,
+          "current_price": 478.50,
+          "cost_basis": 117500.00,
+          "market_value": 119625.00,
+          "unrealized_pnl": 2125.00,
+          "unrealized_pnl_pct": 1.81,
+          "entry_date": "2025-12-10T09:30:00Z",
+          "holding_days": 63,
+          "stop_loss": 456.00,
+          "take_profit": 490.00,
+          "strategy_id": "Index_Leveraged_v1"
+        },
+        {
+          "position_id": "POS_LEV_002",
+          "symbol": "TSLA",
+          "exchange": "NASDAQ",
+          "side": "SHORT",
+          "quantity": -180,
+          "avg_entry_price": 255.00,
+          "current_price": 246.20,
+          "cost_basis": -45900.00,
+          "market_value": -44316.00,
+          "unrealized_pnl": 1584.00,
+          "unrealized_pnl_pct": 3.45,
+          "entry_date": "2026-01-05T14:00:00Z",
+          "holding_days": 37,
+          "stop_loss": 270.00,
+          "take_profit": 235.00,
+          "strategy_id": "HighBeta_Short_v1"
+        },
+        {
+          "position_id": "POS_LEV_003",
+          "symbol": "AAPL",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 200,
+          "avg_entry_price": 152.00,
+          "current_price": 150.80,
+          "cost_basis": 30400.00,
+          "market_value": 30160.00,
+          "unrealized_pnl": -240.00,
+          "unrealized_pnl_pct": -0.79,
+          "entry_date": "2026-01-28T10:00:00Z",
+          "holding_days": 14,
+          "stop_loss": 145.00,
+          "take_profit": 160.00,
+          "strategy_id": "MeanReversion_v2"
+        }
+      ],
+      "closed_trades": [
+        {
+          "trade_id": "TRADE_LEV_001",
+          "symbol": "QQQ",
+          "side": "LONG",
+          "quantity": 150,
+          "entry_price": 405.00,
+          "exit_price": 420.00,
+          "entry_date": "2025-12-01T09:30:00Z",
+          "exit_date": "2025-12-20T15:30:00Z",
+          "holding_days": 19,
+          "realized_pnl": 2250.00,
+          "realized_pnl_pct": 3.70,
+          "commission": 30.00,
+          "slippage": 20.00,
+          "exit_reason": "TAKE_PROFIT"
+        }
+      ],
+      "metrics": {
+        "total_pnl": -1500.00,
+        "total_pnl_pct": -1.25,
+        "realized_pnl": 2200.00,
+        "unrealized_pnl": -3700.00,
+        "win_rate": 0.55,
+        "profit_factor": 1.25,
+        "sharpe_ratio": 0.20,
+        "sortino_ratio": 0.30,
+        "max_drawdown": -18000.00,
+        "max_drawdown_pct": -15.00,
+        "current_drawdown": -4500.00,
+        "total_trades": 22,
+        "winning_trades": 12,
+        "losing_trades": 10,
+        "avg_win": 820.00,
+        "avg_loss": -640.00,
+        "largest_win": 2600.00,
+        "largest_loss": -2100.00
+      },
+      "exposure": {
+        "gross_exposure": 194801.00,
+        "net_exposure": 105469.00,
+        "long_exposure": 149785.00,
+        "short_exposure": -45016.00,
+        "leverage": 2.50,
+        "concentration_top3": 0.92,
+        "number_of_positions": 3
+      },
+      "allocation": {
+        "by_sector": {
+          "Index": 0.62,
+          "Technology": 0.28,
+          "Automotive": 0.10
+        },
+        "by_asset_class": {
+          "Equities": 1.00
+        },
+        "by_strategy": {
+          "Index_Leveraged_v1": 0.60,
+          "HighBeta_Short_v1": 0.25,
+          "MeanReversion_v2": 0.15
+        }
+      }
+    },
+
+    {
+      "portfolio_id": "PF_MULTI_STRAT_007",
+      "name": "Multi-Strategy Portfolio",
+      "account_type": "MARGIN",
+      "status": "ACTIVE",
+      "created_at": "2025-04-01T00:00:00Z",
+      "last_updated": "2026-02-11T20:30:00Z",
+      "capital": {
+        "initial_capital": 90000.00,
+        "current_equity": 96350.00,
+        "cash": 18500.00,
+        "cash_reserved": 3000.00,
+        "margin_used": 32000.00,
+        "margin_available": 58000.00,
+        "buying_power": 90000.00
+      },
+      "positions": [
+        {
+          "position_id": "POS_MS_001",
+          "symbol": "AAPL",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 90,
+          "avg_entry_price": 146.00,
+          "current_price": 153.20,
+          "cost_basis": 13140.00,
+          "market_value": 13788.00,
+          "unrealized_pnl": 648.00,
+          "unrealized_pnl_pct": 4.93,
+          "entry_date": "2026-01-10T09:30:00Z",
+          "holding_days": 32,
+          "stop_loss": 140.00,
+          "take_profit": 160.00,
+          "strategy_id": "Momentum_Swing_v1"
+        },
+        {
+          "position_id": "POS_MS_002",
+          "symbol": "MSFT",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 45,
+          "avg_entry_price": 382.00,
+          "current_price": 388.80,
+          "cost_basis": 17190.00,
+          "market_value": 17496.00,
+          "unrealized_pnl": 306.00,
+          "unrealized_pnl_pct": 1.78,
+          "entry_date": "2026-01-02T10:00:00Z",
+          "holding_days": 40,
+          "stop_loss": 372.00,
+          "take_profit": 400.00,
+          "strategy_id": "TrendFollow_Daily_v1"
+        },
+        {
+          "position_id": "POS_MS_003",
+          "symbol": "TSLA",
+          "exchange": "NASDAQ",
+          "side": "SHORT",
+          "quantity": -40,
+          "avg_entry_price": 250.00,
+          "current_price": 244.50,
+          "cost_basis": -10000.00,
+          "market_value": -9780.00,
+          "unrealized_pnl": 220.00,
+          "unrealized_pnl_pct": 2.20,
+          "entry_date": "2026-02-01T14:00:00Z",
+          "holding_days": 10,
+          "stop_loss": 260.00,
+          "take_profit": 235.00,
+          "strategy_id": "Intraday_Short_v2"
+        },
+        {
+          "position_id": "POS_MS_004",
+          "symbol": "RELIANCE.NS",
+          "exchange": "NSE",
+          "side": "LONG",
+          "quantity": 40,
+          "avg_entry_price": 2800.00,
+          "current_price": 2872.00,
+          "cost_basis": 112000.00,
+          "market_value": 114880.00,
+          "unrealized_pnl": 2880.00,
+          "unrealized_pnl_pct": 2.57,
+          "entry_date": "2025-12-10T04:30:00Z",
+          "holding_days": 63,
+          "stop_loss": 2720.00,
+          "take_profit": 2950.00,
+          "strategy_id": "India_Blue_Chip_v1"
+        },
+        {
+          "position_id": "POS_MS_005",
+          "symbol": "SPY",
+          "exchange": "NYSE",
+          "side": "LONG",
+          "quantity": 60,
+          "avg_entry_price": 472.00,
+          "current_price": 480.50,
+          "cost_basis": 28320.00,
+          "market_value": 28830.00,
+          "unrealized_pnl": 510.00,
+          "unrealized_pnl_pct": 1.80,
+          "entry_date": "2025-11-01T09:30:00Z",
+          "holding_days": 102,
+          "stop_loss": 462.00,
+          "take_profit": 492.00,
+          "strategy_id": "Index_Trend_v1"
+        }
+      ],
+      "closed_trades": [
+        {
+          "trade_id": "TRADE_MS_001",
+          "symbol": "NVDA",
+          "side": "LONG",
+          "quantity": 30,
+          "entry_price": 470.00,
+          "exit_price": 498.00,
+          "entry_date": "2025-09-10T09:30:00Z",
+          "exit_date": "2025-10-05T15:30:00Z",
+          "holding_days": 25,
+          "realized_pnl": 840.00,
+          "realized_pnl_pct": 5.96,
+          "commission": 12.00,
+          "slippage": 8.00,
+          "exit_reason": "TAKE_PROFIT"
+        },
+        {
+          "trade_id": "TRADE_MS_002",
+          "symbol": "AAPL",
+          "side": "LONG",
+          "quantity": 100,
+          "entry_price": 140.00,
+          "exit_price": 138.00,
+          "entry_date": "2025-08-20T09:30:00Z",
+          "exit_date": "2025-09-02T15:30:00Z",
+          "holding_days": 13,
+          "realized_pnl": -220.00,
+          "realized_pnl_pct": -1.57,
+          "commission": 10.00,
+          "slippage": 10.00,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "TRADE_MS_003",
+          "symbol": "INFY.NS",
+          "side": "LONG",
+          "quantity": 80,
+          "entry_price": 1580.00,
+          "exit_price": 1645.00,
+          "entry_date": "2025-10-01T04:30:00Z",
+          "exit_date": "2025-11-10T10:15:00Z",
+          "holding_days": 40,
+          "realized_pnl": 5200.00,
+          "realized_pnl_pct": 4.12,
+          "commission": 16.00,
+          "slippage": 14.00,
+          "exit_reason": "TAKE_PROFIT"
+        }
+      ],
+      "metrics": {
+        "total_pnl": 6350.00,
+        "total_pnl_pct": 7.06,
+        "realized_pnl": 5460.00,
+        "unrealized_pnl": 890.00,
+        "win_rate": 0.60,
+        "profit_factor": 1.80,
+        "sharpe_ratio": 0.95,
+        "sortino_ratio": 1.30,
+        "max_drawdown": -10500.00,
+        "max_drawdown_pct": -11.70,
+        "current_drawdown": -2800.00,
+        "total_trades": 30,
+        "winning_trades": 18,
+        "losing_trades": 12,
+        "avg_win": 740.00,
+        "avg_loss": -420.00,
+        "largest_win": 3100.00,
+        "largest_loss": -1600.00
+      },
+      "exposure": {
+        "gross_exposure": 205,  
+        "net_exposure": 180000.00,
+        "long_exposure": 190994.00,
+        "short_exposure": -9970.00,
+        "leverage": 2.10,
+        "concentration_top3": 0.55,
+        "number_of_positions": 5
+      },
+      "allocation": {
+        "by_sector": {
+          "Technology": 0.42,
+          "Automotive": 0.08,
+          "Index": 0.30,
+          "Energy": 0.00,
+          "India_Equities": 0.20
+        },
+        "by_asset_class": {
+          "Equities": 1.00
+        },
+        "by_strategy": {
+          "Momentum_Swing_v1": 0.22,
+          "TrendFollow_Daily_v1": 0.18,
+          "Intraday_Short_v2": 0.10,
+          "India_Blue_Chip_v1": 0.30,
+          "Index_Trend_v1": 0.20
+        }
+      }
+    },
+
+    {
+      "portfolio_id": "PF_INDIA_008",
+      "name": "Indian Market Portfolio",
+      "account_type": "CASH",
+      "status": "ACTIVE",
+      "created_at": "2025-07-01T00:00:00Z",
+      "last_updated": "2026-02-11T20:30:00Z",
+      "capital": {
+        "initial_capital": 1500000.00,
+        "current_equity": 1612000.00,
+        "cash": 420000.00,
+        "cash_reserved": 100000.00,
+        "margin_used": 0.00,
+        "margin_available": 0.00,
+        "buying_power": 420000.00
+      },
+      "positions": [
+        {
+          "position_id": "POS_IN_001",
+          "symbol": "RELIANCE.NS",
+          "exchange": "NSE",
+          "side": "LONG",
+          "quantity": 120,
+          "avg_entry_price": 2725.00,
+          "current_price": 2885.00,
+          "cost_basis": 327000.00,
+          "market_value": 346200.00,
+          "unrealized_pnl": 19200.00,
+          "unrealized_pnl_pct": 5.87,
+          "entry_date": "2025-11-01T04:30:00Z",
+          "holding_days": 102,
+          "stop_loss": 2620.00,
+          "take_profit": 3000.00,
+          "strategy_id": "India_Blue_Chip_v1"
+        },
+        {
+          "position_id": "POS_IN_002",
+          "symbol": "TCS.NS",
+          "exchange": "NSE",
+          "side": "LONG",
+          "quantity": 80,
+          "avg_entry_price": 3780.00,
+          "current_price": 3920.00,
+          "cost_basis": 302400.00,
+          "market_value": 313600.00,
+          "unrealized_pnl": 11200.00,
+          "unrealized_pnl_pct": 3.70,
+          "entry_date": "2025-10-15T04:30:00Z",
+          "holding_days": 119,
+          "stop_loss": 3680.00,
+          "take_profit": 4050.00,
+          "strategy_id": "India_IT_Trend_v1"
+        },
+        {
+          "position_id": "POS_IN_003",
+          "symbol": "INFY.NS",
+          "exchange": "NSE",
+          "side": "LONG",
+          "quantity": 150,
+          "avg_entry_price": 1580.00,
+          "current_price": 1668.00,
+          "cost_basis": 237000.00,
+          "market_value": 250200.00,
+          "unrealized_pnl": 13200.00,
+          "unrealized_pnl_pct": 5.57,
+          "entry_date": "2025-09-20T04:30:00Z",
+          "holding_days": 144,
+          "stop_loss": 1530.00,
+          "take_profit": 1700.00,
+          "strategy_id": "India_IT_Swing_v1"
+        },
+        {
+          "position_id": "POS_IN_004",
+          "symbol": "NIFTY50",
+          "exchange": "NSE",
+          "side": "LONG",
+          "quantity": 40,
+          "avg_entry_price": 19200.00,
+          "current_price": 20050.00,
+          "cost_basis": 768000.00,
+          "market_value": 802000.00,
+          "unrealized_pnl": 34000.00,
+          "unrealized_pnl_pct": 4.43,
+          "entry_date": "2025-08-10T04:30:00Z",
+          "holding_days": 185,
+          "stop_loss": 18650.00,
+          "take_profit": 20500.00,
+          "strategy_id": "Index_India_v1"
+        }
+      ],
+      "closed_trades": [
+        {
+          "trade_id": "TRADE_IN_001",
+          "symbol": "HDFCBANK.NS",
+          "side": "LONG",
+          "quantity": 100,
+          "entry_price": 1520.00,
+          "exit_price": 1605.00,
+          "entry_date": "2025-10-01T04:30:00Z",
+          "exit_date": "2025-11-20T10:15:00Z",
+          "holding_days": 50,
+          "realized_pnl": 8500.00,
+          "realized_pnl_pct": 5.59,
+          "commission": 80.00,
+          "slippage": 70.00,
+          "exit_reason": "TAKE_PROFIT"
+        }
+      ],
+      "metrics": {
+        "total_pnl": 112000.00,
+        "total_pnl_pct": 7.47,
+        "realized_pnl": 8300.00,
+        "unrealized_pnl": 103700.00,
+        "win_rate": 0.68,
+        "profit_factor": 2.10,
+        "sharpe_ratio": 1.10,
+        "sortino_ratio": 1.60,
+        "max_drawdown": -190000.00,
+        "max_drawdown_pct": -12.50,
+        "current_drawdown": -45000.00,
+        "total_trades": 40,
+        "winning_trades": 27,
+        "losing_trades": 13,
+        "avg_win": 9600.00,
+        "avg_loss": -6200.00,
+        "largest_win": 25500.00,
+        "largest_loss": -18500.00
+      },
+      "exposure": {
+        "gross_exposure": 1714000.00,
+        "net_exposure": 1714000.00,
+        "long_exposure": 1714000.00,
+        "short_exposure": 0.00,
+        "leverage": 1.06,
+        "concentration_top3": 0.74,
+        "number_of_positions": 4
+      },
+      "allocation": {
+        "by_sector": {
+          "Energy": 0.21,
+          "IT": 0.34,
+          "Index": 0.45
+        },
+        "by_asset_class": {
+          "Equities": 1.00
+        },
+        "by_strategy": {
+          "India_Blue_Chip_v1": 0.30,
+          "India_IT_Trend_v1": 0.22,
+          "India_IT_Swing_v1": 0.18,
+          "Index_India_v1": 0.30
+        }
+      }
+    },
+
+    {
+      "portfolio_id": "PF_US_009",
+      "name": "US Market Portfolio",
+      "account_type": "CASH",
+      "status": "ACTIVE",
+      "created_at": "2025-05-01T00:00:00Z",
+      "last_updated": "2026-02-11T20:30:00Z",
+      "capital": {
+        "initial_capital": 200000.00,
+        "current_equity": 218500.00,
+        "cash": 52000.00,
+        "cash_reserved": 8000.00,
+        "margin_used": 0.00,
+        "margin_available": 0.00,
+        "buying_power": 52000.00
+      },
+      "positions": [
+        {
+          "position_id": "POS_US_001",
+          "symbol": "AAPL",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 150,
+          "avg_entry_price": 146.50,
+          "current_price": 155.80,
+          "cost_basis": 21975.00,
+          "market_value": 23370.00,
+          "unrealized_pnl": 1395.00,
+          "unrealized_pnl_pct": 6.35,
+          "entry_date": "2025-12-01T09:30:00Z",
+          "holding_days": 72,
+          "stop_loss": 140.00,
+          "take_profit": 162.00,
+          "strategy_id": "MegaCap_Trend_v1"
+        },
+        {
+          "position_id": "POS_US_002",
+          "symbol": "MSFT",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 120,
+          "avg_entry_price": 382.00,
+          "current_price": 390.50,
+          "cost_basis": 45840.00,
+          "market_value": 46860.00,
+          "unrealized_pnl": 1020.00,
+          "unrealized_pnl_pct": 2.23,
+          "entry_date": "2025-11-10T09:30:00Z",
+          "holding_days": 93,
+          "stop_loss": 370.00,
+          "take_profit": 405.00,
+          "strategy_id": "MegaCap_Trend_v1"
+        },
+        {
+          "position_id": "POS_US_003",
+          "symbol": "GOOGL",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 110,
+          "avg_entry_price": 140.00,
+          "current_price": 147.20,
+          "cost_basis": 15400.00,
+          "market_value": 16192.00,
+          "unrealized_pnl": 792.00,
+          "unrealized_pnl_pct": 5.14,
+          "entry_date": "2025-10-05T09:30:00Z",
+          "holding_days": 129,
+          "stop_loss": 134.00,
+          "take_profit": 152.00,
+          "strategy_id": "Momentum_v2"
+        },
+        {
+          "position_id": "POS_US_004",
+          "symbol": "TSLA",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 80,
+          "avg_entry_price": 240.00,
+          "current_price": 252.40,
+          "cost_basis": 19200.00,
+          "market_value": 20192.00,
+          "unrealized_pnl": 992.00,
+          "unrealized_pnl_pct": 5.17,
+          "entry_date": "2026-01-05T10:00:00Z",
+          "holding_days": 37,
+          "stop_loss": 230.00,
+          "take_profit": 270.00,
+          "strategy_id": "HighBeta_Swing_v1"
+        },
+        {
+          "position_id": "POS_US_005",
+          "symbol": "SPY",
+          "exchange": "NYSE",
+          "side": "LONG",
+          "quantity": 150,
+          "avg_entry_price": 470.00,
+          "current_price": 481.80,
+          "cost_basis": 70500.00,
+          "market_value": 72270.00,
+          "unrealized_pnl": 1770.00,
+          "unrealized_pnl_pct": 2.51,
+          "entry_date": "2025-09-15T09:30:00Z",
+          "holding_days": 149,
+          "stop_loss": 456.00,
+          "take_profit": 495.00,
+          "strategy_id": "Index_Trend_v1"
+        }
+      ],
+      "closed_trades": [
+        {
+          "trade_id": "TRADE_US_001",
+          "symbol": "NFLX",
+          "side": "LONG",
+          "quantity": 60,
+          "entry_price": 480.00,
+          "exit_price": 505.00,
+          "entry_date": "2025-08-01T09:30:00Z",
+          "exit_date": "2025-09-05T15:30:00Z",
+          "holding_days": 35,
+          "realized_pnl": 1500.00,
+          "realized_pnl_pct": 5.21,
+          "commission": 18.00,
+          "slippage": 12.00,
+          "exit_reason": "TAKE_PROFIT"
+        }
+      ],
+      "metrics": {
+        "total_pnl": 18500.00,
+        "total_pnl_pct": 9.25,
+        "realized_pnl": 1470.00,
+        "unrealized_pnl": 17030.00,
+        "win_rate": 0.66,
+        "profit_factor": 1.95,
+        "sharpe_ratio": 1.05,
+        "sortino_ratio": 1.50,
+        "max_drawdown": -23000.00,
+        "max_drawdown_pct": -11.50,
+        "current_drawdown": -5100.00,
+        "total_trades": 28,
+        "winning_trades": 18,
+        "losing_trades": 10,
+        "avg_win": 980.00,
+        "avg_loss": -640.00,
+        "largest_win": 2600.00,
+        "largest_loss": -1800.00
+      },
+      "exposure": {
+        "gross_exposure": 178,  
+        "net_exposure": 178,  
+        "long_exposure": 178,  
+        "short_exposure": 0.00,
+        "leverage": 0.76,
+        "concentration_top3": 0.70,
+        "number_of_positions": 5
+      },
+      "allocation": {
+        "by_sector": {
+          "Technology": 0.58,
+          "Automotive": 0.12,
+          "Index": 0.30
+        },
+        "by_asset_class": {
+          "Equities": 1.00
+        },
+        "by_strategy": {
+          "MegaCap_Trend_v1": 0.38,
+          "Momentum_v2": 0.18,
+          "HighBeta_Swing_v1": 0.18,
+          "Index_Trend_v1": 0.26
+        }
+      }
+    },
+
+    {
+      "portfolio_id": "PF_SIDEWAYS_010",
+      "name": "Sideways Market Portfolio",
+      "account_type": "CASH",
+      "status": "ACTIVE",
+      "created_at": "2025-03-01T00:00:00Z",
+      "last_updated": "2026-02-11T20:30:00Z",
+      "capital": {
+        "initial_capital": 75000.00,
+        "current_equity": 75250.00,
+        "cash": 21000.00,
+        "cash_reserved": 1500.00,
+        "margin_used": 0.00,
+        "margin_available": 0.00,
+        "buying_power": 21000.00
+      },
+      "positions": [
+        {
+          "position_id": "POS_SW_001",
+          "symbol": "AAPL",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 60,
+          "avg_entry_price": 150.00,
+          "current_price": 150.70,
+          "cost_basis": 9000.00,
+          "market_value": 9042.00,
+          "unrealized_pnl": 42.00,
+          "unrealized_pnl_pct": 0.47,
+          "entry_date": "2026-01-20T09:30:00Z",
+          "holding_days": 22,
+          "stop_loss": 145.00,
+          "take_profit": 155.00,
+          "strategy_id": "Range_Break_v1"
+        },
+        {
+          "position_id": "POS_SW_002",
+          "symbol": "SPY",
+          "exchange": "NYSE",
+          "side": "LONG",
+          "quantity": 80,
+          "avg_entry_price": 476.00,
+          "current_price": 475.50,
+          "cost_basis": 38080.00,
+          "market_value": 38040.00,
+          "unrealized_pnl": -40.00,
+          "unrealized_pnl_pct": -0.10,
+          "entry_date": "2025-12-15T09:30:00Z",
+          "holding_days": 58,
+          "stop_loss": 468.00,
+          "take_profit": 485.00,
+          "strategy_id": "MeanReversion_Range_v1"
+        }
+      ],
+      "closed_trades": [
+        {
+          "trade_id": "TRADE_SW_001",
+          "symbol": "AAPL",
+          "side": "LONG",
+          "quantity": 50,
+          "entry_price": 148.00,
+          "exit_price": 149.00,
+          "entry_date": "2025-09-01T09:30:00Z",
+          "exit_date": "2025-09-10T15:30:00Z",
+          "holding_days": 9,
+          "realized_pnl": 50.00,
+          "realized_pnl_pct": 0.68,
+          "commission": 10.00,
+          "slippage": 5.00,
+          "exit_reason": "MANUAL"
+        },
+        {
+          "trade_id": "TRADE_SW_002",
+          "symbol": "MSFT",
+          "side": "LONG",
+          "quantity": 40,
+          "entry_price": 380.00,
+          "exit_price": 379.00,
+          "entry_date": "2025-09-05T09:30:00Z",
+          "exit_date": "2025-09-15T15:30:00Z",
+          "holding_days": 10,
+          "realized_pnl": -40.00,
+          "realized_pnl_pct": -0.26,
+          "commission": 10.00,
+          "slippage": 5.00,
+          "exit_reason": "STOP_LOSS"
+        }
+      ],
+      "metrics": {
+        "total_pnl": 250.00,
+        "total_pnl_pct": 0.33,
+        "realized_pnl": 10.00,
+        "unrealized_pnl": 240.00,
+        "win_rate": 0.48,
+        "profit_factor": 1.02,
+        "sharpe_ratio": 0.10,
+        "sortino_ratio": 0.15,
+        "max_drawdown": -4500.00,
+        "max_drawdown_pct": -6.00,
+        "current_drawdown": -300.00,
+        "total_trades": 50,
+        "winning_trades": 24,
+        "losing_trades": 26,
+        "avg_win": 220.00,
+        "avg_loss": -210.00,
+        "largest_win": 650.00,
+        "largest_loss": -680.00
+      },
+      "exposure": {
+        "gross_exposure": 47082.00,
+        "net_exposure": 47082.00,
+        "long_exposure": 47082.00,
+        "short_exposure": 0.00,
+        "leverage": 0.63,
+        "concentration_top3": 1.00,
+        "number_of_positions": 2
+      },
+      "allocation": {
+        "by_sector": {
+          "Technology": 0.19,
+          "Index": 0.81
+        },
+        "by_asset_class": {
+          "Equities": 1.00
+        },
+        "by_strategy": {
+          "Range_Break_v1": 0.19,
+          "MeanReversion_Range_v1": 0.81
+        }
+      }
+    },
+
+    {
+      "portfolio_id": "PF_RECOVERY_011",
+      "name": "Recovery Portfolio",
+      "account_type": "MARGIN",
+      "status": "ACTIVE",
+      "created_at": "2024-12-01T00:00:00Z",
+      "last_updated": "2026-02-11T20:30:00Z",
+      "capital": {
+        "initial_capital": 110000.00,
+        "current_equity": 104000.00,
+        "cash": 28000.00,
+        "cash_reserved": 5000.00,
+        "margin_used": 32000.00,
+        "margin_available": 45000.00,
+        "buying_power": 75000.00
+      },
+      "positions": [
+        {
+          "position_id": "POS_REC_001",
+          "symbol": "AAPL",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 120,
+          "avg_entry_price": 152.00,
+          "current_price": 154.50,
+          "cost_basis": 18240.00,
+          "market_value": 18540.00,
+          "unrealized_pnl": 300.00,
+          "unrealized_pnl_pct": 1.64,
+          "entry_date": "2025-11-01T09:30:00Z",
+          "holding_days": 102,
+          "stop_loss": 145.00,
+          "take_profit": 162.00,
+          "strategy_id": "Recovery_Trend_v1"
+        },
+        {
+          "position_id": "POS_REC_002",
+          "symbol": "MSFT",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 80,
+          "avg_entry_price": 390.00,
+          "current_price": 398.50,
+          "cost_basis": 31200.00,
+          "market_value": 31880.00,
+          "unrealized_pnl": 680.00,
+          "unrealized_pnl_pct": 2.18,
+          "entry_date": "2025-11-10T09:30:00Z",
+          "holding_days": 93,
+          "stop_loss": 382.00,
+          "take_profit": 410.00,
+          "strategy_id": "Recovery_Trend_v1"
+        },
+        {
+          "position_id": "POS_REC_003",
+          "symbol": "SPY",
+          "exchange": "NYSE",
+          "side": "LONG",
+          "quantity": 100,
+          "avg_entry_price": 475.00,
+          "current_price": 482.00,
+          "cost_basis": 47500.00,
+          "market_value": 48200.00,
+          "unrealized_pnl": 700.00,
+          "unrealized_pnl_pct": 1.47,
+          "entry_date": "2025-10-10T09:30:00Z",
+          "holding_days": 124,
+          "stop_loss": 460.00,
+          "take_profit": 490.00,
+          "strategy_id": "Index_Recovery_v1"
+        }
+      ],
+      "closed_trades": [
+        {
+          "trade_id": "TRADE_REC_001",
+          "symbol": "TSLA",
+          "side": "LONG",
+          "quantity": 70,
+          "entry_price": 260.00,
+          "exit_price": 235.00,
+          "entry_date": "2025-08-01T09:30:00Z",
+          "exit_date": "2025-09-10T15:30:00Z",
+          "holding_days": 40,
+          "realized_pnl": -1750.00,
+          "realized_pnl_pct": -9.62,
+          "commission": 15.00,
+          "slippage": 15.00,
+          "exit_reason": "STOP_LOSS"
+        },
+        {
+          "trade_id": "TRADE_REC_002",
+          "symbol": "AAPL",
+          "side": "LONG",
+          "quantity": 100,
+          "entry_price": 148.00,
+          "exit_price": 158.00,
+          "entry_date": "2025-09-20T09:30:00Z",
+          "exit_date": "2025-10-20T15:30:00Z",
+          "holding_days": 30,
+          "realized_pnl": 900.00,
+          "realized_pnl_pct": 6.08,
+          "commission": 12.00,
+          "slippage": 8.00,
+          "exit_reason": "TAKE_PROFIT"
+        }
+      ],
+      "metrics": {
+        "total_pnl": -6000.00,
+        "total_pnl_pct": -5.45,
+        "realized_pnl": -850.00,
+        "unrealized_pnl": -5150.00,
+        "win_rate": 0.52,
+        "profit_factor": 1.10,
+        "sharpe_ratio": 0.30,
+        "sortino_ratio": 0.45,
+        "max_drawdown": -27500.00,
+        "max_drawdown_pct": -25.00,
+        "current_drawdown": -8800.00,
+        "total_trades": 32,
+        "winning_trades": 17,
+        "losing_trades": 15,
+        "avg_win": 720.00,
+        "avg_loss": -640.00,
+        "largest_win": 2100.00,
+        "largest_loss": -3400.00
+      },
+      "exposure": {
+        "gross_exposure": 98620.00,
+        "net_exposure": 98620.00,
+        "long_exposure": 98620.00,
+        "short_exposure": 0.00,
+        "leverage": 0.95,
+        "concentration_top3": 1.00,
+        "number_of_positions": 3
+      },
+      "allocation": {
+        "by_sector": {
+          "Technology": 0.52,
+          "Index": 0.48
+        },
+        "by_asset_class": {
+          "Equities": 1.00
+        },
+        "by_strategy": {
+          "Recovery_Trend_v1": 0.55,
+          "Index_Recovery_v1": 0.45
+        }
+      }
+    },
+
+    {
+      "portfolio_id": "PF_DAYTRADE_012",
+      "name": "Day Trading Portfolio",
+      "account_type": "MARGIN",
+      "status": "ACTIVE",
+      "created_at": "2026-01-10T00:00:00Z",
+      "last_updated": "2026-02-11T20:30:00Z",
+      "capital": {
+        "initial_capital": 50000.00,
+        "current_equity": 51200.00,
+        "cash": 48200.00,
+        "cash_reserved": 3000.00,
+        "margin_used": 0.00,
+        "margin_available": 0.00,
+        "buying_power": 48200.00
+      },
+      "positions": [],
+      "closed_trades": [
+        {
+          "trade_id": "TRADE_DT_001",
+          "symbol": "AAPL",
+          "side": "LONG",
+          "quantity": 200,
+          "entry_price": 150.20,
+          "exit_price": 151.10,
+          "entry_date": "2026-02-10T09:35:00Z",
+          "exit_date": "2026-02-10T10:10:00Z",
+          "holding_days": 0,
+          "realized_pnl": 180.00,
+          "realized_pnl_pct": 0.60,
+          "commission": 16.00,
+          "slippage": 4.00,
+          "exit_reason": "TAKE_PROFIT"
+        },
+        {
+          "trade_id": "TRADE_DT_002",
+          "symbol": "TSLA",
+          "side": "SHORT",
+          "quantity": 100,
+          "entry_price": 248.50,
+          "exit_price": 250.20,
+          "entry_date": "2026-02-10T11:15:00Z",
+          "exit_date": "2026-02-10T11:40:00Z",
+          "holding_days": 0,
+          "realized_pnl": -170.00,
+          "realized_pnl_pct": -0.69,
+          "commission": 12.00,
+          "slippage": 8.00,
+          "exit_reason": "STOP_LOSS"
+        }
+      ],
+      "metrics": {
+        "total_pnl": 1200.00,
+        "total_pnl_pct": 2.40,
+        "realized_pnl": 1200.00,
+        "unrealized_pnl": 0.00,
+        "win_rate": 0.54,
+        "profit_factor": 1.40,
+        "sharpe_ratio": 1.20,
+        "sortino_ratio": 1.75,
+        "max_drawdown": -2200.00,
+        "max_drawdown_pct": -4.40,
+        "current_drawdown": -400.00,
+        "total_trades": 52,
+        "winning_trades": 28,
+        "losing_trades": 24,
+        "avg_win": 140.00,
+        "avg_loss": -110.00,
+        "largest_win": 420.00,
+        "largest_loss": -380.00
+      },
+      "exposure": {
+        "gross_exposure": 0.00,
+        "net_exposure": 0.00,
+        "long_exposure": 0.00,
+        "short_exposure": 0.00,
+        "leverage": 0.00,
+        "concentration_top3": 0.00,
+        "number_of_positions": 0
+      },
+      "allocation": {
+        "by_sector": {},
+        "by_asset_class": {},
+        "by_strategy": {}
+      }
+    },
+
+    {
+      "portfolio_id": "PF_LONGTERM_013",
+      "name": "Long-Term Hold Portfolio",
+      "account_type": "CASH",
+      "status": "ACTIVE",
+      "created_at": "2024-01-01T00:00:00Z",
+      "last_updated": "2026-02-11T20:30:00Z",
+      "capital": {
+        "initial_capital": 250000.00,
+        "current_equity": 295000.00,
+        "cash": 65000.00,
+        "cash_reserved": 0.00,
+        "margin_used": 0.00,
+        "margin_available": 0.00,
+        "buying_power": 65000.00
+      },
+      "positions": [
+        {
+          "position_id": "POS_LT_001",
+          "symbol": "AAPL",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 200,
+          "avg_entry_price": 125.00,
+          "current_price": 155.80,
+          "cost_basis": 25000.00,
+          "market_value": 31160.00,
+          "unrealized_pnl": 6160.00,
+          "unrealized_pnl_pct": 24.64,
+          "entry_date": "2024-02-01T09:30:00Z",
+          "holding_days": 376,
+          "stop_loss": 0.00,
+          "take_profit": 0.00,
+          "strategy_id": "LongTerm_Core_v1"
+        },
+        {
+          "position_id": "POS_LT_002",
+          "symbol": "MSFT",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 180,
+          "avg_entry_price": 310.00,
+          "current_price": 390.50,
+          "cost_basis": 55800.00,
+          "market_value": 70290.00,
+          "unrealized_pnl": 14490.00,
+          "unrealized_pnl_pct": 25.97,
+          "entry_date": "2024-03-01T09:30:00Z",
+          "holding_days": 348,
+          "stop_loss": 0.00,
+          "take_profit": 0.00,
+          "strategy_id": "LongTerm_Core_v1"
+        },
+        {
+          "position_id": "POS_LT_003",
+          "symbol": "SPY",
+          "exchange": "NYSE",
+          "side": "LONG",
+          "quantity": 200,
+          "avg_entry_price": 430.00,
+          "current_price": 481.80,
+          "cost_basis": 86000.00,
+          "market_value": 96360.00,
+          "unrealized_pnl": 10360.00,
+          "unrealized_pnl_pct": 12.05,
+          "entry_date": "2024-01-15T09:30:00Z",
+          "holding_days": 381,
+          "stop_loss": 0.00,
+          "take_profit": 0.00,
+          "strategy_id": "LongTerm_Core_v1"
+        },
+        {
+          "position_id": "POS_LT_004",
+          "symbol": "RELIANCE.NS",
+          "exchange": "NSE",
+          "side": "LONG",
+          "quantity": 80,
+          "avg_entry_price": 2400.00,
+          "current_price": 2885.00,
+          "cost_basis": 192000.00,
+          "market_value": 230800.00,
+          "unrealized_pnl": 38800.00,
+          "unrealized_pnl_pct": 20.21,
+          "entry_date": "2024-05-01T04:30:00Z",
+          "holding_days": 310,
+          "stop_loss": 0.00,
+          "take_profit": 0.00,
+          "strategy_id": "India_LongTerm_v1"
+        }
+      ],
+      "closed_trades": [],
+      "metrics": {
+        "total_pnl": 45000.00,
+        "total_pnl_pct": 18.00,
+        "realized_pnl": 0.00,
+        "unrealized_pnl": 45000.00,
+        "win_rate": 1.00,
+        "profit_factor": 0.00,
+        "sharpe_ratio": 1.10,
+        "sortino_ratio": 1.50,
+        "max_drawdown": -22000.00,
+        "max_drawdown_pct": -9.50,
+        "current_drawdown": -6000.00,
+        "total_trades": 4,
+        "winning_trades": 4,
+        "losing_trades": 0,
+        "avg_win": 11250.00,
+        "avg_loss": 0.00,
+        "largest_win": 18000.00,
+        "largest_loss": 0.00
+      },
+      "exposure": {
+        "gross_exposure": 428610.00,
+        "net_exposure": 428610.00,
+        "long_exposure": 428610.00,
+        "short_exposure": 0.00,
+        "leverage": 1.45,
+        "concentration_top3": 0.69,
+        "number_of_positions": 4
+      },
+      "allocation": {
+        "by_sector": {
+          "Technology": 0.40,
+          "Index": 0.35,
+          "India_Equities": 0.25
+        },
+        "by_asset_class": {
+          "Equities": 1.00
+        },
+        "by_strategy": {
+          "LongTerm_Core_v1": 0.70,
+          "India_LongTerm_v1": 0.30
+        }
+      }
+    },
+
+    {
+      "portfolio_id": "PF_FROZEN_014",
+      "name": "Frozen Portfolio",
+      "account_type": "MARGIN",
+      "status": "FROZEN",
+      "created_at": "2025-06-15T00:00:00Z",
+      "last_updated": "2026-02-11T20:30:00Z",
+      "capital": {
+        "initial_capital": 60000.00,
+        "current_equity": 58000.00,
+        "cash": 8000.00,
+        "cash_reserved": 2000.00,
+        "margin_used": 35000.00,
+        "margin_available": 5000.00,
+        "buying_power": 0.00
+      },
+      "positions": [
+        {
+          "position_id": "POS_FRZ_001",
+          "symbol": "TSLA",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 100,
+          "avg_entry_price": 270.00,
+          "current_price": 246.20,
+          "cost_basis": 27000.00,
+          "market_value": 24620.00,
+          "unrealized_pnl": -2380.00,
+          "unrealized_pnl_pct": -8.81,
+          "entry_date": "2025-10-01T09:30:00Z",
+          "holding_days": 133,
+          "stop_loss": 250.00,
+          "take_profit": 295.00,
+          "strategy_id": "HighBeta_v1"
+        },
+        {
+          "position_id": "POS_FRZ_002",
+          "symbol": "AAPL",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 120,
+          "avg_entry_price": 155.00,
+          "current_price": 150.50,
+          "cost_basis": 18600.00,
+          "market_value": 18060.00,
+          "unrealized_pnl": -540.00,
+          "unrealized_pnl_pct": -2.90,
+          "entry_date": "2025-11-10T09:30:00Z",
+          "holding_days": 93,
+          "stop_loss": 148.00,
+          "take_profit": 170.00,
+          "strategy_id": "Momentum_v1"
+        }
+      ],
+      "closed_trades": [],
+      "metrics": {
+        "total_pnl": -2000.00,
+        "total_pnl_pct": -3.33,
+        "realized_pnl": 0.00,
+        "unrealized_pnl": -2000.00,
+        "win_rate": 0.00,
+        "profit_factor": 0.00,
+        "sharpe_ratio": -0.40,
+        "sortino_ratio": -0.60,
+        "max_drawdown": -9000.00,
+        "max_drawdown_pct": -15.00,
+        "current_drawdown": -3500.00,
+        "total_trades": 4,
+        "winning_trades": 0,
+        "losing_trades": 4,
+        "avg_win": 0.00,
+        "avg_loss": -500.00,
+        "largest_win": 0.00,
+        "largest_loss": -800.00
+      },
+      "exposure": {
+        "gross_exposure": 42680.00,
+        "net_exposure": 42680.00,
+        "long_exposure": 42680.00,
+        "short_exposure": 0.00,
+        "leverage": 0.74,
+        "concentration_top3": 1.00,
+        "number_of_positions": 2
+      },
+      "allocation": {
+        "by_sector": {
+          "Technology": 1.00
+        },
+        "by_asset_class": {
+          "Equities": 1.00
+        },
+        "by_strategy": {
+          "HighBeta_v1": 0.55,
+          "Momentum_v1": 0.45
+        }
+      }
+    },
+
+    {
+      "portfolio_id": "PF_PENNY_015",
+      "name": "Penny Stock Portfolio",
+      "account_type": "CASH",
+      "status": "ACTIVE",
+      "created_at": "2025-09-01T00:00:00Z",
+      "last_updated": "2026-02-11T20:30:00Z",
+      "capital": {
+        "initial_capital": 30000.00,
+        "current_equity": 31250.00,
+        "cash": 4500.00,
+        "cash_reserved": 500.00,
+        "margin_used": 0.00,
+        "margin_available": 0.00,
+        "buying_power": 4500.00
+      },
+      "positions": [
+        {
+          "position_id": "POS_PNY_001",
+          "symbol": "PENNY",
+          "exchange": "NYSE",
+          "side": "LONG",
+          "quantity": 5000,
+          "avg_entry_price": 0.85,
+          "current_price": 0.92,
+          "cost_basis": 4250.00,
+          "market_value": 4600.00,
+          "unrealized_pnl": 350.00,
+          "unrealized_pnl_pct": 8.24,
+          "entry_date": "2026-02-01T09:30:00Z",
+          "holding_days": 10,
+          "stop_loss": 0.70,
+          "take_profit": 1.10,
+          "strategy_id": "Penny_Momentum_v1"
+        },
+        {
+          "position_id": "POS_PNY_002",
+          "symbol": "LOWVOL",
+          "exchange": "NYSE",
+          "side": "LONG",
+          "quantity": 8000,
+          "avg_entry_price": 2.10,
+          "current_price": 2.05,
+          "cost_basis": 16800.00,
+          "market_value": 16400.00,
+          "unrealized_pnl": -400.00,
+          "unrealized_pnl_pct": -2.38,
+          "entry_date": "2026-01-20T09:30:00Z",
+          "holding_days": 22,
+          "stop_loss": 1.80,
+          "take_profit": 2.50,
+          "strategy_id": "Penny_Reversal_v1"
+        },
+        {
+          "position_id": "POS_PNY_003",
+          "symbol": "MICRO",
+          "exchange": "NASDAQ",
+          "side": "LONG",
+          "quantity": 6000,
+          "avg_entry_price": 1.25,
+          "current_price": 1.38,
+          "cost_basis": 7500.00,
+          "market_value": 8280.00,
+          "unrealized_pnl": 780.00,
+          "unrealized_pnl_pct": 10.40,
+          "entry_date": "2026-01-25T09:30:00Z",
+          "holding_days": 17,
+          "stop_loss": 1.00,
+          "take_profit": 1.60,
+          "strategy_id": "Penny_Breakout_v1"
+        }
+      ],
+      "closed_trades": [
+        {
+          "trade_id": "TRADE_PNY_001",
+          "symbol": "PENNY",
+          "side": "LONG",
+          "quantity": 4000,
+          "entry_price": 0.70,
+          "exit_price": 0.90,
+          "entry_date": "2025-10-01T09:30:00Z",
+          "exit_date": "2025-10-05T15:30:00Z",
+          "holding_days": 4,
+          "realized_pnl": 800.00,
+          "realized_pnl_pct": 28.57,
+          "commission": 10.00,
+          "slippage": 10.00,
+          "exit_reason": "TAKE_PROFIT"
+        }
+      ],
+      "metrics": {
+        "total_pnl": 1250.00,
+        "total_pnl_pct": 4.17,
+        "realized_pnl": 780.00,
+        "unrealized_pnl": 470.00,
+        "win_rate": 0.62,
+        "profit_factor": 1.60,
+        "sharpe_ratio": 0.85,
+        "sortino_ratio": 1.15,
+        "max_drawdown": -3500.00,
+        "max_drawdown_pct": -11.60,
+        "current_drawdown": -1200.00,
+        "total_trades": 18,
+        "winning_trades": 11,
+        "losing_trades": 7,
+        "avg_win": 220.00,
+        "avg_loss": -180.00,
+        "largest_win": 900.00,
+        "largest_loss": -620.00
+      },
+      "exposure": {
+        "gross_exposure": 29280.00,
+        "net_exposure": 29280.00,
+        "long_exposure": 29280.00,
+        "short_exposure": 0.00,
+        "leverage": 0.94,
+        "concentration_top3": 1.00,
+        "number_of_positions": 3
+      },
+      "allocation": {
+        "by_sector": {
+          "MicroCaps": 1.00
+        },
+        "by_asset_class": {
+          "Equities": 1.00
+        },
+        "by_strategy": {
+          "Penny_Momentum_v1": 0.32,
+          "Penny_Reversal_v1": 0.38,
+          "Penny_Breakout_v1": 0.30
+        }
+      }
+    }
+  ]
+}

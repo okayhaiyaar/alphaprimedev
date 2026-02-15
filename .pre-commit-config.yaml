@@ -1,0 +1,261 @@
+# ============================================================
+# ALPHA-PRIME v2.0 - Pre-commit Configuration
+# ============================================================
+# FIRST-TIME SETUP
+# ============================================================
+# 1. Install pre-commit framework:
+#      pip install pre-commit
+# 2. Install git hooks:
+#      pre-commit install
+# 3. (Optional) Run on all files:
+#      pre-commit run --all-files
+# 4. Update hooks to latest versions:
+#      pre-commit autoupdate
+# ============================================================
+# AUTOMATED CODE QUALITY CHECKS
+# ============================================================
+# Automated code quality checks run before every commit.
+# Usage:
+#   git commit                     # Hooks run automatically
+#   pre-commit run                 # Run on staged files
+#   pre-commit run --all-files     # Run on entire repo
+# Skip hooks (emergency only):
+#   git commit --no-verify
+# Skip specific hook:
+#   SKIP=flake8 git commit -m "..."
+# If a hook fails:
+#   1. Fix the reported issues
+#   2. git add .
+#   3. git commit again
+# ============================================================
+
+fail_fast: false
+
+default_language_version:
+  python: python3.10
+
+exclude: |
+  (?x)^(
+    data/.*|
+    logs/.*|
+    backups/.*|
+    \.venv/.*|
+    venv/.*|
+    build/.*|
+    dist/.*|
+    .*\.egg-info/.*|
+    __pycache__/.*
+  )$
+
+repos:
+  # ──────────────────────────────────────────────────────────
+  # BASIC FILE CHECKS
+  # ──────────────────────────────────────────────────────────
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: trailing-whitespace
+        name: Trim trailing whitespace
+        args: [--markdown-linebreak-ext=md]
+
+      - id: end-of-file-fixer
+        name: Fix end of files
+        exclude_types: [jupyter]
+
+      - id: check-yaml
+        name: Check YAML syntax
+        args: [--safe]
+
+      - id: check-json
+        name: Check JSON syntax
+
+      - id: check-toml
+        name: Check TOML syntax
+
+      - id: check-added-large-files
+        name: Check for large files
+        args: [--maxkb=1000]  # Max 1MB
+
+      - id: check-case-conflict
+        name: Check for filename case conflicts
+
+      - id: check-merge-conflict
+        name: Check for merge conflict markers
+
+      - id: detect-private-key
+        name: Detect private keys
+
+      - id: mixed-line-ending
+        name: Fix mixed line endings
+        args: [--fix=lf]
+
+      - id: check-ast
+        name: Check Python AST validity
+
+      - id: check-builtin-literals
+        name: Check builtin type constructor use
+
+      - id: check-docstring-first
+        name: Check docstring is first
+
+      - id: debug-statements
+        name: Check for debugger imports
+
+      - id: name-tests-test
+        name: Check test naming convention
+        args: [--pytest-test-first]
+        files: ^tests/.*\.py$
+
+  # ──────────────────────────────────────────────────────────
+  # CODE FORMATTING
+  # ──────────────────────────────────────────────────────────
+  - repo: https://github.com/psf/black
+    rev: 24.1.1
+    hooks:
+      - id: black
+        name: Format code with black
+        language_version: python3.10
+        args: [--line-length=100]
+
+  # ──────────────────────────────────────────────────────────
+  # IMPORT SORTING
+  # ──────────────────────────────────────────────────────────
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        name: Sort imports with isort
+        args: [--profile=black, --line-length=100]
+
+  # ──────────────────────────────────────────────────────────
+  # LINTING
+  # ──────────────────────────────────────────────────────────
+  - repo: https://github.com/PyCQA/flake8
+    rev: 7.0.0
+    hooks:
+      - id: flake8
+        name: Lint with flake8
+        args:
+          - --max-line-length=100
+          - --extend-ignore=E203,E266,E501,W503
+          - --max-complexity=10
+        additional_dependencies:
+          - flake8-docstrings
+          - flake8-bugbear
+
+  # ──────────────────────────────────────────────────────────
+  # TYPE CHECKING
+  # ──────────────────────────────────────────────────────────
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.8.0
+    hooks:
+      - id: mypy
+        name: Type check with mypy
+        args:
+          - --python-version=3.10
+          - --ignore-missing-imports
+          - --disallow-incomplete-defs
+          - --no-implicit-optional
+        additional_dependencies:
+          - types-requests
+          - types-python-dateutil
+          - pydantic
+
+  # ──────────────────────────────────────────────────────────
+  # SECURITY CHECKS
+  # ──────────────────────────────────────────────────────────
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.6
+    hooks:
+      - id: bandit
+        name: Security check with bandit
+        args:
+          - -c
+          - pyproject.toml
+        additional_dependencies: ["bandit[toml]"]
+        exclude: ^tests/.*
+
+  # ──────────────────────────────────────────────────────────
+  # YAML LINTING
+  # ──────────────────────────────────────────────────────────
+  - repo: https://github.com/adrienverge/yamllint
+    rev: v1.33.0
+    hooks:
+      - id: yamllint
+        name: Lint YAML files
+        args: [-c=.yamllint.yaml]
+
+  # ──────────────────────────────────────────────────────────
+  # DOCKERFILE LINTING
+  # ──────────────────────────────────────────────────────────
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.12.0
+    hooks:
+      - id: hadolint-docker
+        name: Lint Dockerfile
+        files: ^Dockerfile$
+
+  # ──────────────────────────────────────────────────────────
+  # SECRET DETECTION
+  # ──────────────────────────────────────────────────────────
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        name: Detect secrets
+        args:
+          - --baseline
+          - .secrets.baseline
+        exclude: |
+          (?x)^(
+            .*\.lock$|
+            poetry\.lock|
+            package-lock\.json
+          )$
+
+  # ──────────────────────────────────────────────────────────
+  # MARKDOWN LINTING (Optional)
+  # ──────────────────────────────────────────────────────────
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.39.0
+    hooks:
+      - id: markdownlint
+        name: Lint Markdown files
+        args: [--fix]
+        files: \.(md|markdown)$
+
+  # ──────────────────────────────────────────────────────────
+  # CUSTOM PROJECT CHECKS
+  # ──────────────────────────────────────────────────────────
+  - repo: local
+    hooks:
+      - id: check-env-example
+        name: Validate .env.example exists
+        entry: test -f .env.example
+        language: system
+        pass_filenames: false
+
+      - id: no-print-statements
+        name: Check for print statements (use logger)
+        entry: 'print\('
+        language: pygrep
+        files: \.py$
+        exclude: |
+          (?x)^(
+            tests/.*|
+            scripts/.*|
+            setup\.py
+          )$
+
+      - id: no-breakpoint
+        name: Check for breakpoint()
+        entry: 'breakpoint\(\)'
+        language: pygrep
+        files: \.py$
+
+      - id: check-requirements-txt
+        name: Check requirements.txt is sorted
+        entry: sort -c requirements.txt
+        language: system
+        files: ^requirements\.txt$
+        pass_filenames: false

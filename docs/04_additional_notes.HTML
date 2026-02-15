@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALPHA-PRIME v2.0 - Technical Reference</title>
+    <style>
+        :root {
+            /* Color Palette - Tech/Developer Theme */
+            --bg-body: #0f1115;
+            --bg-sidebar: #161b22;
+            --bg-card: #1c2128;
+            --bg-terminal: #0d1117;
+            --border-color: #30363d;
+            
+            --accent-primary: #2ea043; /* Success Green */
+            --accent-glow: #3fb950;
+            --accent-secondary: #58a6ff; /* Tech Blue */
+            --accent-purple: #bc8cff; /* For Architecture/Structure */
+            --accent-warning: #d29922;
+            --accent-danger: #f85149;
+            
+            --text-main: #c9d1d9;
+            --text-header: #ffffff;
+            --text-muted: #8b949e;
+            
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            --font-mono: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Layout */
+        .layout-container {
+            display: flex;
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 2rem 1.5rem;
+            display: none; /* Hidden on mobile by default */
+        }
+
+        @media (min-width: 1024px) {
+            .sidebar {
+                display: block;
+            }
+        }
+
+        .sidebar h3 {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .sidebar h3:first-child { margin-top: 0; }
+
+        .nav-link {
+            display: block;
+            color: var(--text-main);
+            text-decoration: none;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            border-left: 2px solid transparent;
+            padding-left: 1rem;
+            margin-bottom: 0.25rem;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-secondary);
+        }
+
+        .nav-link.active {
+            color: var(--accent-purple);
+            border-left-color: var(--accent-purple);
+            background: linear-gradient(90deg, rgba(188, 140, 255, 0.1) 0%, transparent 100%);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem 1.5rem;
+            max-width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .main-content {
+                padding: 4rem;
+            }
+        }
+
+        /* Headers */
+        h1 {
+            font-size: 2.5rem;
+            color: var(--text-header);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--accent-purple);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .meta-info {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            color: var(--text-header);
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+        }
+
+        h2::before {
+            content: '//';
+            color: var(--accent-purple);
+            margin-right: 0.5rem;
+            font-family: var(--font-mono);
+            font-weight: bold;
+            letter-spacing: -2px;
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--text-header);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        h4 {
+            font-size: 1.1rem;
+            color: var(--text-main);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            color: var(--accent-secondary);
+        }
+
+        /* Schematic Diagram */
+        .schematic-view {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            white-space: pre;
+            background-color: var(--bg-terminal);
+            color: var(--accent-purple);
+            padding: 1.5rem;
+            border: 1px solid var(--accent-purple);
+            border-radius: 4px;
+            overflow-x: auto;
+            box-shadow: 0 0 15px rgba(188, 140, 255, 0.1);
+            line-height: 1.2;
+            margin: 1.5rem 0;
+        }
+
+        /* Sections & Cards */
+        .step-block {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        /* Troubleshooting Card */
+        .error-card {
+            border-left: 4px solid var(--accent-danger);
+            background-color: rgba(248, 81, 73, 0.05);
+            padding: 1rem 1.5rem;
+            margin-bottom: 1.5rem;
+            border-radius: 4px;
+        }
+        
+        .error-title {
+            font-family: var(--font-mono);
+            color: var(--accent-danger);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+        }
+        
+        .error-fix {
+            margin-top: 0.5rem;
+            padding-top: 0.5rem;
+            border-top: 1px dashed var(--border-color);
+        }
+
+        /* Lists */
+        ul {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+        
+        li::before {
+            content: '>';
+            color: var(--text-muted);
+            position: absolute;
+            left: 0;
+            font-family: var(--font-mono);
+        }
+
+        /* Checkbox styling */
+        li.checklist-item {
+            display: flex;
+            align-items: flex-start;
+            padding-left: 0;
+            cursor: pointer;
+        }
+        
+        li.checklist-item::before { content: none; }
+
+        .checkbox-mock {
+            min-width: 18px;
+            height: 18px;
+            border: 2px solid var(--text-muted);
+            border-radius: 4px;
+            margin-right: 12px;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            background: var(--bg-body);
+        }
+
+        .checklist-item.done .checkbox-mock {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .checklist-item.done .checkbox-mock::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Code Blocks */
+        .code-wrapper {
+            background-color: var(--bg-terminal);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background-color: #21262d;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: var(--font-main);
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 2px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--border-color);
+            color: var(--text-main);
+        }
+
+        pre {
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: #e6edf3;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+            background: var(--bg-terminal);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        th {
+            background-color: #21262d;
+            color: var(--text-header);
+            font-weight: 600;
+        }
+        
+        tr:last-child td { border-bottom: none; }
+
+        /* Journal Text Area */
+        textarea.journal-entry {
+            width: 100%;
+            height: 300px;
+            background-color: var(--bg-terminal);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            resize: vertical;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+        
+        textarea.journal-entry:focus {
+            outline: none;
+            border-color: var(--accent-secondary);
+        }
+
+        /* Utilities */
+        a { color: var(--accent-secondary); text-decoration: none; }
+        strong { color: var(--text-header); font-weight: 600; }
+        hr { border: 0; height: 1px; background: var(--border-color); margin: 3rem 0; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="layout-container">
+    <!-- Navigation Sidebar -->
+    <nav class="sidebar">
+        <h3>Contents</h3>
+        <a href="#arch" class="nav-link">1. System Architecture</a>
+        <a href="#dir" class="nav-link">2. Directory Structure</a>
+        <a href="#errors" class="nav-link">3. Errors & Solutions</a>
+        <a href="#config" class="nav-link">4. Config Files</a>
+        <a href="#db" class="nav-link">5. Database Schema</a>
+        <a href="#logs" class="nav-link">6. Logs & Debugging</a>
+        <a href="#prelive" class="nav-link">7. Pre-Live Checklist</a>
+        <a href="#experiments" class="nav-link">8. Safe Experiments</a>
+        <a href="#maint" class="nav-link">9. Maintenance</a>
+        <a href="#api" class="nav-link">10. API Reference</a>
+        <a href="#perf" class="nav-link">11. Performance</a>
+        <a href="#backup" class="nav-link">12. Backup</a>
+        <a href="#security" class="nav-link">13. Security</a>
+        <a href="#broker" class="nav-link">14. Broker Notes</a>
+        <a href="#journal" class="nav-link">15. My Journal</a>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        
+        <header>
+            <h1>ALPHA-PRIME v2.0 <br><span style="font-weight: 300; font-size: 0.6em; color: var(--text-muted)">Additional Notes & Technical Reference</span></h1>
+            <div class="subtitle">Everything else you need to know</div>
+            <div class="meta-info">Last updated: February 11, 2026</div>
+        </header>
+
+        <section id="arch">
+            <h2>1. System Architecture</h2>
+            <h3>High-Level Overview</h3>
+            <div class="schematic-view">
+┌─────────────────────────────────────────────────────────────┐
+│                    ALPHA-PRIME v2.0                         │
+├─────────────────────────────────────────────────────────────┤
+│                                                             │
+│  ┌──────────────┐                     ┌──────────────┐      │
+│  │  Dashboard   │◄──── WebSocket ───► │   Trading    │      │
+│  │ (Streamlit)  │       / HTTP        │   Engine     │      │
+│  │  Port: 8000  │                     │   (Core)     │      │
+│  └──────────────┘                     └───────┬──────┘      │
+│                                              │              │
+│                                   ┌──────────▼─────────┐    │
+│                                   │   Strategy Manager │    │
+│                                   └─────────┬──────────┘    │
+│                                             │               │
+│       ┌───────────────────────────────┬─────┼───────────┐   │
+│       │                               │     │           │   │
+│  ┌────▼─────┐                   ┌────▼──────▼───┐ ┌────▼─────┐
+│  │  Risk    │                   │  Execution    │ │ Portfolio │
+│  │ Manager  │                   │   Engine      │ │ Manager   │
+│  └────┬─────┘                   └──────┬────────┘ └────┬─────┘
+│       │                                │               │       │
+│       └──────────────────────┬─────────┴───────────────┘       │
+│                              │                                 │
+│                        ┌─────▼─────────┐                       │
+│                        │ Order Manager │                       │
+│                        └─────┬─────────┘                       │
+│                              │                                 │
+│            ┌─────────────────┼────────────────────┐            │
+│            │                 │                    │            │
+│      ┌─────▼─────┐    ┌─────▼─────┐        ┌─────▼─────┐    │
+│      │PostgreSQL │    │  Redis    │        │  Broker   │    │
+│      │ Database  │    │  Cache    │        │   API     │    │
+│      └───────────┘    └───────────┘        └───────────┘    │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+            </div>
+
+            <h3>Component Descriptions</h3>
+            <p><strong>Trading Engine (<code>core/engine.py</code>)</strong>: Main orchestrator. Runs async event loop, receives market data, generates signals.</p>
+            <p><strong>Strategy Manager (<code>core/strategy_engine.py</code>)</strong>: Loads strategies, runs logic, tracks per-strategy performance.</p>
+            <p><strong>Risk Manager (<code>core/risk_manager.py</code>)</strong>: Pre-trade checks (limits, drawdown, correlation), Position sizing, Kill switches.</p>
+            <p><strong>Execution Engine (<code>core/execution_engine.py</code>)</strong>: Converts signals to orders, routes to broker, models slippage.</p>
+            <p><strong>Database – PostgreSQL</strong>: Durable storage for trades, orders, portfolio history.</p>
+            <p><strong>Cache – Redis</strong>: Fast in-memory data for market state and quotes.</p>
+        </section>
+
+        <hr>
+
+        <section id="dir">
+            <h2>2. Directory Structure</h2>
+            <div class="code-wrapper">
+                <div class="code-header"><span>Tree</span> <button class="copy-btn">Copy</button></div>
+                <pre><code>alpha-prime-v2/
+├── config/                     # Configuration files
+│   ├── strategies/            # Strategy configs
+│   ├── risk_config.yaml       # Risk rules (CRITICAL)
+│   ├── broker_config.yaml     # Broker settings
+│   └── general_config.yaml    # System-wide flags
+├── core/                      # Core trading logic
+│   ├── engine.py              # Main engine
+│   ├── strategy_engine.py
+│   ├── risk_manager.py
+│   └── execution_engine.py
+├── strategies/                # Strategy implementations
+├── integrations/              # External integrations (Brokers, Redis)
+├── database/                  # Database layer (Models, Queries)
+├── data/                      # Local data cache
+├── dashboard/                 # Streamlit dashboard
+├── scripts/                   # Utility scripts (Setup, Backtest, Tools)
+├── tests/                     # Test suite
+├── logs/                      # Logs
+├── reports/                   # Generated reports
+├── docs/                      # Documentation
+├── .env                       # Secrets (not committed)
+└── requirements.txt</code></pre>
+            </div>
+            <p><strong>Key files:</strong></p>
+            <ul>
+                <li><code>.env</code> – ALL secrets (DB URL, API keys, email, Telegram)</li>
+                <li><code>config/risk_config.yaml</code> – your risk rules (most important)</li>
+                <li><code>core/engine.py</code> – engine entry point</li>
+                <li><code>logs/alpha_prime.log</code> – first place to look on errors</li>
+            </ul>
+        </section>
+
+        <hr>
+
+        <section id="errors">
+            <h2>3. Common Errors & Solutions</h2>
+            
+            <h3>Category 1: Database Errors</h3>
+            
+            <div class="error-card">
+                <div class="error-title">Error: psycopg2.OperationalError: could not connect to server</div>
+                <p>Symptoms: Connection refused on port 5432.</p>
+                <div class="error-fix">
+                    <strong>Fixes:</strong>
+                    <ol>
+                        <li>Start PostgreSQL (<code>brew services start postgresql@14</code> or <code>sudo systemctl start postgresql</code>).</li>
+                        <li>Check <code>.env</code> port matches DB.</li>
+                        <li>Ensure DB exists (<code>createdb alpha_prime</code>).</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="error-card">
+                <div class="error-title">Error: sqlalchemy.exc.ProgrammingError: relation "trades" does not exist</div>
+                <p>Cause: Migrations not run.</p>
+                <div class="error-fix">
+                    <strong>Fix:</strong> Run <code>bash scripts/setup.sh --db-only</code> or <code>alembic upgrade head</code>.
+                </div>
+            </div>
+
+            <h3>Category 2: Redis Errors</h3>
+            
+            <div class="error-card">
+                <div class="error-title">Error: redis.exceptions.ConnectionError</div>
+                <p>Cause: Redis not running.</p>
+                <div class="error-fix">
+                    <strong>Fix:</strong> Start Redis service. Check with <code>redis-cli ping</code> (Should reply PONG).
+                </div>
+            </div>
+
+            <h3>Category 3: Broker API Errors</h3>
+            
+            <div class="error-card">
+                <div class="error-title">Error: TokenException: Invalid access token</div>
+                <p>Cause: Token expired or wrong credentials.</p>
+                <div class="error-fix">
+                    <strong>Fix:</strong> Run <code>python integrations/zerodha/auth.py --login</code> to refresh token.
+                </div>
+            </div>
+            
+            <div class="error-card">
+                <div class="error-title">Error: OrderException: Order rejected by OMS</div>
+                <p>Cause: Outside hours, wrong symbol, bad price.</p>
+                <div class="error-fix">
+                    <strong>Debug:</strong> Run <code>python scripts/broker_test.py --test-order --dry-run</code>.
+                </div>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="config">
+            <h2>4. Configuration Files Explained</h2>
+            
+            <h3><code>config/risk_config.yaml</code> (Core Risk Control)</h3>
+            <div class="code-wrapper">
+                <div class="code-header"><span>YAML</span> <button class="copy-btn">Copy</button></div>
+                <pre><code>risk_limits:
+  daily_max_loss: 2.0         # % of equity
+  max_drawdown: 4.0           # % from peak
+  per_trade_risk: 0.25        # % per trade
+  max_open_positions: 3
+  
+  kill_switch:
+    daily_loss_threshold: 1.8
+
+circuit_breakers:
+  consecutive_losses:
+    enabled: true
+    threshold: 3
+    action: "reduce_size"</code></pre>
+            </div>
+            
+            <h3><code>.env</code> (Secrets)</h3>
+            <div class="code-wrapper">
+                <div class="code-header"><span>.env</span> <button class="copy-btn">Copy</button></div>
+                <pre><code>DATABASE_URL=postgresql://username:password@localhost:5432/alpha_prime
+REDIS_URL=redis://localhost:6379/0
+ZERODHA_API_KEY=...
+ENVIRONMENT=production</code></pre>
+            </div>
+            <p>Security: <code>chmod 600 .env</code></p>
+        </section>
+
+        <hr>
+
+        <section id="db">
+            <h2>5. Database Schema</h2>
+            
+            <h3><code>trades</code> table</h3>
+            <div class="code-wrapper">
+                <div class="code-header"><span>SQL</span> <button class="copy-btn">Copy</button></div>
+                <pre><code>CREATE TABLE trades (
+    id SERIAL PRIMARY KEY,
+    trade_id VARCHAR(50) UNIQUE NOT NULL,
+    strategy_name VARCHAR(100) NOT NULL,
+    symbol VARCHAR(50) NOT NULL,
+    side VARCHAR(10) NOT NULL,            -- BUY/SELL
+    entry_price DECIMAL(15, 2) NOT NULL,
+    pnl DECIMAL(15, 2),
+    status VARCHAR(20) NOT NULL,          -- OPEN/CLOSED/CANCELLED
+    created_at TIMESTAMP DEFAULT NOW()
+);</code></pre>
+            </div>
+
+            <h3>Useful Queries</h3>
+            <p><strong>Strategy performance last 30 days:</strong></p>
+            <div class="code-wrapper">
+                <div class="code-header"><span>SQL</span> <button class="copy-btn">Copy</button></div>
+                <pre><code>SELECT
+    strategy_name,
+    COUNT(*) AS total_trades,
+    SUM(pnl) AS total_pnl,
+    AVG(pnl) AS avg_pnl
+FROM trades
+WHERE entry_time >= CURRENT_DATE - INTERVAL '30 days'
+  AND status = 'CLOSED'
+GROUP BY strategy_name;</code></pre>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="logs">
+            <h2>6. Logs & Debugging</h2>
+            <table>
+                <thead><tr><th>File</th><th>Purpose</th><th>Level</th></tr></thead>
+                <tbody>
+                    <tr><td><code>logs/alpha_prime.log</code></td><td>Main system log</td><td>INFO</td></tr>
+                    <tr><td><code>logs/trades.log</code></td><td>Trades and order exec</td><td>DEBUG</td></tr>
+                    <tr><td><code>logs/risk.log</code></td><td>Risk events & rejections</td><td>WARNING</td></tr>
+                    <tr><td><code>logs/errors.log</code></td><td>Errors only</td><td>ERROR</td></tr>
+                </tbody>
+            </table>
+            
+            <p><strong>Tail logs:</strong></p>
+            <div class="code-wrapper">
+                <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                <pre><code>tail -f logs/alpha_prime.log
+grep "ERROR" logs/alpha_prime.log | grep "2026-02-11"</code></pre>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="prelive">
+            <h2>7. Pre-Live Checklist</h2>
+            <div class="step-block">
+                <h3>Before First Real Live Trade</h3>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div><code>pytest tests/smoke/ -v</code> passes</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>All live strategies fully backtested (3+ years)</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Risk limits set (Daily max loss ~40% of firm limit)</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>DB migrations applied & Redis running</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Broker API authenticated</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Emergency contacts & procedures ready</div></li>
+                </ul>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="experiments">
+            <h2>8. Safe Experimentation Guide</h2>
+            <div class="error-card" style="border-left-color: var(--accent-warning); background-color: rgba(210, 153, 34, 0.05);">
+                <div class="error-title" style="color: var(--accent-warning);">Golden Rule</div>
+                <p><strong>Never experiment with real money.</strong></p>
+            </div>
+            <p><strong>Pipeline:</strong> Idea → Backtest → Walk-Forward → Monte Carlo → Paper Trade → Live (10% size) → Scale Up.</p>
+        </section>
+
+        <hr>
+
+        <section id="maint">
+            <h2>9. Maintenance Tasks</h2>
+            <ul>
+                <li><strong>Daily:</strong> Check report, Scan error logs.</li>
+                <li><strong>Weekly:</strong> <code>python scripts/backup.py --weekly</code>, Review strategy vs expectations.</li>
+                <li><strong>Monthly:</strong> Full health check, DB vacuum, Update requirements.</li>
+            </ul>
+        </section>
+
+        <hr>
+
+        <section id="api">
+            <h2>10. API Reference (Engine)</h2>
+            <div class="code-wrapper">
+                <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                <pre><code># Monitor mode (no trades)
+python scripts/run_engine.py --mode monitor
+
+# Live trading
+python scripts/run_engine.py --mode live --confirm
+
+# Paper trading
+python scripts/run_engine.py --mode paper
+
+# Emergency stop
+python scripts/run_engine.py --mode emergency-stop</code></pre>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="perf">
+            <h2>11. Performance Tuning</h2>
+            
+            <h3>Database</h3>
+            <p>Create indexes for frequent queries:</p>
+            <div class="code-wrapper">
+                <div class="code-header"><span>SQL</span> <button class="copy-btn">Copy</button></div>
+                <pre><code>CREATE INDEX idx_trades_date ON trades(DATE(entry_time));
+CREATE INDEX idx_trades_pnl  ON trades(pnl) WHERE pnl IS NOT NULL;</code></pre>
+            </div>
+            
+            <h3>Redis</h3>
+            <div class="code-wrapper">
+                <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                <pre><code>redis-cli CONFIG SET maxmemory-policy allkeys-lru
+redis-cli CONFIG SET maxmemory 4gb</code></pre>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="backup">
+            <h2>12. Backup & Recovery</h2>
+            <h3>Automated</h3>
+            <p>Cron example: <code>0 4 * * * /path/to/scripts/backup.py --daily --compress</code></p>
+            
+            <h3>Full Disaster Recovery</h3>
+            <div class="code-wrapper">
+                <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                <pre><code>python scripts/restore.py --backup backups/latest.tar.gz --confirm
+python scripts/health_check.py --full
+python scripts/run_engine.py --mode paper --duration 60
+python scripts/run_engine.py --mode live --confirm</code></pre>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="security">
+            <h2>13. Security & API Keys</h2>
+            <ul>
+                <li class="checklist-item"><div class="checkbox-mock"></div><div>Rotate <strong>broker API keys</strong> every ~90 days</div></li>
+                <li class="checklist-item"><div class="checkbox-mock"></div><div>Limit <code>.env</code> permissions: <code>chmod 600 .env</code></div></li>
+                <li class="checklist-item"><div class="checkbox-mock"></div><div>Never log secrets or print them</div></li>
+                <li class="checklist-item"><div class="checkbox-mock"></div><div>Restrict DB user permissions to required tables only</div></li>
+            </ul>
+        </section>
+
+        <hr>
+
+        <section id="broker">
+            <h2>14. Broker-Specific Notes (Skeleton)</h2>
+            <p><em>(Fill with your broker quirks: Zerodha margin rules, product types, rate limits, etc.)</em></p>
+            <div class="step-block">
+                <h4>Zerodha:</h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Intraday vs CNC vs NRML</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Leverage schedules</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Order freeze quantities / circuit limit behavior</div></li>
+                </ul>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="journal">
+            <h2>15. Personal Notes & Journal</h2>
+            <p>Use this area as your scratchpad for technical observations, slippage notes, or strategy ideas.</p>
+            <div class="step-block">
+                <textarea class="journal-entry" placeholder="2026-02-11
+- Observed slightly higher slippage on BANKNIFTY during RBI speech.
+- Plan: run deeper regime test before deciding to reduce allocation."></textarea>
+            </div>
+            <p><em>Note: This text area is for your local session use. Save important notes to a file.</em></p>
+        </section>
+
+    </main>
+</div>
+
+<script>
+    // Copy to clipboard functionality
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const codeBlock = btn.parentElement.nextElementSibling;
+            const code = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.style.color = 'var(--accent-glow)';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.color = '';
+                }, 2000);
+            });
+        });
+    });
+
+    // Checkbox interaction
+    document.querySelectorAll('.checklist-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            item.classList.toggle('done');
+        });
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            if (targetId) {
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                } else {
+                    console.warn(`Target element ${targetId} not found.`);
+                }
+            }
+        });
+    });
+
+    // Active sidebar state
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= (sectionTop - 200)) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').includes(current)) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

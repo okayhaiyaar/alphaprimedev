@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALPHA-PRIME v2.0 - Daily Startup Checklist</title>
+    <style>
+        :root {
+            /* Color Palette - Tech/Trading Theme */
+            --bg-body: #0f1115;
+            --bg-sidebar: #161b22;
+            --bg-card: #1c2128;
+            --bg-terminal: #0d1117;
+            --border-color: #30363d;
+            
+            --accent-primary: #2ea043; /* Success Green */
+            --accent-glow: #3fb950;
+            --accent-secondary: #58a6ff; /* Tech Blue */
+            --accent-warning: #d29922;
+            --accent-danger: #f85149;
+            --accent-critical: #da3633;
+            
+            --text-main: #c9d1d9;
+            --text-header: #ffffff;
+            --text-muted: #8b949e;
+            
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            --font-mono: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Layout */
+        .layout-container {
+            display: flex;
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 2rem 1.5rem;
+            display: none; /* Hidden on mobile by default */
+        }
+
+        @media (min-width: 1024px) {
+            .sidebar {
+                display: block;
+            }
+        }
+
+        .sidebar h3 {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .nav-link {
+            display: block;
+            color: var(--text-main);
+            text-decoration: none;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            border-left: 2px solid transparent;
+            padding-left: 1rem;
+            margin-bottom: 0.25rem;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-secondary);
+        }
+
+        .nav-link.active {
+            color: var(--accent-glow);
+            border-left-color: var(--accent-glow);
+            background: linear-gradient(90deg, rgba(63, 185, 80, 0.1) 0%, transparent 100%);
+        }
+        
+        .nav-link.danger-zone {
+            color: var(--accent-danger);
+        }
+        .nav-link.danger-zone.active {
+            border-left-color: var(--accent-danger);
+            background: linear-gradient(90deg, rgba(248, 81, 73, 0.1) 0%, transparent 100%);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem 1.5rem;
+            max-width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .main-content {
+                padding: 4rem;
+            }
+        }
+
+        /* Headers */
+        h1 {
+            font-size: 2.5rem;
+            color: var(--text-header);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--accent-glow);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .meta-info {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            color: var(--text-header);
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+        }
+
+        h2::before {
+            content: '>';
+            color: var(--accent-secondary);
+            margin-right: 0.5rem;
+            font-family: var(--font-mono);
+            font-weight: bold;
+        }
+        
+        h2.danger-title::before {
+             content: '!';
+             color: var(--accent-danger);
+        }
+
+        h3 {
+            font-size: 1.3rem;
+            color: var(--text-header);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .time-badge {
+            font-size: 0.8rem;
+            background: var(--bg-terminal);
+            padding: 2px 8px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            font-weight: normal;
+        }
+
+        h4 {
+            font-size: 1.1rem;
+            color: var(--text-main);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Sections & Cards */
+        .step-block {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .emergency-zone {
+            background-color: rgba(248, 81, 73, 0.05);
+            border: 1px solid var(--accent-danger);
+        }
+        
+        .emergency-zone h3, .emergency-zone strong {
+            color: var(--accent-danger);
+        }
+
+        /* Lists */
+        ul {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        /* Checkbox styling */
+        li.checklist-item {
+            display: flex;
+            align-items: flex-start;
+            padding-left: 0;
+            cursor: pointer;
+        }
+        
+        li.checklist-item:hover .checkbox-mock {
+            border-color: var(--accent-secondary);
+        }
+
+        .checkbox-mock {
+            min-width: 18px;
+            height: 18px;
+            border: 2px solid var(--text-muted);
+            border-radius: 4px;
+            margin-right: 12px;
+            margin-top: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            background: var(--bg-body);
+        }
+
+        .checklist-item.done .checkbox-mock {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+        }
+
+        .checklist-item.done .checkbox-mock::after {
+            content: '✓';
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .checklist-item.done {
+            color: var(--text-muted);
+            text-decoration: line-through;
+        }
+
+        /* Code Blocks */
+        .code-wrapper {
+            background-color: var(--bg-terminal);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background-color: #21262d;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: var(--font-main);
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 2px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--border-color);
+            color: var(--text-main);
+        }
+
+        pre {
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: #e6edf3;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+            font-size: 0.9rem;
+            background: var(--bg-terminal);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        th {
+            background-color: #21262d;
+            color: var(--text-header);
+            font-weight: 600;
+        }
+        
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        /* Inputs for Personal Notes */
+        input.inline-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid var(--text-muted);
+            color: var(--accent-secondary);
+            font-family: var(--font-mono);
+            width: 200px;
+            padding: 0 4px;
+        }
+        
+        input.inline-input:focus {
+            outline: none;
+            border-bottom-color: var(--accent-glow);
+        }
+
+        /* Reference Card */
+        .reference-card {
+            font-family: var(--font-mono);
+            background-color: var(--bg-terminal);
+            color: var(--text-main);
+            padding: 1.5rem;
+            border: 1px solid var(--accent-secondary);
+            border-radius: 4px;
+            white-space: pre;
+            overflow-x: auto;
+            font-size: 0.85rem;
+            box-shadow: 0 0 15px rgba(88, 166, 255, 0.1);
+        }
+
+        /* Utilities */
+        a { color: var(--accent-secondary); text-decoration: none; }
+        strong { color: var(--text-header); font-weight: 600; }
+        
+        blockquote {
+            border-left: 4px solid var(--accent-secondary);
+            background-color: rgba(88, 166, 255, 0.1);
+            padding: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        hr {
+            border: 0;
+            height: 1px;
+            background: var(--border-color);
+            margin: 3rem 0;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="layout-container">
+    <!-- Navigation Sidebar -->
+    <nav class="sidebar">
+        <h3>Startup Sequence</h3>
+        <a href="#premarket" class="nav-link">Pre-Market</a>
+        <a href="#phase1" class="nav-link">1. Core Services</a>
+        <a href="#phase2" class="nav-link">2. Health Check</a>
+        <a href="#phase3" class="nav-link">3. Risk Config</a>
+        <a href="#phase4" class="nav-link">4. Start Engine</a>
+        <a href="#phase5" class="nav-link">5. Dashboard</a>
+        <a href="#phase6" class="nav-link">6. Final Verify</a>
+        <hr style="margin: 1rem 0; opacity: 0.2;">
+        <h3>Shutdown</h3>
+        <a href="#shutdown" class="nav-link">End of Day</a>
+        <h3>Critical</h3>
+        <a href="#emergency" class="nav-link danger-zone">Emergency Procedures</a>
+        <a href="#reference" class="nav-link">Reference Card</a>
+        <a href="#notes" class="nav-link">My Notes</a>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        
+        <header>
+            <h1>ALPHA-PRIME v2.0 <br><span style="font-weight: 300; font-size: 0.8em; color: var(--text-muted)">Daily Startup Checklist</span></h1>
+            <div class="subtitle">From computer on → live trading in 5–10 minutes</div>
+            <div class="meta-info">
+                Last updated: February 11, 2026<br>
+                Optimized for: <span style="color: var(--accent-warning);">Indian market hours (9:15 AM – 3:30 PM IST)</span>
+            </div>
+        </header>
+
+        <section id="premarket">
+            <h2>Pre-Market Checklist (Before 9:00 AM IST) <span style="font-size:0.6em; margin-left: auto; color: var(--text-muted);">1 minute</span></h2>
+            
+            <div class="step-block">
+                <h3>Environmental Check <span class="time-badge">1 minute</span></h3>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Laptop plugged into power</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Internet stable – run:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>ping 8.8.8.8</code></pre>
+                </div>
+                <p>Confirm you see multiple <code>Reply from 8.8.8.8</code> lines (no <code>Request timed out</code>). <a href="https://keepyourhomeip.com/blogs/news/what-is-ping-and-how-to-use-it-to-troubleshoot-your-internet-connectivity" target="_blank">[keepyourhomeip]</a></p>
+                
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>System clock correct (IST) – run:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>date</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>No pending OS updates that might auto‑restart</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Trading workspace clear, no distractions</div></li>
+                </ul>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="phase1">
+            <h2>Phase 1: Start Core Services <span style="font-size:0.6em; margin-left: auto; color: var(--text-muted);">2 minutes</span></h2>
+
+            <div class="step-block">
+                <h3>Step 1.1 – Start PostgreSQL (Database) <span class="time-badge">10 seconds</span></h3>
+                
+                <p><strong>macOS:</strong></p>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>brew services start postgresql@14
+brew services list | grep postgresql
+# Confirm: status shows "started"</code></pre>
+                </div>
+
+                <p><strong>Linux (Ubuntu/Debian):</strong></p>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>sudo systemctl start postgresql
+sudo systemctl status postgresql
+# Confirm: "active (running)" in output</code></pre>
+                </div>
+
+                <p><strong>Windows:</strong></p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Press <code>Win + R</code>, type <code>services.msc</code>, press Enter.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Find <strong>postgresql-x64-14</strong> (or similar).</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Right‑click → <strong>Start</strong>.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Status column should show <strong>Running</strong>.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>PostgreSQL status: <strong>RUNNING</strong> ✓</div></li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 1.2 – Start Redis (Cache) <span class="time-badge">10 seconds</span></h3>
+
+                <p><strong>macOS:</strong></p>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>brew services start redis
+redis-cli ping
+# Confirm: PONG</code></pre>
+                </div>
+
+                <p><strong>Linux (Ubuntu/Debian):</strong></p>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>sudo systemctl start redis
+redis-cli ping
+# Confirm: PONG</code></pre>
+                </div>
+
+                <p><strong>Windows:</strong></p>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>CMD</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>cd C:\Redis
+start redis-server.exe redis.windows.conf
+# New window opens – keep it running
+
+redis-cli ping
+# Confirm: PONG</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Redis status: <strong>PONG</strong> ✓</div></li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 1.3 – Navigate to Project <span class="time-badge">5 seconds</span></h3>
+                <p><strong>macOS / Linux:</strong></p>
+                <div class="code-wrapper"><pre><code>cd ~/Documents/alpha-prime-v2
+pwd
+# Confirm: path ends with /alpha-prime-v2</code></pre></div>
+                <p><strong>Windows (CMD/PowerShell):</strong></p>
+                <div class="code-wrapper"><pre><code>cd C:\Users\YourName\Documents\alpha-prime-v2
+cd
+# Confirm: path shows \alpha-prime-v2</code></pre></div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Correct project directory confirmed ✓</div></li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 1.4 – Activate Virtual Environment <span class="time-badge">5 seconds</span></h3>
+                <p><strong>macOS / Linux:</strong></p>
+                <div class="code-wrapper"><pre><code>source venv/bin/activate</code></pre></div>
+                <p><strong>Windows:</strong></p>
+                <div class="code-wrapper"><pre><code>venv\Scripts\activate</code></pre></div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Success indicator: command prompt starts with <strong>(venv)</strong> ✓</div></li>
+                </ul>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="phase2">
+            <h2>Phase 2: System Health Check <span style="font-size:0.6em; margin-left: auto; color: var(--text-muted);">1–2 minutes</span></h2>
+
+            <div class="step-block">
+                <h3>Step 2.1 – Run Health Check Script <span class="time-badge">30 seconds</span></h3>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>python scripts/health_check.py --quick</code></pre>
+                </div>
+                <p>Expected key lines:</p>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Output</span></div>
+                    <pre><code>✓ Database: Connected (...)
+✓ Redis: Connected (PONG)
+✓ Broker API: Authenticated
+✓ Market Data: Live feed active
+...
+Status: READY TO TRADE</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Database: <strong>Connected</strong> ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Redis: <strong>Connected (PONG)</strong> ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Broker API: <strong>Authenticated</strong> ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Market data: <strong>Live feed active</strong> ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>No <code>❌ Critical</code> lines ✓</div></li>
+                </ul>
+                <p><strong>If any ❌ Critical:</strong></p>
+                <div class="code-wrapper"><pre><code>tail -n 50 logs/alpha_prime.log</code></pre></div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Fix cause (DB/Redis/broker/market data), rerun health check ✓</div></li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 2.2 – Verify Broker Connection <span class="time-badge">30 seconds</span></h3>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>python scripts/broker_test.py --verify</code></pre>
+                </div>
+                <p>Expected key lines:</p>
+                <div class="code-wrapper"><pre><code>✓ Zerodha login successful
+✓ Account: AB1234
+✓ Available margin: ₹x,xx,xxx
+✓ Active orders: 0
+✓ Open positions: 0
+✓ Order placement: TEST OK</code></pre></div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Login successful ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Margin available ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Active orders as expected (usually 0 pre‑market) ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Open positions as expected (usually 0 intraday start) ✓</div></li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 2.3 – Check Market Status <span class="time-badge">10 seconds</span></h3>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>python -c "from core.market_hours import is_market_open; print('Market Open' if is_market_open() else 'Market Closed')"</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>If before 9:15 AM → expect <strong>Market Closed</strong> ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>After 9:15 AM → expect <strong>Market Open</strong> ✓</div></li>
+                </ul>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="phase3">
+            <h2>Phase 3: Risk Configuration Check <span style="font-size:0.6em; margin-left: auto; color: var(--text-muted);">1 minute</span></h2>
+
+            <div class="step-block">
+                <h3>Step 3.1 – Verify Risk Limits <span class="time-badge">30 seconds</span></h3>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>python scripts/show_config.py --risk</code></pre>
+                </div>
+                <p>Verify on screen:</p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Daily Max Loss: matches your daily risk (e.g. 3–5% of capital) ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Max Drawdown: within prop firm / broker rules ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Per‑Trade Risk: around 0.25–0.5% of capital ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Max Open Positions: within your comfort + rule set ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Kill Switch Drawdown: enabled and sensible ✓</div></li>
+                </ul>
+                <p><strong>If values wrong:</strong></p>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>python scripts/configure_risk.py --interactive
+# or edit:
+nano config/risk_config.yaml   # macOS/Linux
+notepad config\risk_config.yaml  # Windows</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Risk config corrected and saved ✓</div></li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 3.2 – Verify Strategy Configuration <span class="time-badge">20 seconds</span></h3>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>python scripts/show_config.py --strategies</code></pre>
+                </div>
+                <p>Check:</p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Only intended strategies show <code>[ENABLED]</code> ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>No test / experimental strategies enabled ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Symbol lists match what you actually want to trade ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Position limits per strategy look correct ✓</div></li>
+                </ul>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="phase4">
+            <h2>Phase 4: Start Trading Engine <span style="font-size:0.6em; margin-left: auto; color: var(--text-muted);">1 minute</span></h2>
+
+            <div class="step-block">
+                <h3>Step 4.1 – Start in Monitor Mode (Before 9:15 AM) <span class="time-badge">30 seconds</span></h3>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>python scripts/run_engine.py --mode monitor</code></pre>
+                </div>
+                <p>Expected log snippets:</p>
+                <div class="code-wrapper"><pre><code>INFO: ALPHA-PRIME v2.0 Engine Starting
+INFO: Mode: MONITOR (dry-run)
+INFO: Strategies loaded: X
+INFO: Risk manager initialized
+INFO: Market data feed: CONNECTED
+INFO: Waiting for market open...
+INFO: Engine ready (monitor mode)</code></pre></div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Engine in <strong>MONITOR</strong> mode visible ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div><code>Strategies loaded: ...</code> ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div><code>Market data feed: CONNECTED</code> ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>No ERROR / CRITICAL lines on startup ✓</div></li>
+                </ul>
+                <blockquote>Keep this terminal <strong>open</strong>. This is <strong>Engine Terminal</strong>.</blockquote>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 4.2 – Switch to Live at 9:15 AM <span class="time-badge">30 seconds</span></h3>
+                <p>Open <strong>another</strong> terminal for command control:</p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Navigate + activate <code>venv</code> again:</div></li>
+                </ul>
+                <div class="code-wrapper"><pre><code>cd ~/Documents/alpha-prime-v2          # macOS/Linux
+# or
+cd C:\Users\YourName\Documents\alpha-prime-v2   # Windows
+
+source venv/bin/activate               # macOS/Linux
+venv\Scripts\activate                  # Windows</code></pre></div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Switch to live:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>python scripts/run_engine.py --mode live --confirm</code></pre>
+                </div>
+                <p>Prompt example:</p>
+                <div class="code-wrapper"><pre><code>⚠️  WARNING: Switching to LIVE mode
+This will place REAL trades with REAL money.
+
+Type 'CONFIRM' to proceed: CONFIRM</code></pre></div>
+                <p>Expected logs:</p>
+                <div class="code-wrapper"><pre><code>INFO: Switching to LIVE mode
+INFO: Risk limits verified
+INFO: ✓ LIVE TRADING ACTIVE
+INFO: Monitoring for signals...</code></pre></div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div><code>LIVE TRADING ACTIVE</code> message seen in logs ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>No immediate errors ✓</div></li>
+                </ul>
+                <blockquote>Keep this command terminal open if engine uses it; otherwise, you can reuse it as <strong>Command Terminal</strong>.</blockquote>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="phase5">
+            <h2>Phase 5: Dashboard & Monitoring <span style="font-size:0.6em; margin-left: auto; color: var(--text-muted);">1 minute</span></h2>
+
+            <div class="step-block">
+                <h3>Step 5.1 – Start Dashboard <span class="time-badge">30 seconds</span></h3>
+                <p>Open a <strong>third</strong> terminal:</p>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>cd ~/Documents/alpha-prime-v2          # macOS/Linux
+# or
+cd C:\Users\YourName\Documents\alpha-prime-v2  # Windows
+
+source venv/bin/activate               # macOS/Linux
+venv\Scripts\activate                  # Windows
+
+python -m dashboard.app_v2</code></pre>
+                </div>
+                <p>Expected output:</p>
+                <div class="code-wrapper"><pre><code>INFO: Starting ALPHA-PRIME v2.0 Dashboard
+INFO: WebSocket server: ws://localhost:8001
+INFO: HTTP server: http://localhost:8000
+INFO: Press CTRL+C to quit</code></pre></div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Dashboard server running, no ERROR / CRITICAL ✓</div></li>
+                </ul>
+                <blockquote>This is <strong>Dashboard Terminal</strong> – keep it open.</blockquote>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 5.2 – Open Dashboard in Browser <span class="time-badge">30 seconds</span></h3>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Open browser → go to <code>http://localhost:8000</code></div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Confirm:
+                        <ul>
+                            <li class="checklist-item"><div class="checkbox-mock"></div><div>Portfolio value visible ✓</div></li>
+                            <li class="checklist-item"><div class="checkbox-mock"></div><div>Today’s P&L: ₹0.00 (at start) ✓</div></li>
+                            <li class="checklist-item"><div class="checkbox-mock"></div><div>Status indicator: <strong>TRADING ACTIVE</strong> / similar green label ✓</div></li>
+                            <li class="checklist-item"><div class="checkbox-mock"></div><div>Strategies listed with <strong>Running/Enabled</strong> ✓</div></li>
+                            <li class="checklist-item"><div class="checkbox-mock"></div><div>Open positions: 0 (or expected) ✓</div></li>
+                            <li class="checklist-item"><div class="checkbox-mock"></div><div>No red error banner ✓</div></li>
+                        </ul>
+                    </div></li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 5.3 – Enable Real-Time Alerts (Optional) <span class="time-badge">30 seconds</span></h3>
+                <p>From <strong>Command Terminal</strong> (with <code>venv</code> active):</p>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code># Telegram alerts (critical only)
+python scripts/enable_alerts.py --telegram --critical-only
+
+# Desktop/terminal alerts (if supported)
+python scripts/enable_alerts.py --desktop</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Alert channels enabled ✓</div></li>
+                </ul>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="phase6">
+            <h2>Phase 6: Final Pre‑Trading Verification <span style="font-size:0.6em; margin-left: auto; color: var(--text-muted);">1 minute</span></h2>
+
+            <div class="step-block">
+                <h3>“Am I Ready?” Checklist</h3>
+                
+                <h4>Infrastructure</h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div><strong>Engine Terminal</strong> open – logs scrolling, no errors ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div><strong>Dashboard Terminal</strong> open – dashboard running ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div><strong>Command Terminal</strong> free for commands ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Dashboard page visible in browser ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Internet still stable (optional re‑check):
+                        <div class="code-wrapper" style="margin: 0.5rem 0;"><pre><code>ping 8.8.8.8</code></pre></div>
+                    </div></li>
+                </ul>
+
+                <h4>Risk & Compliance</h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Daily loss limit correct for today ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Per‑trade risk acceptable ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Only tested strategies enabled ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>No manual override / manual hedge scripts running ✓</div></li>
+                </ul>
+
+                <h4>Market Conditions</h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Market open and liquid ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>No major scheduled news in next 30 minutes (check calendar) ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Spreads normal on broker platform ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>India VIX not at extreme level (per your rules) ✓</div></li>
+                </ul>
+
+                <h4>Personal</h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Well‑rested and focused ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>No urgent tasks in next 2 hours ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Phone on silent or DND ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Emergency stop procedure clear in mind ✓</div></li>
+                </ul>
+
+                <h3 style="color: var(--accent-glow); margin-top: 1.5rem;">READY TO TRADE ✓</h3>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="shutdown">
+            <h2>End‑of‑Day Shutdown (3:30 PM onwards) <span style="font-size:0.6em; margin-left: auto; color: var(--text-muted);">5 minutes</span></h2>
+
+            <div class="step-block">
+                <h3>Step 7.1 – Stop New Trades (≈3:25 PM) <span class="time-badge">30 seconds</span></h3>
+                <p>From <strong>Command Terminal</strong>:</p>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>python scripts/run_engine.py --mode stop-new-trades</code></pre>
+                </div>
+                <p>Expected:</p>
+                <div class="code-wrapper"><pre><code>INFO: New trade entries disabled
+INFO: Existing positions will be managed to exit according to rules</code></pre></div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>New trades stopped ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Engine still running, managing open positions ✓</div></li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 7.2 – Close All Positions (≈3:28 PM, Intraday Only) <span class="time-badge">1 minute</span></h3>
+                <p>If you want <strong>no overnight positions</strong>:</p>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>python scripts/close_all_positions.py --market-order --confirm</code></pre>
+                </div>
+                <p>Prompt example:</p>
+                <div class="code-wrapper"><pre><code>⚠️  This will close ALL open positions at MARKET price
+
+Type 'CLOSE' to proceed: CLOSE</code></pre></div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>All positions closed ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>No pending orders ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Verified on broker platform ✓</div></li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 7.3 – Generate Daily Report <span class="time-badge">1 minute</span></h3>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>python scripts/generate_report.py --today --detailed</code></pre>
+                </div>
+                <p>Expected:</p>
+                <div class="code-wrapper"><pre><code>📊 Daily Trading Report - YYYY-MM-DD
+...
+Report saved: reports/daily_YYYY-MM-DD.pdf</code></pre></div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Report generated ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>P&L matches broker statement ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>No anomalies in trade list ✓</div></li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 7.4 – Backup Data <span class="time-badge">30 seconds</span></h3>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>python scripts/backup.py --daily --compress</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Backup completed (backup file created in backups folder) ✓</div></li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 7.5 – Stop All Services <span class="time-badge">1–2 minutes</span></h3>
+                <p><strong>1. Stop Dashboard</strong></p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>In <strong>Dashboard Terminal</strong>: press <code>CTRL + C</code>. Confirm no more dashboard logs.</div></li>
+                </ul>
+                <p><strong>2. Stop Engine</strong></p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>In <strong>Engine Terminal</strong>: press <code>CTRL + C</code>. Confirm engine stops and returns to shell prompt.</div></li>
+                </ul>
+                <p><strong>3. Deactivate Virtual Environment</strong></p>
+                <p>From any terminal with <code>(venv)</code>:</p>
+                <div class="code-wrapper"><pre><code>deactivate</code></pre></div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Prompt no longer shows <code>(venv)</code> ✓</div></li>
+                </ul>
+                <p><strong>4. Optional – Stop Redis</strong></p>
+                <ul>
+                    <li>macOS: <code>brew services stop redis</code> <a href="https://danielabaron.me/blog/homebrew-postgresql-service-not-starting-resolved/" target="_blank">[danielabaron]</a></li>
+                    <li>Linux: <code>sudo systemctl stop redis</code></li>
+                    <li>Windows: <li class="checklist-item"><div class="checkbox-mock"></div><div>Close the <code>redis-server.exe</code> window.</div></li></li>
+                </ul>
+                <p><strong>5. Optional – Stop PostgreSQL</strong></p>
+                <ul>
+                    <li>macOS: <code>brew services stop postgresql@14</code> <a href="https://stackoverflow.com/questions/7975556/how-can-i-start-postgresql-server-on-mac-os-x" target="_blank">[stackoverflow]</a></li>
+                    <li>Linux: <code>sudo systemctl stop postgresql</code></li>
+                    <li>Windows: <li class="checklist-item"><div class="checkbox-mock"></div><div>In <code>services.msc</code>, right‑click PostgreSQL service → <strong>Stop</strong>.</div></li></li>
+                </ul>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Dashboard stopped ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Engine stopped ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Environment deactivated ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Services stopped if desired ✓</div></li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 7.6 – Daily Journal (Optional but Recommended) <span class="time-badge">2 minutes</span></h3>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>nano logs/daily_journal.txt         # macOS / Linux
+notepad logs\daily_journal.txt      # Windows</code></pre>
+                </div>
+                <p>Log briefly:</p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Any manual interventions ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Unusual market conditions ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Strategy performance notes ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Issues & ideas ✓</div></li>
+                </ul>
+            </div>
+        </section>
+        
+        <hr>
+
+        <section id="emergency">
+            <h2 class="danger-title">Emergency Procedures</h2>
+
+            <div class="step-block emergency-zone">
+                <h3>🚨 Emergency Stop – Immediate Action</h3>
+                <p><strong>Trigger:</strong> something looks very wrong – runaway losses, repeated errors, strange trades.</p>
+                <ol>
+                    <li><strong>Stop Engine Immediately</strong>
+                        <ul>
+                            <li class="checklist-item"><div class="checkbox-mock"></div><div>In <strong>Engine Terminal</strong>: press <code>CTRL + C</code>.</div></li>
+                        </ul>
+                    </li>
+                    <li><strong>Check Pending Orders</strong>
+                        <div class="code-wrapper"><pre><code>python scripts/check_pending_orders.py</code></pre></div>
+                        <ul>
+                            <li class="checklist-item"><div class="checkbox-mock"></div><div>Confirm no unknown/unwanted orders ✓</div></li>
+                        </ul>
+                    </li>
+                    <li><strong>Flatten All Positions (if needed)</strong>
+                        <div class="code-wrapper"><pre><code>python scripts/emergency_flatten.py --all --market</code></pre></div>
+                        <ul>
+                            <li class="checklist-item"><div class="checkbox-mock"></div><div>Confirm all positions closed on broker platform ✓</div></li>
+                        </ul>
+                    </li>
+                    <li><strong>Check Damage</strong>
+                        <div class="code-wrapper"><pre><code>python scripts/show_pnl.py --today</code></pre></div>
+                    </li>
+                    <li><strong>Review What Happened</strong>
+                        <div class="code-wrapper"><pre><code>tail -n 200 logs/alpha_prime.log</code></pre></div>
+                        <ul>
+                            <li class="checklist-item"><div class="checkbox-mock"></div><div>Understand cause before restarting ✓</div></li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="step-block emergency-zone">
+                <h3>🔴 Kill Switch Activated (Automatic)</h3>
+                <p>If built‑in risk kill switch triggers, logs may show:</p>
+                <div class="code-wrapper" style="border-color: var(--accent-critical);"><pre><code>CRITICAL: KILL SWITCH ACTIVATED
+CRITICAL: Daily loss limit reached: -₹x,xxx
+INFO: All strategies paused
+INFO: Closing open positions...
+INFO: Engine entering SAFE mode</code></pre></div>
+                <p>When you see this:</p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Do <strong>NOT</strong> restart engine immediately ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Confirm all positions closed (broker platform + <code>show_pnl.py</code>) ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Review logs to understand cause ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Decide if trading should stop for the day ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>If restarting another day, adjust risk or disable problem strategy ✓</div></li>
+                </ul>
+            </div>
+
+            <div class="step-block" style="border-left: 4px solid var(--accent-warning);">
+                <h3>🟡 Broker Connection Lost</h3>
+                <p>From <strong>Command Terminal</strong>:</p>
+                <div class="code-wrapper"><pre><code>python scripts/reconnect_broker.py</code></pre></div>
+                <p>If still down:</p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Log into broker web platform, manually manage open positions ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Do <strong>not</strong> restart engine until connection stable ✓</div></li>
+                </ul>
+                <p>Optional quick status check (example Zerodha):</p>
+                <div class="code-wrapper"><pre><code># Just an example; you can also open status page in browser
+curl -I https://kite.zerodha.com/</code></pre></div>
+            </div>
+        </section>
+        
+        <hr>
+
+        <section id="reference">
+            <h2>Quick Reference Card (Print This)</h2>
+            <div class="reference-card">
+┌─────────────────────────────────────────┐
+│ ALPHA-PRIME Daily Quick Start           │
+├─────────────────────────────────────────┤
+│ 1. Start services:                      │
+│    # macOS                              │
+│    brew services start postgresql@14    │
+│    brew services start redis            │
+│                                         │
+│    # Linux                              │
+│    sudo systemctl start postgresql      │
+│    sudo systemctl start redis           │
+│                                         │
+│ 2. Activate env:                        │
+│    cd ~/Documents/alpha-prime-v2        │
+│    source venv/bin/activate             │
+│                                         │
+│ 3. Health check:                        │
+│    python scripts/health_check.py --quick│
+│                                         │
+│ 4. Start engine (monitor):              │
+│    python scripts/run_engine.py         │
+│      --mode monitor                     │
+│                                         │
+│ 5. Start dashboard:                     │
+│    python -m dashboard.app_v2           │
+│    Open: http://localhost:8000          │
+│                                         │
+│ 6. At 9:15 AM, go live:                 │
+│    python scripts/run_engine.py         │
+│      --mode live --confirm              │
+│                                         │
+│ 7. End of day (3:30 PM):                │
+│    - stop new trades                    │
+│    - close positions (if intraday)      │
+│    - generate report & backup           │
+│    - CTRL+C engine + dashboard          │
+│                                         │
+│ EMERGENCY STOP:                         │
+│  - CTRL+C engine                        │
+│  - emergency_flatten.py --all --market  │
+└─────────────────────────────────────────┘
+            </div>
+        </section>
+
+        <section id="budget">
+            <h2>Time Budget Summary</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Phase</th>
+                        <th>Duration (approx)</th>
+                        <th>Cumulative</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Pre‑market checks</td><td>1 min</td><td>1 min</td></tr>
+                    <tr><td>Start services (DB + Redis)</td><td>2 min</td><td>3 min</td></tr>
+                    <tr><td>Health checks</td><td>2 min</td><td>5 min</td></tr>
+                    <tr><td>Risk & strategy verification</td><td>1 min</td><td>6 min</td></tr>
+                    <tr><td>Start engine (monitor → live)</td><td>1 min</td><td>7 min</td></tr>
+                    <tr><td>Dashboard & alerts</td><td>1–2 min</td><td>8–9 min</td></tr>
+                    <tr><td>Final verification</td><td>1 min</td><td>9–10 min</td></tr>
+                </tbody>
+            </table>
+            <p>With practice: <strong>5–7 minutes total</strong>.</p>
+        </section>
+
+        <section id="notes">
+            <h2>Personal Notes (Fill Once, Then Reuse)</h2>
+            <div class="step-block">
+                <p><strong>My typical daily routine:</strong></p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Start checklist at: <input type="text" class="inline-input" placeholder="e.g. 8:45 AM"></div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Coffee while services boot: ☕</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Quick NIFTY / BANKNIFTY pre‑market scan ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Review yesterday’s report in <code>reports/</code> ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Adjustments for today (news, events): <input type="text" class="inline-input" placeholder="Notes..."></div></li>
+                </ul>
+
+                <p><strong>Reminders:</strong></p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Friday: run <strong>weekly backup</strong> (<code>python scripts/backup.py --weekly</code>) ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Month‑end: run <strong>performance review</strong> ✓</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Check API key expiry dates: <input type="text" class="inline-input" placeholder="Date..."> ✓</div></li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<script>
+    // Copy to clipboard functionality
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const codeBlock = btn.parentElement.nextElementSibling;
+            const code = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.style.color = 'var(--accent-glow)';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.color = '';
+                }, 2000);
+            });
+        });
+    });
+
+    // Checkbox interaction
+    document.querySelectorAll('.checklist-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            if (e.target.tagName !== 'A' && e.target.tagName !== 'INPUT') {
+                item.classList.toggle('done');
+            }
+        });
+    });
+
+    // Smooth scroll
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // Active sidebar state
+    const sections = document.querySelectorAll('section, header');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            if (pageYOffset >= (sectionTop - 200)) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').includes(current)) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,364 @@
+============================================================
+ALPHA-PRIME v2.0 - Docker Ignore Rules
+============================================================
+Excludes files from Docker build context to:
+- Reduce image size (target: <500MB)
+- Speed up builds (exclude 10,000+ cache files)
+- Prevent secrets leakage
+- Avoid unnecessary cache invalidation
+Build context sent to Docker daemon = project root MINUS these patterns
+============================================================
+
+
+============================================================
+CRITICAL - SECRETS & CREDENTIALS
+============================================================
+Never bake real credentials or private keys into Docker images.
+
+# Core env files with real secrets
+.env
+**/.env
+.env.local
+.env.*.local
+
+# Cloud and SSH credentials
+**/.aws
+**/.ssh
+
+# Key material and certificates
+*.key
+*.pem
+*.p12
+
+# Explicit secret config files
+secrets.yaml
+credentials.json
+
+# Any filename containing secret-like keywords (defensive)
+**/*secret*
+**/*Secret*
+**/*SECRET*
+**/*password*
+**/*Password*
+**/*PASSWORD*
+**/*token*
+**/*Token*
+**/*TOKEN*
+
+# Auth artifacts (tokens, browser exports, local auth helpers)
+auth/
+auth/**
+
+
+============================================================
+RUNTIME DATA (USER-SPECIFIC, REGENERATED IN CONTAINER)
+============================================================
+Exclude user-specific trading state, logs, caches, and backups.
+
+# Core trading state and analytics artifacts
+data/portfolio.json
+data/trade_history.csv
+data/strategy_performance.json
+data/drift_metrics.json
+data/execution_analytics.csv
+
+# Cache: SEC filings, news, social, market data
+data/cache/
+data/cache/**
+
+# Backups (portfolio snapshots, state archives)
+backups/
+backups/**
+
+# Logs: runtime logs and rotations
+logs/
+logs/**
+
+# Generic temporary/backup files
+*.tmp
+*.bak
+
+# Keep directory skeletons for mounts / runtime usage
+!data/.gitkeep
+!logs/.gitkeep
+
+
+============================================================
+PYTHON RUNTIME ARTIFACTS
+============================================================
+Ignore compiled bytecode, build outputs, and tool caches.
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+build/
+dist/
+downloads/
+.eggs/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Coverage and testing caches
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+*.cover
+*.py,cover
+
+# Type checker caches
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre / Ruff / other linters
+.pyre/
+ruff_cache/
+
+
+============================================================
+DEVELOPMENT & TESTING FILES
+============================================================
+Tests and dev tooling run outside the production container.
+
+# Test suites and helpers (adjust if you run tests in-container)
+tests/**
+conftest.py
+pytest.ini
+pytest.ini.*
+.pytest_cache/
+
+# Local tooling and hooks
+.pre-commit-config.yaml
+.pre-commit-hooks.yaml
+
+# Local-only build helpers
+Makefile
+makefile
+
+
+============================================================
+DOCUMENTATION & META FILES
+============================================================
+Docs and project meta are not needed at runtime.
+
+README.md
+CHANGELOG.md
+LICENSE
+
+# Docs (Sphinx, MkDocs, custom)
+docs/
+docs/**
+
+# Generic markdown and reST docs (non-runtime)
+*.md
+*.rst
+
+
+============================================================
+VERSION CONTROL METADATA
+============================================================
+Git and other VCS metadata must stay out of images.
+
+# Git
+.git/
+.gitignore
+.gitattributes
+.gitmodules
+.gitlab-ci.yml
+
+# GitHub / CI workflows
+.github/
+.github/**
+
+# Other VCS
+.hg/
+.svn/
+
+
+============================================================
+IDE & EDITOR FILES
+============================================================
+Editor/IDE-specific configuration is local-only.
+
+# Visual Studio Code
+.vscode/
+.vscode/**
+
+# JetBrains / PyCharm / IntelliJ
+.idea/
+.idea/**
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim/Emacs swap and backup files
+*.swp
+*.swo
+*~
+\#*\#
+.*~
+
+# Other editor artifacts
+*.orig
+
+
+============================================================
+DOCKER & DEPLOYMENT AUX FILES
+============================================================
+Exclude local-only Docker configuration helpers.
+
+# Local docker compose overrides
+docker-compose.override.yml
+docker-compose.*.yml
+
+# Local Docker configuration directory
+.docker/
+.docker/**
+
+# Optional: keep Dockerfile in context (often needed), but you may ignore alternates
+*.dockerfile.local
+
+
+============================================================
+JUPYTER & NOTEBOOKS
+============================================================
+Notebooks are for research, not production containers.
+
+*.ipynb
+.ipynb_checkpoints/
+.ipynb_checkpoints/**
+
+
+============================================================
+LARGE DATA & ML ARTIFACTS
+============================================================
+Large, derived data should be downloaded or generated at runtime.
+
+# Generic large data formats
+*.csv
+*.json
+*.tsv
+
+# Keep small schemas/configs explicitly if needed
+!schemas/*.json
+!config/*.json
+
+# Model and weight files
+*.h5
+*.hdf5
+*.hdf
+*.pth
+*.pt
+
+# Serialized models / objects
+*.pkl
+*.pickle
+*.joblib
+
+# Numpy arrays
+*.npy
+*.npz
+
+# MLflow / experiment tracking artifacts
+mlruns/
+mlruns/**
+mlartifacts/
+mlartifacts/**
+
+
+============================================================
+NODE / JS TOOLING (IF PRESENT)
+============================================================
+Frontend build artifacts and node modules are large and regenerated.
+
+node_modules/
+npm-debug.log
+yarn.lock
+package-lock.json
+pnpm-lock.yaml
+
+
+============================================================
+OS-SPECIFIC METADATA
+============================================================
+OS-level junk files that should never land in images.
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Generic backup suffixes
+*~
+*.swp
+
+
+============================================================
+KEEP RULES & CORE PROJECT FILES
+============================================================
+Ensure essential templates, code, and configs remain in context.
+
+# Keep environment template (no secrets)
+!.env.example
+
+# Keep Python source code
+!*.py
+
+# Keep requirements for pip installs
+!requirements.txt
+!requirements-dev.txt
+!pyproject.toml
+!setup.cfg
+!setup.py
+
+# Keep core configuration and modules
+!config.py
+!brain.py
+!data_engine.py
+!research_engine.py
+!app.py
+!alerts.py
+!portfolio.py
+!scheduler.py
+
+# Keep key package directories (source code)
+!dashboard/
+!dashboard/**
+!risk/
+!risk/**
+!strategy/
+!strategy/**
+!intelligence/
+!intelligence/**
+!validation/
+!validation/**
+!utils/
+!utils/**
+!ops/
+!ops/**
+
+# If you run tests in-container, keep fixtures
+!tests/fixtures/
+!tests/fixtures/**

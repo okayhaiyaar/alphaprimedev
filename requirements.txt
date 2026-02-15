@@ -1,0 +1,144 @@
+# Core trading, timeseries, and statistical stack
+# Note: pandas-ta is in beta; pin to avoid breaking changes
+
+streamlit>=1.31.0,<2.0.0
+yfinance>=0.2.36,<0.3.0
+pandas>=2.2.0,<3.0.0
+# pandas-ta>=0.3.14b0,<0.4.0
+numpy>=1.26.0,<2.0.0
+plotly>=5.18.0,<6.0.0
+scipy>=1.12.0,<2.0.0
+statsmodels>=0.14.1,<0.15.0
+
+
+
+
+# HTTP clients and HTML parsing for research and intel
+
+requests>=2.31.0,<3.0.0
+beautifulsoup4>=4.12.0,<5.0.0
+playwright>=1.41.0,<2.0.0
+httpx>=0.26.0,<0.27.0
+
+# After installation, run to fetch Chromium browser:
+#   playwright install chromium --with-deps
+
+
+
+
+# LLM APIs, Reddit client, sentiment analysis, token accounting
+
+openai>=1.10.0,<2.0.0
+praw>=7.7.1,<8.0.0
+vaderSentiment>=3.3.2,<4.0.0
+tiktoken>=0.5.2,<0.6.0
+
+# GPT-4o model requires OPENAI_API_KEY configured in .env
+
+
+
+
+# Typed settings and data models for trading signals and portfolio
+
+pydantic>=2.5.0,<3.0.0
+pydantic-settings>=2.1.0,<3.0.0
+
+
+
+
+# Environment variable loading and configuration management
+
+python-dotenv>=1.0.0,<2.0.0
+
+PyJWT>=2.8.0,<3.0.0
+
+
+
+# Lightweight cron-style scheduler for daily market cycles
+
+schedule>=1.2.0,<2.0.0
+
+
+
+
+# Position sizing, portfolio optimization, and performance helpers
+
+pyportfolioopt>=1.5.5,<2.0.0
+# empyrical>=0.5.5,<0.6.0
+
+
+
+
+# Trading performance analysis and tear sheets
+
+quantstats>=0.0.62,<0.1.0
+
+
+
+# Data quality rules and model/data drift diagnostics
+
+evidently>=0.4.15,<0.5.0
+great-expectations>=0.18.8,<0.19.0
+
+
+
+
+# SEC EDGAR helpers and aggregated SEC-API client
+
+edgartools>=2.0.0,<3.0.0
+sec-api>=1.0.15,<2.0.0
+
+
+
+
+# Robust retry policies for external API calls
+
+tenacity>=8.2.3,<9.0.0
+
+
+
+
+# On-disk cache for intel, filings, and market data
+
+diskcache>=5.6.3,<6.0.0
+
+
+
+
+# ML models for drift, regime detection, and meta-learning
+
+scikit-learn>=1.4.0,<2.0.0
+xgboost>=2.0.3,<3.0.0
+
+
+
+
+
+# Logging, system metrics, and filesystem monitoring
+
+python-json-logger>=2.0.7,<3.0.0
+psutil>=5.9.8,<6.0.0
+watchdog>=4.0.0,<5.0.0
+
+
+
+# Optional notification services (uncomment if needed)
+# Twilio requires account SID and auth token
+# SendGrid requires API key
+
+# twilio>=8.12.0,<9.0.0
+# sendgrid>=6.11.0,<7.0.0
+
+
+
+# Development/Testing packages (optional for production)
+# Remove or move to requirements-dev.txt for minimal production images
+
+pytest>=7.4.0,<8.0.0
+pytest-cov>=4.1.0,<5.0.0
+pytest-asyncio>=0.23.0,<0.24.0
+black>=23.12.0,<24.0.0
+flake8>=7.0.0,<8.0.0
+mypy>=1.8.0,<2.0.0
+isort>=5.13.0,<6.0.0
+pre-commit>=3.6.0,<4.0.0

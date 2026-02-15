@@ -1,0 +1,1547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALPHA-PRIME v2.0 - Installation Guide</title>
+    <style>
+        :root {
+            /* Color Palette - Tech/Trading Theme */
+            --bg-body: #0f1115;
+            --bg-sidebar: #161b22;
+            --bg-card: #1c2128;
+            --bg-terminal: #0d1117;
+            --border-color: #30363d;
+            
+            --accent-primary: #2ea043; /* Success Green */
+            --accent-glow: #3fb950;
+            --accent-secondary: #58a6ff; /* Tech Blue */
+            --accent-warning: #d29922;
+            --accent-danger: #f85149;
+            
+            --text-main: #c9d1d9;
+            --text-header: #ffffff;
+            --text-muted: #8b949e;
+            
+            --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            --font-mono: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            line-height: 1.6;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Layout */
+        .layout-container {
+            display: flex;
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 280px;
+            background-color: var(--bg-sidebar);
+            border-right: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            height: 100vh;
+            overflow-y: auto;
+            padding: 2rem 1.5rem;
+            display: none; /* Hidden on mobile by default */
+        }
+
+        @media (min-width: 1024px) {
+            .sidebar {
+                display: block;
+            }
+        }
+
+        .sidebar h3 {
+            color: var(--text-muted);
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .nav-link {
+            display: block;
+            color: var(--text-main);
+            text-decoration: none;
+            padding: 0.5rem 0;
+            font-size: 0.9rem;
+            border-left: 2px solid transparent;
+            padding-left: 1rem;
+            margin-bottom: 0.25rem;
+            transition: all 0.2s;
+        }
+
+        .nav-link:hover {
+            color: var(--accent-secondary);
+        }
+
+        .nav-link.active {
+            color: var(--accent-glow);
+            border-left-color: var(--accent-glow);
+            background: linear-gradient(90deg, rgba(63, 185, 80, 0.1) 0%, transparent 100%);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 2rem 1.5rem;
+            max-width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .main-content {
+                padding: 4rem;
+            }
+        }
+
+        /* Headers */
+        h1 {
+            font-size: 2.5rem;
+            color: var(--text-header);
+            margin-bottom: 0.5rem;
+            line-height: 1.2;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: var(--accent-glow);
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        .meta-info {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        h2 {
+            font-size: 1.75rem;
+            color: var(--text-header);
+            margin-top: 3rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+        }
+
+        h2::before {
+            content: '#';
+            color: var(--accent-secondary);
+            margin-right: 0.5rem;
+            opacity: 0.5;
+        }
+
+        h3 {
+            font-size: 1.4rem;
+            color: var(--text-header);
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+
+        h4 {
+            font-size: 1.1rem;
+            color: var(--text-main);
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+        }
+
+        /* Sections & Cards */
+        .step-block {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Lists */
+        ul {
+            list-style: none;
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            position: relative;
+            padding-left: 1.5rem;
+        }
+
+        /* Checkbox styling */
+        li.checklist-item {
+            display: flex;
+            align-items: flex-start;
+            padding-left: 0;
+        }
+
+        .checkbox-mock {
+            min-width: 18px;
+            height: 18px;
+            border: 2px solid var(--text-muted);
+            border-radius: 4px;
+            margin-right: 12px;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .checklist-item.done .checkbox-mock::after {
+            content: '✓';
+            color: var(--accent-glow);
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        /* Links */
+        a {
+            color: var(--accent-secondary);
+            text-decoration: none;
+            border-bottom: 1px dashed transparent;
+            transition: border 0.2s;
+        }
+
+        a:hover {
+            border-bottom-color: var(--accent-secondary);
+        }
+
+        /* Code Blocks */
+        .code-wrapper {
+            background-color: var(--bg-terminal);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            margin: 1rem 0;
+            overflow: hidden;
+        }
+
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background-color: #21262d;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-family: var(--font-main);
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-muted);
+            padding: 2px 8px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.75rem;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            background-color: var(--border-color);
+            color: var(--text-main);
+        }
+
+        pre {
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: #e6edf3;
+        }
+
+        code {
+            font-family: var(--font-mono);
+        }
+
+        /* Inline code */
+        p code, li code {
+            background-color: rgba(110, 118, 129, 0.4);
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            font-size: 0.85em;
+        }
+
+        /* Callouts / Blockquotes */
+        blockquote {
+            border-left: 4px solid var(--accent-warning);
+            background-color: rgba(210, 153, 34, 0.1);
+            padding: 1rem;
+            margin: 1.5rem 0;
+            border-radius: 0 4px 4px 0;
+        }
+
+        /* Divider */
+        hr {
+            border: 0;
+            height: 1px;
+            background: var(--border-color);
+            margin: 3rem 0;
+        }
+
+        /* ASCII Art / Visual Mockups */
+        .ascii-art {
+            font-family: var(--font-mono);
+            white-space: pre;
+            background-color: var(--bg-terminal);
+            padding: 1rem;
+            border-radius: 4px;
+            border: 1px solid var(--accent-glow);
+            color: var(--accent-glow);
+            overflow-x: auto;
+            font-size: 0.8rem;
+            line-height: 1.2;
+            margin: 1rem 0;
+            box-shadow: 0 0 10px rgba(63, 185, 80, 0.1);
+        }
+
+        /* Utilities */
+        strong {
+            color: var(--text-header);
+            font-weight: 600;
+        }
+
+        .status-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-right: 8px;
+        }
+
+        .status-tag.win { background-color: rgba(56, 139, 253, 0.15); color: #58a6ff; }
+        .status-tag.mac { background-color: rgba(210, 153, 34, 0.15); color: #d29922; }
+        .status-tag.linux { background-color: rgba(235, 87, 87, 0.15); color: #f85149; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 1.8rem; }
+            h2 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="layout-container">
+    <!-- Navigation Sidebar -->
+    <nav class="sidebar">
+        <h3>Contents</h3>
+        <a href="#intro" class="nav-link">Introduction</a>
+        <a href="#requirements" class="nav-link">Requirements</a>
+        <a href="#section1" class="nav-link">1. Install Prerequisites</a>
+        <a href="#section2" class="nav-link">2. Download Project</a>
+        <a href="#section3" class="nav-link">3. Automated Setup</a>
+        <a href="#section4" class="nav-link">4. Configure Credentials</a>
+        <a href="#section5" class="nav-link">5. Verify & Test</a>
+        <a href="#section6" class="nav-link">6. Conclusion</a>
+        <a href="#reference" class="nav-link">Daily Reference</a>
+        <a href="#troubleshooting" class="nav-link">Troubleshooting</a>
+        <a href="#reset" class="nav-link">Emergency Reset</a>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="main-content">
+        
+        <header id="intro">
+            <h1>ALPHA-PRIME v2.0 <br><span style="font-weight: 300; font-size: 0.8em; color: var(--text-muted)">Quick Start Installation</span></h1>
+            <div class="subtitle">Get from zero → running system in 30 minutes</div>
+            <div class="meta-info">Last updated: February 11, 2026</div>
+        </header>
+
+        <section id="requirements">
+            <h2>What You Need First</h2>
+            
+            <div class="step-block">
+                <h3>Hardware / Software Requirements</h3>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Computer with <strong>Windows 10/11</strong>, <strong>macOS 10.15+</strong>, or <strong>Ubuntu 20.04+</strong></div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>At least <strong>8 GB RAM</strong> (more is better)</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>At least <strong>10 GB free disk space</strong></div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div><strong>Stable internet connection</strong></div></li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h3>Accounts / Credentials You Need Ready</h3>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div><strong>Broker account</strong> (Zerodha / Upstox) OR <strong>prop firm funded account</strong></div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div><strong>Broker API credentials</strong> (API Key, Secret, User ID, Password / PIN)</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div><strong>Email account</strong> for alerts (Gmail works best)</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div><strong>Telegram account</strong> (optional, for mobile alerts)</div></li>
+                </ul>
+                <blockquote>
+                    Tip: If you don’t have API keys yet, you can still install everything and plug them in later in the <code>.env</code> file.
+                </blockquote>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="section1">
+            <h2>Section 1: Install Prerequisites (≈15 minutes)</h2>
+            <p style="margin-bottom: 1.5rem;">In this section you install the tools ALPHA-PRIME needs: Python (language), PostgreSQL (database), Redis (cache), Git (to download code).</p>
+
+            <hr style="border-style: dashed; opacity: 0.3; margin: 2rem 0;">
+
+            <h3>Step 1.1 – Install Python 3.11</h3>
+            <p><strong>Why:</strong> ALPHA-PRIME is written in Python. Python is the “language” the system speaks. <a href="https://docs.python.org/3.11/using/windows.html" target="_blank">docs.python</a></p>
+
+            <div class="step-block">
+                <h4><span class="status-tag win">Windows</span></h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Open your browser and go to: <code>https://www.python.org/downloads/</code> <a href="https://docs.python.org/3.11/using/windows.html" target="_blank">[docs.python]</a></div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Click the <strong>big yellow button</strong> that says <strong>“Download Python 3.11.x”</strong> (If it shows 3.12, click “View all Python releases” and choose <strong>3.11.x</strong>.)</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Run the downloaded file <code>python-3.11.x-amd64.exe</code></div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>On the first screen:
+                        <ul style="margin-top:0.5rem">
+                            <li class="checklist-item"><div class="checkbox-mock"></div><div><strong>CHECK</strong> the box <strong>“Add Python 3.11 to PATH”</strong> (this is critical: it lets you run <code>python</code> from anywhere). <a href="https://docs.python.org/3/using/windows.html" target="_blank">[docs.python]</a></div></li>
+                            <li class="checklist-item"><div class="checkbox-mock"></div><div>Click <strong>“Install Now”</strong>.</div></li>
+                        </ul>
+                    </div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>When it finishes, close the installer.</div></li>
+                </ul>
+
+                <p><strong>Verify Python:</strong></p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Open <strong>Command Prompt</strong>: Press <code>Win</code> key, type <strong>cmd</strong>, press Enter.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Type (copy‑paste exactly):</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>CMD</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>python --version</code></pre>
+                </div>
+                <p>You should see something like:</p>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Output</span></div>
+                    <pre><code>Python 3.11.x</code></pre>
+                </div>
+                <p><strong>If you see:</strong></p>
+                <ul>
+                    <li><code>python is not recognized</code> → Close Command Prompt, open it again, try <code>python --version</code> one more time.</li>
+                    <li>Still fails? Run the installer again and make sure <strong>“Add Python to PATH”</strong> is checked. <a href="https://stackoverflow.com/questions/6318156/adding-python-to-path-on-windows" target="_blank">[stackoverflow]</a></li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h4><span class="status-tag mac">macOS</span></h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Open <strong>Terminal</strong>: Press <code>Cmd + Space</code>, type <strong>Terminal</strong>, press Enter.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>First install <strong>Homebrew</strong> (a tool that installs other tools), if you don’t have it:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Terminal</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"</code></pre>
+                </div>
+                <p>When it finishes, run:</p>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Terminal</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>brew --version</code></pre>
+                </div>
+                <p>If you see a version number, Homebrew is ready. <a href="https://www.dataquest.io/blog/install-postgresql-14-7-for-macos/" target="_blank">[dataquest]</a></p>
+                
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Install Python 3.11:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Terminal</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>brew install python@3.11</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Verify:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Terminal</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>python3 --version</code></pre>
+                </div>
+                <p>You should see <code>Python 3.11.x</code>.</p>
+
+                <p><strong>If you see “command not found: brew”:</strong></p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Run the Homebrew install command above again and follow on‑screen instructions. <a href="https://www.dataquest.io/blog/install-postgresql-14-7-for-macos/" target="_blank">[dataquest]</a></div></li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h4><span class="status-tag linux">Linux (Ubuntu / Debian)</span></h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Open <strong>Terminal</strong>.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Update packages:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>sudo apt update</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Install Python 3.11 and tools:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>sudo apt install python3.11 python3.11-venv python3-pip</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Verify:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>python3 --version</code></pre>
+                </div>
+                <p>You should see <code>Python 3.11.x</code>.</p>
+            </div>
+
+            <hr style="border-style: dashed; opacity: 0.3; margin: 2rem 0;">
+
+            <h3>Step 1.2 – Install PostgreSQL (Database)</h3>
+            <p><strong>Why:</strong> ALPHA-PRIME stores orders, positions, trades, and history in a PostgreSQL database (think of it as a powerful spreadsheet that the system can query fast). <a href="https://www.postgresql.org/download/" target="_blank">[postgresql]</a></p>
+
+            <div class="step-block">
+                <h4><span class="status-tag win">Windows</span></h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Go to: <code>https://www.postgresql.org/download/windows/</code> <a href="https://www.postgresql.org/download/windows/" target="_blank">[postgresql]</a></div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Click <strong>“Download the installer”</strong> and choose <strong>PostgreSQL 14</strong> (or 15 if 14 is not available; ALPHA-PRIME assumes 14+).</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Run the installer:
+                        <ul style="margin-top:0.5rem">
+                            <li class="checklist-item"><div class="checkbox-mock"></div><div>Keep all defaults (especially port <strong>5432</strong>).</div></li>
+                            <li class="checklist-item"><div class="checkbox-mock"></div><div><strong>Set a password</strong> for the <strong>postgres</strong> user and <strong>write it down</strong>. You will need this in <code>.env</code>.</div></li>
+                        </ul>
+                    </div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>When finished, allow it to install <strong>pgAdmin</strong> as well (the GUI admin tool).</div></li>
+                </ul>
+                <p><strong>Quick check:</strong></p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Open <strong>pgAdmin</strong> from Start Menu.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>It should connect to <code>PostgreSQL 14</code> automatically or ask for the password you set.</div></li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h4><span class="status-tag mac">macOS</span></h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>In <strong>Terminal</strong>, install PostgreSQL via Homebrew:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Terminal</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>brew install postgresql@14</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Start PostgreSQL:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Terminal</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>brew services start postgresql@14</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Verify:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Terminal</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>psql --version</code></pre>
+                </div>
+                <p>You should see something like <code>psql (PostgreSQL) 14.x</code>. <a href="https://www.dataquest.io/blog/install-postgresql-14-7-for-macos/" target="_blank">[dataquest]</a></p>
+
+                <p><strong>If <code>psql: command not found</code>:</strong></p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Add PostgreSQL to PATH (only needed on some setups):</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Terminal</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>echo 'export PATH="/usr/local/opt/postgresql@14/bin:$PATH"' >> ~/.zshrc
+source ~/.zshrc</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Try <code>psql --version</code> again. <a href="https://www.dataquest.io/blog/install-postgresql-14-7-for-macos/" target="_blank">[dataquest]</a></div></li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h4><span class="status-tag linux">Linux (Ubuntu / Debian)</span></h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>In <strong>Terminal</strong>:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>sudo apt install postgresql postgresql-contrib</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Start PostgreSQL and enable it at boot:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>sudo systemctl start postgresql
+sudo systemctl enable postgresql</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Verify:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>psql --version</code></pre>
+                </div>
+                <p>You should see a PostgreSQL version.</p>
+            </div>
+
+            <hr style="border-style: dashed; opacity: 0.3; margin: 2rem 0;">
+
+            <h3>Step 1.3 – Install Redis (Cache)</h3>
+            <p><strong>Why:</strong> Redis is a super‑fast in‑memory store used for live prices, session info, and internal queues. <a href="https://www.liquidweb.com/blog/install-redis-macos-windows/" target="_blank">[liquidweb]</a></p>
+
+            <div class="step-block">
+                <h4><span class="status-tag win">Windows</span></h4>
+                <p>Redis on Windows is easiest using WSL (Linux on Windows) or the community build.</p>
+                <p><strong>Simple (dev) option – use Redis for Windows port:</strong></p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Open browser: <code>https://github.com/microsoftarchive/redis/releases</code> <a href="https://www.linkedin.com/pulse/redis-in-depth-comprehensive-guide-setup-mac-windows-kumar-shanu" target="_blank">[linkedin]</a></div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Download the latest <strong><code>Redis-x64</code></strong> ZIP.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Extract to <code>C:\Redis</code>.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Open <strong>Command Prompt as Administrator</strong>.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Run:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>CMD</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>cd C:\Redis
+redis-server.exe redis.windows.conf</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Leave this window <strong>open</strong> (Redis server is running here).</div></li>
+                </ul>
+                <p><strong>Quick check (optional):</strong></p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Open a second Command Prompt:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>CMD</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>cd C:\Redis
+redis-cli ping</code></pre>
+                </div>
+                <p>You should see:</p>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Output</span></div>
+                    <pre><code>PONG</code></pre>
+                </div>
+            </div>
+
+            <div class="step-block">
+                <h4><span class="status-tag mac">macOS</span></h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>In <strong>Terminal</strong> (Homebrew must be installed):</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Terminal</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>brew install redis</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Start Redis:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Terminal</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>brew services start redis</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Verify:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Terminal</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>redis-cli ping</code></pre>
+                </div>
+                <p>You should see <code>PONG</code>. <a href="https://www.liquidweb.com/blog/install-redis-macos-windows/" target="_blank">[liquidweb]</a></p>
+            </div>
+
+            <div class="step-block">
+                <h4><span class="status-tag linux">Linux (Ubuntu / Debian)</span></h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>In <strong>Terminal</strong>:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>sudo apt install redis-server
+sudo systemctl start redis
+sudo systemctl enable redis</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Verify:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>redis-cli ping</code></pre>
+                </div>
+                <p>Expected: <code>PONG</code>. <a href="https://www.liquidweb.com/blog/install-redis-macos-windows/" target="_blank">[liquidweb]</a></p>
+            </div>
+
+            <hr style="border-style: dashed; opacity: 0.3; margin: 2rem 0;">
+
+            <h3>Step 1.4 – Install Git</h3>
+            <p><strong>Why:</strong> Git downloads the project code from GitHub (or your repo). It’s like “copying the project” in a safe and updateable way.</p>
+
+            <div class="step-block">
+                <h4><span class="status-tag win">Windows</span></h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Go to: <code>https://git-scm.com/download/win</code></div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Download the installer and run it.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Keep <strong>default options</strong> (just click Next until Finish). <a href="https://feaforall.com/how-to-install-python-3-on-windows-and-set-the-path/" target="_blank">[feaforall]</a></div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Verify in Command Prompt:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>CMD</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>git --version</code></pre>
+                </div>
+            </div>
+
+            <div class="step-block">
+                <h4><span class="status-tag mac">macOS</span></h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>In <strong>Terminal</strong>:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Terminal</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>brew install git</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Verify:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Terminal</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>git --version</code></pre>
+                </div>
+            </div>
+
+            <div class="step-block">
+                <h4><span class="status-tag linux">Linux (Ubuntu / Debian)</span></h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>In <strong>Terminal</strong>:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>sudo apt install git
+git --version</code></pre>
+                </div>
+                <p>If you see a version number, Git is installed.</p>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="section2">
+            <h2>Section 2: Download ALPHA-PRIME Project (≈5 minutes)</h2>
+            <p>You now download the actual ALPHA-PRIME v2.0 code.</p>
+
+            <div class="step-block">
+                <h3>Step 2.1 – Choose a Folder for the Project</h3>
+                <p>Pick a simple path you can remember.</p>
+
+                <h4>Windows example:</h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Open <strong>Command Prompt</strong> and run:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>CMD</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>cd C:\Users\YourName\Documents</code></pre>
+                </div>
+                <p>(Replace <code>YourName</code> with your actual username.)</p>
+
+                <h4>macOS / Linux example:</h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>In <strong>Terminal</strong>:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Terminal</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>cd ~/Documents</code></pre>
+                </div>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 2.2 – Clone from GitHub (recommended)</h3>
+                <p>Replace the URL below with your actual repo if different.</p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Run:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>git clone https://github.com/yourusername/alpha-prime-v2.git
+cd alpha-prime-v2</code></pre>
+                </div>
+                <p>You should now be <strong>inside</strong> the <code>alpha-prime-v2</code> folder.</p>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 2.3 – If You Have a ZIP Instead</h3>
+                <p>If you were given a ZIP file (e.g. <code>alpha-prime-v2.zip</code>):</p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Extract it to a folder like:
+                        <ul>
+                            <li>Windows: <code>C:\alpha-prime-v2</code></li>
+                            <li>macOS/Linux: <code>~/alpha-prime-v2</code></li>
+                        </ul>
+                    </div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Open a terminal/Command Prompt and navigate there:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>cd path/to/alpha-prime-v2</code></pre>
+                </div>
+                <p>(Replace <code>path/to</code> with the real folder path.)</p>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="section3">
+            <h2>Section 3: Automated Setup (≈10 minutes)</h2>
+            <p>The setup script does the heavy lifting for you:</p>
+            <ul>
+                <li>Creates a <strong>virtual environment</strong> (isolated Python sandbox)</li>
+                <li>Installs dependencies</li>
+                <li>Initializes the database</li>
+                <li>Creates configuration templates</li>
+            </ul>
+
+            <div class="step-block">
+                <h3>Step 3.1 – Make Setup Script Executable (macOS / Linux only)</h3>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>From inside the project folder:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>chmod +x scripts/setup.sh</code></pre>
+                </div>
+                <p>(Windows users <strong>skip</strong> this; you will run the script via Git Bash or WSL if needed.)</p>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 3.2 – Run the Setup Script</h3>
+                <p><strong>All OS (from project root):</strong></p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Run:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>bash scripts/setup.sh --dev</code></pre>
+                </div>
+                <p>What you should see:</p>
+                <ul>
+                    <li>Lines like:
+                        <ul>
+                            <li><code>Creating virtual environment...</code></li>
+                            <li><code>Installing dependencies...</code></li>
+                            <li><code>Setting up database...</code></li>
+                            <li><code>✓ Setup complete!</code></li>
+                        </ul>
+                    </li>
+                </ul>
+                <p>This can take <strong>a few minutes</strong> depending on your internet speed.</p>
+            </div>
+
+            <div class="step-block" style="border-left: 4px solid var(--accent-danger);">
+                <h3>If You See Errors During Setup</h3>
+                
+                <p><strong>Error: <code>python: command not found</code> or <code>python3: command not found</code></strong></p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Go back to <strong>Step 1.1</strong> and confirm Python is installed and <code>python</code> / <code>python3</code> works.</div></li>
+                </ul>
+
+                <p><strong>Error: <code>psql: could not connect to server</code> or mentions PostgreSQL</strong></p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Ensure PostgreSQL is running:
+                        <ul>
+                            <li>Windows: Start <strong>pgAdmin</strong>, if needed restart the PostgreSQL service from Services.</li>
+                            <li>macOS:
+                                <div class="code-wrapper"><pre><code>brew services start postgresql@14</code></pre></div>
+                            </li>
+                            <li>Linux:
+                                <div class="code-wrapper"><pre><code>sudo systemctl start postgresql</code></pre></div>
+                            </li>
+                        </ul>
+                    </div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Re-run:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>bash scripts/setup.sh --dev</code></pre>
+                </div>
+
+                <p><strong>Error: <code>could not connect to Redis</code></strong></p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Ensure Redis is running (see Step 1.3), then re-run setup.</div></li>
+                </ul>
+
+                <p><strong>Error: <code>Permission denied</code> (macOS / Linux)</strong></p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Try:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>sudo bash scripts/setup.sh --dev</code></pre>
+                </div>
+                <p>(You will be asked for your system password.)</p>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 3.3 – Verify Setup Created Key Files</h3>
+                <p>From the project folder:</p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Check that <code>venv</code> folder exists.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Check that <code>.env</code> file exists (or <code>.env.example</code> was copied).</div></li>
+                </ul>
+                <p>If <code>venv</code> or <code>.env</code> is missing, the setup script may have failed. Fix the error and run it again.</p>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="section4">
+            <h2>Section 4: Configure Your Credentials (≈5 minutes)</h2>
+            <p>Your <code>.env</code> file tells ALPHA-PRIME how to talk to your broker, database, email, etc.</p>
+
+            <div class="step-block">
+                <h3>Step 4.1 – Open the <code>.env</code> File</h3>
+                <p>Location: <strong>project root folder</strong>, file named <code>.env</code>.</p>
+
+                <h4>Windows:</h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>In File Explorer, open the <code>alpha-prime-v2</code> folder.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>If you don’t see <code>.env</code>, make sure “Hidden items” are visible.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Right‑click <code>.env</code> → <strong>Open with</strong> → choose <strong>Notepad</strong>.</div></li>
+                </ul>
+
+                <h4>macOS:</h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>In <strong>Terminal</strong> (from project root):</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Terminal</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>open -e .env</code></pre>
+                </div>
+                <p>or use any editor (VS Code, etc.).</p>
+
+                <h4>Linux:</h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>In <strong>Terminal</strong>:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>nano .env</code></pre>
+                </div>
+                <p>(or open with your preferred editor.)</p>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 4.2 – Fill in Broker and API Keys</h3>
+                <p>Inside <code>.env</code>, find the lines similar to:</p>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>.env</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code># Broker API (Zerodha example)
+ZERODHA_API_KEY=your_api_key_here
+ZERODHA_API_SECRET=your_secret_here
+ZERODHA_USER_ID=your_user_id_here
+ZERODHA_PASSWORD=your_password_here
+ZERODHA_PIN=your_pin_here</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Replace <code>your_api_key_here</code> etc. with your <strong>real</strong> values.</div></li>
+                </ul>
+
+                <p><strong>Where to get Zerodha API keys (example):</strong></p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Log into <strong>Kite</strong> in your browser.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Go to <code>https://kite.trade/</code> → <strong>Developers</strong> / <strong>Create App</strong>.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Create an app, then copy:
+                        <ul>
+                            <li><strong>API Key</strong></li>
+                            <li><strong>API Secret</strong></li>
+                        </ul>
+                    </div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Fill them into your <code>.env</code>.</div></li>
+                </ul>
+                <p><em>For Upstox or other brokers, fill the corresponding variables in the same file.</em></p>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 4.3 – Set Up Email Alerts (optional but recommended)</h3>
+                <p>In <code>.env</code>, find:</p>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>.env</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>SMTP_HOST=smtp.gmail.com
+SMTP_PORT=587
+SMTP_EMAIL=your_email@gmail.com
+SMTP_PASSWORD=your_app_password
+ALERT_EMAIL_TO=your_email@gmail.com</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Replace <code>your_email@gmail.com</code> with your Gmail address (or other provider).</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>For Gmail:
+                        <ul>
+                            <li>Create an <strong>App Password</strong> in Google Account → Security → App passwords.</li>
+                            <li>Use that as <code>SMTP_PASSWORD</code>.</li>
+                        </ul>
+                    </div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Save the file.</div></li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 4.4 – Set Up Telegram Alerts (optional)</h3>
+                <p>Find:</p>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>.env</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>TELEGRAM_BOT_TOKEN=your_bot_token
+TELEGRAM_CHAT_ID=your_chat_id</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Create a bot via <code>@BotFather</code> in Telegram (send <code>/newbot</code>).</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Copy the bot token into <code>TELEGRAM_BOT_TOKEN</code>.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>For Chat ID, send a message to your bot, then use a simple script (provided in docs) or an online tool to get your chat ID.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Fill <code>TELEGRAM_CHAT_ID</code>.</div></li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 4.5 – Database Credentials</h3>
+                <p>The setup script usually configures PostgreSQL access accordingly, but verify lines like:</p>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>.env</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>DATABASE_URL=postgresql+asyncpg://postgres:your_password@localhost:5432/alpha_prime_v2</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Make sure <code>your_password</code> matches the <strong>postgres</strong> password you set in Step 1.2.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Save the <code>.env</code> file after editing.</div></li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 4.6 – Security Reminder</h3>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Never share <code>.env</code> with anyone.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div><code>.env</code> is usually in <code>.gitignore</code> so it’s not committed to Git. Don’t remove it from there.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Treat <code>.env</code> like your <strong>password vault</strong>.</div></li>
+                </ul>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="section5">
+            <h2>Section 5: Test That Everything Works (≈5–10 minutes)</h2>
+            <p>Here you just check that core pieces (Python, DB, Redis, broker) are wired correctly.</p>
+
+            <div class="step-block">
+                <h3>Step 5.1 – Activate the Virtual Environment</h3>
+                <p>Do this <strong>every time</strong> you work with ALPHA-PRIME in a new terminal.</p>
+
+                <h4>Windows (Command Prompt or PowerShell):</h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>From the project folder:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>CMD</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>venv\Scripts\activate</code></pre>
+                </div>
+                <p>You should see your prompt change to start with <code>(venv)</code>.</p>
+
+                <h4>macOS / Linux:</h4>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>From the project folder:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>source venv/bin/activate</code></pre>
+                </div>
+                <p>You should also see <code>(venv)</code> at the start of your prompt.</p>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 5.2 – Run Smoke Tests</h3>
+                <p>These are quick health checks for configuration, DB, Redis, and broker.</p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>From the project root with <code>(venv)</code> active:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>pytest tests/smoke/ -v</code></pre>
+                </div>
+                <p><strong>Expected output (example):</strong></p>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Output</span></div>
+                    <pre><code>tests/smoke/test_config.py  ✓
+tests/smoke/test_database.py ✓
+tests/smoke/test_redis.py   ✓
+tests/smoke/test_broker.py  ✓
+
+====== 4 passed in 2.5s ======</code></pre>
+                </div>
+
+                <p><strong>If a test fails:</strong></p>
+                <ul>
+                    <li><code>test_config.py</code> fails → Check <code>.env</code> for missing / incorrect values.</li>
+                    <li><code>test_database.py</code> fails → PostgreSQL may not be running, or <code>DATABASE_URL</code> is wrong.
+                        <ul><li>Start PostgreSQL again (see Section 1.2).</li></ul>
+                    </li>
+                    <li><code>test_redis.py</code> fails → Redis may not be running.
+                        <ul><li>Start Redis again (Section 1.3).</li></ul>
+                    </li>
+                    <li><code>test_broker.py</code> fails → Broker API keys might be wrong, or broker API is down.
+                        <ul>
+                            <li>Double‑check keys in <code>.env</code>.</li>
+                            <li>Try logging into broker’s web platform manually.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 5.3 – Start the Dashboard</h3>
+                <p>This starts the ALPHA-PRIME web interface on your machine.</p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Ensure <code>(venv)</code> is active.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Run:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>python -m dashboard.app_v2</code></pre>
+                </div>
+                <p><strong>Expected output:</strong></p>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Output</span></div>
+                    <pre><code>INFO: Starting ALPHA-PRIME v2.0 Dashboard
+INFO: Running on http://127.0.0.1:8000
+INFO: Press CTRL+C to quit</code></pre>
+                </div>
+            </div>
+
+            <div class="step-block">
+                <h3>Step 5.4 – Open the Dashboard in Your Browser</h3>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Open your browser (Chrome/Edge/Safari/Firefox).</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Go to: <code>http://localhost:8000</code></div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>You should see the ALPHA-PRIME dashboard with:
+                        <ul>
+                            <li>Portfolio overview</li>
+                            <li>Equity curve (likely empty on first run)</li>
+                            <li>Strategy controls</li>
+                            <li>Live positions (empty if nothing running yet)</li>
+                        </ul>
+                    </div></li>
+                </ul>
+
+                <p><strong>Visual description (example):</strong></p>
+                <div class="ascii-art">
+╔════════════════════════════════════════╗
+║  ALPHA-PRIME v2.0                      ║
+║  Dashboard                             ║
+╠════════════════════════════════════════╣
+║  Portfolio Value: $100,000.00          ║
+║  Today's P&L: $0.00                    ║
+║  Open Positions: 0                     ║
+║                                        ║
+║  [Start Trading] [Stop] [Settings]     ║
+╚════════════════════════════════════════╝
+                </div>
+
+                <p>If you see this (or similar), your install is <strong>successfully running</strong>.</p>
+                
+                <p>To stop the dashboard:</p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Go to the terminal window where it’s running.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Press <code>CTRL + C</code>.</div></li>
+                </ul>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="section6">
+            <h2>Section 6: You’re Done!</h2>
+            <div class="step-block" style="border-color: var(--accent-primary);">
+                <p>What you just did:</p>
+                <ul>
+                    <li class="checklist-item done"><div class="checkbox-mock"></div><div>Installed Python</div></li>
+                    <li class="checklist-item done"><div class="checkbox-mock"></div><div>Installed PostgreSQL (database)</div></li>
+                    <li class="checklist-item done"><div class="checkbox-mock"></div><div>Installed Redis (cache)</div></li>
+                    <li class="checklist-item done"><div class="checkbox-mock"></div><div>Installed Git</div></li>
+                    <li class="checklist-item done"><div class="checkbox-mock"></div><div>Downloaded ALPHA-PRIME v2.0</div></li>
+                    <li class="checklist-item done"><div class="checkbox-mock"></div><div>Ran the automated setup</div></li>
+                    <li class="checklist-item done"><div class="checkbox-mock"></div><div>Configured your <code>.env</code> with broker and alert credentials</div></li>
+                    <li class="checklist-item done"><div class="checkbox-mock"></div><div>Ran smoke tests</div></li>
+                    <li class="checklist-item done"><div class="checkbox-mock"></div><div>Started the dashboard and saw it in browser</div></li>
+                </ul>
+                <p>This was a <strong>one‑time setup</strong>. You should <strong>not</strong> need to repeat these steps unless you reinstall your system.</p>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="reference">
+            <h2>Quick Daily Reference (after first install)</h2>
+            <p><strong>Start everything (day‑to‑day use):</strong></p>
+            <div class="code-wrapper">
+                <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                <pre><code># 1. Open terminal / command prompt
+cd path/to/alpha-prime-v2
+
+# 2. Activate virtual environment
+# Windows:
+venv\Scripts\activate
+# macOS / Linux:
+source venv/bin/activate
+
+# 3. Start dashboard
+python -m dashboard.app_v2</code></pre>
+            </div>
+
+            <p><strong>Stop the system:</strong></p>
+            <ul>
+                <li>In the terminal where ALPHA-PRIME is running:
+                    <ul>
+                        <li>Press <code>CTRL + C</code>.</li>
+                    </ul>
+                </li>
+            </ul>
+        </section>
+
+        <hr>
+
+        <section id="troubleshooting">
+            <h2>Troubleshooting – Common Problems & Fixes</h2>
+
+            <div class="step-block">
+                <h3>“Command not found: python”</h3>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Try:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>python3 --version</code></pre>
+                </div>
+                <ul>
+                    <li>If that works, use <code>python3</code> instead of <code>python</code>:</li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>python3 -m dashboard.app_v2</code></pre>
+                </div>
+                <ul>
+                    <li>If neither <code>python</code> nor <code>python3</code> works, revisit <strong>Step 1.1</strong>.</li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h3>“Permission denied” on macOS / Linux</h3>
+                <p>This usually means the script isn’t marked as executable.</p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Run:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>chmod +x scripts/setup.sh
+chmod +x scripts/run_engine.py</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>If still denied, prefix with <code>sudo</code> (only when needed):</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>sudo bash scripts/setup.sh --dev</code></pre>
+                </div>
+            </div>
+
+            <div class="step-block">
+                <h3>“Port 8000 already in use”</h3>
+                <p>Another program is already using port 8000.</p>
+                <p><strong>macOS / Linux:</strong></p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Find what’s using it:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>lsof -i :8000</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Kill that process (carefully) using the PID shown, or change ALPHA‑PRIME’s port in the dashboard config.</div></li>
+                </ul>
+                <p><strong>Windows:</strong></p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>In Command Prompt:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>CMD</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>netstat -ano | findstr :8000</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Find the PID, then kill it via Task Manager or:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>CMD</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>taskkill /PID <PID> /F</code></pre>
+                </div>
+            </div>
+
+            <div class="step-block">
+                <h3>Dashboard Loads but Shows Errors</h3>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Check logs:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code># From project root
+tail -f logs/alpha_prime.log    # macOS / Linux</code></pre>
+                </div>
+                <p>On Windows (no <code>tail</code>):</p>
+                <ul>
+                    <li>Open <code>logs/alpha_prime.log</code> in Notepad and scroll to bottom.</li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Look for lines with <code>ERROR</code>.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Common hints:
+                        <ul>
+                            <li>Database connection errors → PostgreSQL not running or <code>DATABASE_URL</code> wrong.</li>
+                            <li>Redis errors → Redis not running.</li>
+                            <li>Broker errors → API credentials wrong or broker API down.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h3>Can’t Connect to Broker API</h3>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Verify values in <code>.env</code> (no extra spaces, correct case).</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Try logging into broker web platform (Kite, etc.) to confirm credentials.</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Check broker API status (e.g. Zerodha status page).</div></li>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Ensure your API app is activated and has permissions.</div></li>
+                </ul>
+            </div>
+
+            <div class="step-block">
+                <h3>PostgreSQL Service Fails to Start</h3>
+                <p><strong>macOS (Homebrew):</strong></p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Check logs:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>tail -f /usr/local/var/log/postgres.log</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Restart service:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>brew services restart postgresql@14</code></pre>
+                </div>
+                <p><a href="https://www.dataquest.io/blog/install-postgresql-14-7-for-macos/" target="_blank">[dataquest]</a></p>
+
+                <p><strong>Linux:</strong></p>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Check status:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>sudo systemctl status postgresql</code></pre>
+                </div>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Restart:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>sudo systemctl restart postgresql</code></pre>
+                </div>
+            </div>
+
+            <div class="step-block">
+                <h3>Redis Not Responding</h3>
+                <ul>
+                    <li class="checklist-item"><div class="checkbox-mock"></div><div>Run:</div></li>
+                </ul>
+                <div class="code-wrapper">
+                    <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                    <pre><code>redis-cli ping</code></pre>
+                </div>
+                <p>If not <code>PONG</code>:</p>
+                <ul>
+                    <li>macOS:
+                        <div class="code-wrapper"><pre><code>brew services restart redis</code></pre></div>
+                    </li>
+                    <li>Linux:
+                        <div class="code-wrapper"><pre><code>sudo systemctl restart redis-server</code></pre></div>
+                    </li>
+                    <li>Windows: close and re‑run <code>redis-server.exe</code> in <code>C:\Redis</code>.</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr>
+
+        <section id="reset">
+            <h2>Emergency Reset – Start Fresh If Things Are Messed Up</h2>
+            <p>If configuration is broken and you just want a clean slate (keeping a backup):</p>
+            <blockquote>
+                Warning: This deletes ALL portfolio positions, trades, and orders in the ALPHA‑PRIME database, but it creates a backup first.
+            </blockquote>
+            <ol>
+                <li><strong>Stop everything</strong>
+                    <ul>
+                        <li class="checklist-item"><div class="checkbox-mock"></div><div>In any ALPHA-PRIME terminal windows, press <code>CTRL + C</code>.</div></li>
+                    </ul>
+                </li>
+                <li><strong>Deactivate virtual environment</strong>
+                    <ul>
+                        <li class="checklist-item"><div class="checkbox-mock"></div><div>If your prompt shows <code>(venv)</code>, run:</div></li>
+                    </ul>
+                    <div class="code-wrapper">
+                        <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                        <pre><code>deactivate</code></pre>
+                    </div>
+                </li>
+                <li><strong>Reset portfolio db (with backup)</strong>
+                    <ul>
+                        <li class="checklist-item"><div class="checkbox-mock"></div><div>From project root:</div></li>
+                    </ul>
+                    <div class="code-wrapper">
+                        <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                        <pre><code>python scripts/reset_portfolio.py --mode full --backup --confirm</code></pre>
+                    </div>
+                    <ul>
+                        <li>This will:
+                            <ul>
+                                <li>Create a backup <code>.sql</code> file in <code>backups/</code>.</li>
+                                <li>Wipe positions/trades/orders and cache for a fresh start.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><strong>Re-run setup</strong>
+                    <ul>
+                        <li class="checklist-item"><div class="checkbox-mock"></div><div>Run:</div></li>
+                    </ul>
+                    <div class="code-wrapper">
+                        <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                        <pre><code>bash scripts/setup.sh --dev</code></pre>
+                    </div>
+                </li>
+                <li><strong>Re-check <code>.env</code></strong>
+                    <ul>
+                        <li class="checklist-item"><div class="checkbox-mock"></div><div>Open <code>.env</code>, ensure broker/API settings are correct.</div></li>
+                    </ul>
+                </li>
+                <li><strong>Run smoke tests again</strong>
+                    <ul>
+                        <li class="checklist-item"><div class="checkbox-mock"></div><div>Activate <code>venv</code> and run:</div></li>
+                    </ul>
+                    <div class="code-wrapper">
+                        <div class="code-header"><span>Bash</span> <button class="copy-btn">Copy</button></div>
+                        <pre><code>pytest tests/smoke/ -v</code></pre>
+                    </div>
+                </li>
+            </ol>
+            <p>If smoke tests pass and dashboard starts, you are back to a working clean state.</p>
+        </section>
+
+        <hr>
+
+        <section id="support">
+            <h2>Support & Next Steps</h2>
+            <p>If you get stuck:</p>
+            <ul>
+                <li class="checklist-item"><div class="checkbox-mock"></div><div>Check <code>logs/alpha_prime.log</code> for detailed error messages.</div></li>
+                <li class="checklist-item"><div class="checkbox-mock"></div><div>Copy the error message and search it in <strong>Perplexity</strong> or the broker’s help center.</div></li>
+                <li class="checklist-item"><div class="checkbox-mock"></div><div>Check broker API docs (Zerodha / Upstox / your broker) for any extra steps (like whitelisting IPs, enabling APIs).</div></li>
+            </ul>
+
+            <p><strong>After installation, read next:</strong></p>
+            <ul>
+                <li class="checklist-item"><div class="checkbox-mock"></div><div><code>docs/02_daily_startup_checklist.md</code> – how to start and stop the system <strong>every day</strong>.</div></li>
+                <li class="checklist-item"><div class="checkbox-mock"></div><div><code>docs/03_profit_maximization_guide.md</code> – how to configure strategies and risk settings for your own trading.</div></li>
+            </ul>
+            <p>Once you have this guide done once, you <strong>never</strong> need to repeat it on this machine unless you:</p>
+            <ul>
+                <li>Wipe or reinstall your OS, or</li>
+                <li>Intentionally remove ALPHA-PRIME and want a clean reinstall.</li>
+            </ul>
+        </section>
+
+    </main>
+</div>
+
+<script>
+    // Copy to clipboard functionality
+    document.querySelectorAll('.copy-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const codeBlock = btn.parentElement.nextElementSibling;
+            const code = codeBlock.textContent;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const originalText = btn.textContent;
+                btn.textContent = 'Copied!';
+                btn.style.color = 'var(--accent-glow)';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.color = '';
+                }, 2000);
+            });
+        });
+    });
+
+    // Checkbox interaction (Visual only)
+    document.querySelectorAll('.checklist-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            // Only toggle if not clicking a link
+            if (e.target.tagName !== 'A') {
+                item.classList.toggle('done');
+            }
+        });
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
+            });
+        });
+    });
+
+    // Active state for sidebar
+    const sections = document.querySelectorAll('section, header');
+    const navLinks = document.querySelectorAll('.nav-link');
+
+    window.addEventListener('scroll', () => {
+        let current = '';
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            if (pageYOffset >= (sectionTop - 200)) {
+                current = section.getAttribute('id');
+            }
+        });
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (link.getAttribute('href').includes(current)) {
+                link.classList.add('active');
+            }
+        });
+    });
+</script>
+
+</body>
+</html>

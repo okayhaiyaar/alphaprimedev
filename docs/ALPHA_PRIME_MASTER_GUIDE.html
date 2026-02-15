@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALPHA-PRIME v2.0 | Master Command Reference</title>
+    <style>
+        :root {
+            /* Core Theme - Deep Space / Cyberpunk */
+            --bg-void: #030405;
+            --bg-panel: #0d1117;
+            --bg-surface: #161b22;
+            --bg-input: #010409;
+            
+            /* UI Borders */
+            --border-dim: #21262d;
+            --border-bright: #30363d;
+            --border-active: #58a6ff;
+            
+            /* Syntax & Accents */
+            --neon-cyan: #39c5bb;
+            --neon-blue: #58a6ff;
+            --neon-purple: #bc8cff;
+            --neon-gold: #d29922;
+            --neon-green: #3fb950;
+            --neon-red: #ff7b72;
+            
+            /* Typography */
+            --text-primary: #f0f6fc;
+            --text-secondary: #8b949e;
+            --text-tertiary: #6e7681;
+            --text-code: #e3e9f0;
+
+            --font-display: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            --font-mono: "JetBrains Mono", "Fira Code", "Consolas", monospace;
+            
+            /* Dimensions */
+            --sidebar-width: 340px;
+            --header-height: 60px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; scrollbar-width: thin; scrollbar-color: var(--border-bright) var(--bg-void); }
+        
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-void); }
+        ::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
+
+        html { scroll-behavior: smooth; font-size: 16px; }
+
+        body {
+            font-family: var(--font-display);
+            background-color: var(--bg-void);
+            color: var(--text-primary);
+            line-height: 1.7;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+        }
+
+        /* --- SIDEBAR NAVIGATION --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background: var(--bg-panel);
+            border-right: 1px solid var(--border-dim);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-dim);
+            background: rgba(13, 17, 23, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .brand {
+            font-family: var(--font-mono);
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .brand-indicator {
+            width: 8px;
+            height: 8px;
+            background: var(--neon-green);
+            border-radius: 50%;
+            box-shadow: 0 0 10px var(--neon-green);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.5; box-shadow: 0 0 5px var(--neon-green); }
+            50% { opacity: 1; box-shadow: 0 0 15px var(--neon-green); }
+            100% { opacity: 0.5; box-shadow: 0 0 5px var(--neon-green); }
+        }
+
+        .search-container {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            background: var(--bg-input);
+            border: 1px solid var(--border-dim);
+            color: var(--text-primary);
+            padding: 0.6rem 0.6rem 0.6rem 2.2rem;
+            border-radius: 6px;
+            font-family: var(--font-display);
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--neon-blue);
+            box-shadow: 0 0 0 2px rgba(88, 166, 255, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 0.8rem;
+            pointer-events: none;
+        }
+
+        .nav-tree {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1rem 0;
+        }
+
+        .nav-part {
+            margin-bottom: 1rem;
+        }
+
+        .nav-part-title {
+            padding: 0.5rem 1.5rem;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            color: var(--neon-blue);
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            cursor: pointer;
+            user-select: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-part-title:hover { color: var(--text-primary); }
+
+        .nav-chapters {
+            display: block; /* Toggled by JS */
+        }
+
+        .nav-link {
+            display: block;
+            padding: 0.4rem 1.5rem 0.4rem 2rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            border-left: 2px solid transparent;
+            transition: all 0.15s;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .nav-link:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.03);
+        }
+
+        .nav-link.active {
+            color: var(--text-primary);
+            background: linear-gradient(90deg, rgba(88, 166, 255, 0.1), transparent);
+            border-left-color: var(--neon-blue);
+        }
+
+        /* --- MAIN CONTENT AREA --- */
+        .main-viewport {
+            flex: 1;
+            height: 100%;
+            overflow-y: auto;
+            position: relative;
+            background: radial-gradient(circle at top right, #10151c 0%, var(--bg-void) 40%);
+        }
+
+        /* Reading Progress */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: var(--sidebar-width);
+            right: 0;
+            height: 2px;
+            background: transparent;
+            z-index: 1000;
+        }
+
+        .progress-indicator {
+            height: 100%;
+            background: var(--neon-cyan);
+            width: 0%;
+            box-shadow: 0 0 10px var(--neon-cyan);
+        }
+
+        .content-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 5rem 3rem 10rem 3rem;
+        }
+
+        /* --- TYPOGRAPHY --- */
+        h1.master-title {
+            font-size: 3.5rem;
+            line-height: 1.1;
+            font-weight: 800;
+            letter-spacing: -1px;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(135deg, #fff 0%, #a0b1c5 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.5rem;
+            color: var(--neon-blue);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .meta-data {
+            font-family: var(--font-mono);
+            font-size: 0.85rem;
+            color: var(--text-tertiary);
+            border-top: 1px solid var(--border-dim);
+            border-bottom: 1px solid var(--border-dim);
+            padding: 1rem 0;
+            margin-bottom: 4rem;
+            display: flex;
+            gap: 2rem;
+        }
+
+        .part-header {
+            margin-top: 6rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border-dim);
+            padding-bottom: 1rem;
+            scroll-margin-top: 2rem;
+        }
+
+        .part-label {
+            font-family: var(--font-mono);
+            color: var(--neon-purple);
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .part-title {
+            font-size: 2.5rem;
+            color: var(--text-primary);
+            font-weight: 300;
+        }
+
+        h3.chapter-title {
+            font-size: 1.8rem;
+            margin-top: 4rem;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            scroll-margin-top: 1rem;
+        }
+        
+        h3.chapter-title::before {
+            content: '#';
+            color: var(--border-bright);
+            margin-right: 12px;
+            font-weight: 300;
+        }
+
+        h4 {
+            font-size: 1.3rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        p {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+            max-width: 80ch;
+        }
+
+        ul, ol {
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+            color: var(--text-secondary);
+        }
+
+        li {
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        /* --- VISUAL ELEMENTS --- */
+        
+        /* Blueprints / ASCII Art */
+        .blueprint {
+            background: #0d1117;
+            border: 1px solid var(--border-dim);
+            border-radius: 6px;
+            padding: 2rem;
+            margin: 2rem 0;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+        }
+
+        .blueprint::before {
+            content: 'SCHEMATIC_VIEW';
+            position: absolute;
+            top: 8px;
+            right: 12px;
+            font-family: var(--font-mono);
+            font-size: 0.6rem;
+            color: var(--border-bright);
+            letter-spacing: 2px;
+        }
+
+        .blueprint-content {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            line-height: 1.4;
+            color: var(--neon-cyan);
+            white-space: pre;
+            overflow-x: auto;
+        }
+
+        /* Code Blocks */
+        .code-container {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-bright);
+            border-radius: 8px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+
+        .code-header {
+            background: #1c2128;
+            padding: 0.5rem 1rem;
+            border-bottom: 1px solid var(--border-bright);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--font-mono);
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+        }
+
+        .code-lang {
+            text-transform: uppercase;
+            color: var(--neon-gold);
+            font-weight: bold;
+        }
+
+        pre {
+            padding: 1.25rem;
+            overflow-x: auto;
+            margin: 0;
+        }
+
+        code {
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            color: var(--text-code);
+        }
+
+        /* Inline Code */
+        p code, li code {
+            background: rgba(110, 118, 129, 0.4);
+            padding: 0.2em 0.4em;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-family: var(--font-mono);
+            color: var(--text-code);
+        }
+
+        .copy-btn {
+            background: transparent;
+            border: 1px solid var(--border-bright);
+            color: var(--text-secondary);
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover {
+            border-color: var(--text-primary);
+            color: var(--text-primary);
+        }
+
+        /* Tables */
+        .data-table-wrapper {
+            overflow-x: auto;
+            margin: 2rem 0;
+            border-radius: 8px;
+            border: 1px solid var(--border-dim);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+            background: var(--bg-surface);
+        }
+
+        th {
+            text-align: left;
+            padding: 1rem;
+            background: #21262d;
+            color: var(--text-primary);
+            font-weight: 600;
+            border-bottom: 1px solid var(--border-bright);
+            white-space: nowrap;
+        }
+
+        td {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border-dim);
+            color: var(--text-secondary);
+        }
+
+        tr:last-child td { border-bottom: none; }
+        tr:hover td { background: rgba(255,255,255,0.02); }
+
+        /* Links */
+        a {
+            color: var(--neon-blue);
+            text-decoration: none;
+            border-bottom: 1px dashed transparent;
+            transition: border-bottom 0.2s;
+        }
+
+        a:hover { border-bottom-color: var(--neon-blue); }
+
+        /* Blockquotes */
+        blockquote {
+            border-left: 4px solid var(--neon-purple);
+            background: rgba(188, 140, 255, 0.05);
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 6px 6px 0;
+            font-style: italic;
+            color: var(--text-code);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                position: fixed;
+                height: 100%;
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .main-viewport {
+                margin-left: 0;
+            }
+            .progress-bar { left: 0; }
+            .content-container { padding: 3rem 1.5rem; }
+            
+            /* Hamburger */
+            .menu-toggle {
+                display: block;
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                background: var(--neon-blue);
+                color: #fff;
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+                z-index: 200;
+                cursor: pointer;
+            }
+        }
+        
+        @media (min-width: 1025px) {
+            .menu-toggle { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="brand">
+                <div class="brand-indicator"></div>
+                ALPHA-PRIME v2.0
+            </div>
+            <div class="search-container">
+                <span class="search-icon">🔍</span>
+                <input type="text" class="search-input" id="search" placeholder="Filter protocols...">
+            </div>
+        </div>
+        <div class="nav-tree" id="nav-tree">
+            <!-- Navigation generated by JS -->
+        </div>
+    </nav>
+
+    <!-- Progress Bar -->
+    <div class="progress-bar"><div class="progress-indicator" id="progress"></div></div>
+
+    <!-- Main Content -->
+    <main class="main-viewport" id="viewport">
+        <div class="content-container">
+            
+            <!-- HEADER -->
+            <header>
+                <h1 class="master-title">ALPHA-PRIME v2.0 <br>Master Guide</h1>
+                <div class="subtitle">Architecture, Operations, Risk & Research Manual</div>
+                <div class="meta-data">
+                    <span>SECURITY_LEVEL: OPERATOR</span>
+                    <span>LAST_UPDATED: 2026-02-11</span>
+                    <span>DOC_ID: AP-V2-MASTER</span>
+                </div>
+            </header>
+
+            <!-- PART I -->
+            <section id="part1">
+                <div class="part-header">
+                    <span class="part-label">Part I</span>
+                    <h2 class="part-title">Executive Overview</h2>
+                </div>
+
+                <div id="chap1">
+                    <h3 class="chapter-title">Chapter 1 – What ALPHA‑PRIME v2.0 Is</h3>
+                    <p>ALPHA‑PRIME v2.0 is a modular, multi‑strategy algo trading platform for Indian markets (NSE, NIFTY, BANKNIFTY, major equities) with production‑grade risk management, execution, and observability.</p>
+                    
+                    <p><strong>Core capabilities:</strong></p>
+                    <ul>
+                        <li>Multi‑strategy trading (mean reversion, breakout scalper, momentum) with pluggable strategy modules.</li>
+                        <li>Broker integration layer (Zerodha/Upstox style) with REST + WebSocket connectivity for orders and live data.</li>
+                        <li>Real‑time risk management, including per‑trade risk, daily loss limits, drawdown control, correlation caps, and kill switches.</li>
+                        <li>Persistent data layer (PostgreSQL) plus Redis cache for stateful intraday operation and historical analytics.</li>
+                        <li>Backtesting, walk‑forward, Monte Carlo, and reporting tooling via <code>scripts/backtest.py</code>, <code>optimize_strategy.py</code>, and report generators.</li>
+                        <li>Dashboard UI (<code>dashboard/app_v2.py</code>) for monitoring, lightweight manual control, and report browsing.</li>
+                    </ul>
+
+                    <p><strong>Problems this solves for you (trader + builder):</strong></p>
+                    <ul>
+                        <li>Removes manual execution risk: orders, sizing, and exits are fully systematic.</li>
+                        <li>Encodes your risk rules so your future self cannot easily override them on tilt.</li>
+                        <li>Provides a single platform for research, backtesting, paper trading, and live deployment.</li>
+                        <li>Creates a durable operational footprint (DB, logs, reports) so you can audit and iterate strategies with data.</li>
+                    </ul>
+                </div>
+
+                <div id="chap2">
+                    <h3 class="chapter-title">Chapter 2 – Core Design Principles</h3>
+                    <ol>
+                        <li><strong>Reliability over raw speed</strong><br>
+                        Target: robust execution during Indian trading hours with modest latency, not HFT microsecond games. Preference for Python + PostgreSQL + Redis with careful design rather than prematurely optimizing every micro‑path.</li>
+
+                        <li><strong>Risk‑first design</strong><br>
+                        Every trade path passes through risk checks: capital at risk, limits, correlation, time filters, volatility filters. Prop‑firm rules (daily loss, total drawdown) are treated as first‑class constraints configured in <code>risk_config.yaml</code>.</li>
+
+                        <li><strong>Modularity</strong><br>
+                        Clear separation between strategy logic, risk management, order execution, portfolio tracking, data storage, and presentation. Strategies never talk to broker directly; they emit signals consumed by the risk and execution layers.</li>
+
+                        <li><strong>Observability</strong><br>
+                        Structured logs (system, trades, risk, errors, performance) with consistent patterns and log levels. Persistent trade/portfolio history and derived performance metrics to validate live behavior vs backtests.</li>
+
+                        <li><strong>Automation with human‑in‑the‑loop</strong><br>
+                        System can run unattended, but dashboard + CLI allow you to stop trading, emergency‑flatten, or adjust configs safely. Critical operations (live mode, emergency stop, restore) require explicit confirmation or are wrapped in clear scripts.</li>
+
+                        <li><strong>Separation of research vs production</strong><br>
+                        Research experiments live in branch strategies, different configs, and non‑live modes (paper, backtest). Production configs are conservative, version‑controlled, and gated by checklists and tests (see Chapter 24, Chapter 25).</li>
+                    </ol>
+                </div>
+
+                <div id="chap3">
+                    <h3 class="chapter-title">Chapter 3 – High‑Level Data Flow</h3>
+                    
+                    <h4>3.1 Real‑Time Trading Loop</h4>
+                    <div class="blueprint">
+                        <div class="blueprint-content">
+Market Data (WebSocket / Polling)
+        │
+        ▼
+  Strategy Engine
+  (core/strategy_engine.py)
+        │  emits signals
+        ▼
+   Risk Manager
+   (core/risk_manager.py)
+        │  approves/rejects, sizes positions
+        ▼
+  Execution Engine
+  (core/execution_engine.py)
+        │  orders → Broker API
+        ▼
+      Broker
+  (integrations/zerodha, upstox)
+        │  fills / updates
+        ▼
+  Order Manager & Portfolio
+  (core/order_manager.py, core/portfolio.py)
+        │   state updates → DB + Redis
+        ▼
+PostgreSQL + Redis
+(database/*, integrations/redis_client.py)
+        │
+        ▼
+ Dashboard & Reports
+ (dashboard/app_v2.py, scripts/generate_report.py)</div>
+                    </div>
+
+                    <h4>3.2 Backtest / Offline Loop</h4>
+                    <div class="blueprint">
+                        <div class="blueprint-content">
+Historical Market Data (data/market_data)
+        │
+        ▼
+ Backtest Runner (scripts/backtest.py)
+        │  feeds candles/ticks to strategies
+        ▼
+   Strategy Engine (offline mode)
+        │  signals
+        ▼
+  Simulated Risk & Execution
+        │  pseudo orders, fills, slippage
+        ▼
+  In-Memory / File-Based Results
+        │
+        ├─► CSV/DB (reports/backtest/)
+        └─► Plots / Metrics / HTML/PDF reports</div>
+                    </div>
+                    <p>Backtests bypass live broker APIs and Redis; they operate on recorded data and simulated fills while reusing the same strategy logic and risk model where possible.</p>
+                </div>
+            </section>
+
+            <!-- PART II -->
+            <section id="part2">
+                <div class="part-header">
+                    <span class="part-label">Part II</span>
+                    <h2 class="part-title">System Architecture & Design</h2>
+                </div>
+
+                <div id="chap4">
+                    <h3 class="chapter-title">Chapter 4 – Component Map</h3>
+                    <p>At a coarse level:</p>
+                    <ul>
+                        <li><strong>Data layer:</strong> PostgreSQL schema (<code>trades</code>, <code>orders</code>, <code>portfolio_history</code>, <code>strategy_performance</code>) plus Redis for real‑time cache.</li>
+                        <li><strong>Strategy layer:</strong> <code>strategies/</code> and <code>core/strategy_engine.py</code> implementing signal generation based on configured parameters.</li>
+                        <li><strong>Risk layer:</strong> <code>core/risk_manager.py</code> applying risk_limits, position sizing, time/volatility filters, and circuit breakers.</li>
+                        <li><strong>Execution layer:</strong> <code>core/execution_engine.py</code> and <code>core/order_manager.py</code> translating approved signals into broker orders.</li>
+                        <li><strong>Portfolio layer:</strong> <code>core/portfolio.py</code> and DB models tracking positions, P&L, margin, and equity history.</li>
+                        <li><strong>Integration layer:</strong> <code>integrations/</code> for Zerodha/Upstox clients, Redis wrapper, email/Telegram alerts.</li>
+                        <li><strong>Presentation layer:</strong> <code>dashboard/app_v2.py</code> and pages/components implementing the UI.</li>
+                    </ul>
+                    <p>Each component has a clear contract:</p>
+                    <ul>
+                        <li>Strategies output <strong>signals</strong> (desired side, instrument, stop/take‑profit, confidence).</li>
+                        <li>Risk transforms signals into <strong>approved trade instructions</strong> (or rejects them).</li>
+                        <li>Execution and order management transform instructions into <strong>orders</strong> and track <strong>fills</strong>.</li>
+                        <li>Portfolio updates <strong>positions</strong> and writes to DB; dashboard reads from DB/Redis.</li>
+                    </ul>
+                </div>
+
+                <div id="chap5">
+                    <h3 class="chapter-title">Chapter 5 – Directory & Module Structure</h3>
+                    <div class="code-container">
+                        <div class="code-header"><span class="code-lang">TREE</span> <button class="copy-btn">COPY</button></div>
+                        <pre><code>alpha-prime-v2/
+├── config/
+│   ├── strategies/
+│   ├── risk_config.yaml
+│   ├── broker_config.yaml
+│   ├── trading_hours.yaml
+│   └── general_config.yaml
+├── core/
+├── strategies/
+├── integrations/
+├── database/
+├── data/
+├── dashboard/
+├── scripts/
+├── tests/
+├── logs/
+├── reports/
+├── docs/
+└── project root files (.env, requirements.txt, README.md, pyproject.toml)</code></pre>
+                    </div>
+
+                    <h4>5.1 config/</h4>
+                    <ul>
+                        <li><strong>What lives here:</strong> all configuration not meant to change intraday: risk rules, strategy parameters, market hours, broker endpoints.</li>
+                        <li><strong>Key files:</strong>
+                            <ul>
+                                <li><code>risk_config.yaml</code> – global risk limits, sizing method, time/vol filters, circuit breakers.</li>
+                                <li><code>strategies/*.yaml</code> – per‑strategy parameters, symbol lists, overrides.</li>
+                                <li><code>broker_config.yaml</code> – base URLs, timeouts, product types.</li>
+                                <li><code>trading_hours.yaml</code> – session times, holidays, half‑days.</li>
+                            </ul>
+                        </li>
+                        <li><strong>How to extend:</strong> add new strategy YAMLs, create presets (e.g. <code>risk_config_prop_challenge.yaml</code>) and symlink/copy into <code>risk_config.yaml</code>.</li>
+                    </ul>
+
+                    <h4>5.2 core/</h4>
+                    <ul>
+                        <li><strong>What lives here:</strong> core engine components, independent of any specific strategy or broker.</li>
+                        <li><strong>Key files:</strong>
+                            <ul>
+                                <li><code>engine.py</code> – orchestrates the trading loop.</li>
+                                <li><code>strategy_engine.py</code> – loads and runs strategies.</li>
+                                <li><code>risk_manager.py</code> – pre‑trade risk, sizing, circuit breakers.</li>
+                                <li><code>execution_engine.py</code> – order dispatch to <code>integrations</code>.</li>
+                                <li><code>portfolio.py</code> – portfolio state and P&L.</li>
+                                <li><code>order_manager.py</code> – life‑cycle of orders.</li>
+                                <li><code>market_hours.py</code> – is_market_open logic.</li>
+                            </ul>
+                        </li>
+                        <li><strong>How to extend:</strong> add new risk rules, extend order types, support partial fill handling, add new signals.</li>
+                    </ul>
+
+                    <!-- Continuing structure details for 5.3 to 5.8... -->
+                    <h4>5.3 strategies/</h4>
+                    <p><strong>What lives here:</strong> implementations of trading logic that operate on data and emit signals.</p>
+                    <p><strong>Key files:</strong> <code>base_strategy.py</code>, <code>mean_reversion.py</code>, <code>breakout_scalper.py</code>.</p>
+
+                    <h4>5.4 integrations/</h4>
+                    <p><strong>What lives here:</strong> external adapters. Zerodha/Upstox clients, Redis wrapper, Alerts.</p>
+
+                    <h4>5.5 database/</h4>
+                    <p><strong>What lives here:</strong> DB connectivity, ORM models, migrations, queries.</p>
+
+                    <h4>5.6 dashboard/</h4>
+                    <p><strong>What lives here:</strong> Streamlit dashboard code (<code>app_v2.py</code>, pages).</p>
+
+                    <h4>5.7 scripts/</h4>
+                    <p><strong>What lives here:</strong> operational CLI tooling (setup, backtest, backup, health check).</p>
+
+                    <h4>5.8 tests/, logs/, reports/, docs/</h4>
+                    <p>Standard support directories for artifacts and validation.</p>
+                </div>
+
+                <div id="chap6">
+                    <h3 class="chapter-title">Chapter 6 – Execution Model & Concurrency</h3>
+                    <p>ALPHA‑PRIME uses an asynchronous, event‑driven model within Python, layered around the engine and strategy/risk/execution components.</p>
+                    <ul>
+                        <li><strong>Async I/O:</strong> broker HTTP calls (via aiohttp or similar) and WebSocket streams are non‑blocking; market events and order updates are consumed via callbacks/tasks.</li>
+                        <li><strong>Strategy scheduling:</strong> strategies are invoked on bars or ticks within the event loop; signals are passed into risk manager queues.</li>
+                        <li><strong>Risk + execution concurrency:</strong> multiple signals, risk checks, and orders may be in flight simultaneously; concurrency control is handled via internal queues and DB transactions (e.g. to avoid double‑spending capital).</li>
+                        <li><strong>Background tasks:</strong>
+                            <ul>
+                                <li>Periodic health checks (<code>health_check.py</code>, or internal tasks in engine).</li>
+                                <li>Periodic portfolio snapshots into <code>portfolio_history</code>.</li>
+                                <li>Log rotation and maintenance scripts run out‑of‑band (<code>cron</code>, systemd timers).</li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="blueprint">
+                        <div class="blueprint-content">
+Event Loop
+  ├─ Task: consume_market_data()
+  ├─ Task: run_strategies_on_bar()
+  ├─ Task: apply_risk_checks()
+  ├─ Task: submit_orders_to_broker()
+  ├─ Task: handle_broker_responses()
+  ├─ Task: update_portfolio_and_db()
+  └─ Task: emit_metrics_and_logs()</div>
+                    </div>
+                </div>
+
+                <div id="chap7">
+                    <h3 class="chapter-title">Chapter 7 – Data Model & Schema</h3>
+                    <p>Conceptual entities:</p>
+                    <ul>
+                        <li><strong>Order:</strong> intent to transact a symbol with quantity, price, type, status.</li>
+                        <li><strong>Trade:</strong> logical trade lifecycle (entry, exit, P&L) linked to one or more orders.</li>
+                        <li><strong>Portfolio snapshot:</strong> time‑stamped view of total equity, cash, margin, P&L.</li>
+                        <li><strong>Strategy performance:</strong> aggregated metrics per strategy per day.</li>
+                    </ul>
+                    <p>Persistent schema is in PostgreSQL (see full DDL in <code>04_additional_notes.md</code>). Redis caches high‑frequency, transient state (latest quotes, current open positions state, etc.) to reduce DB load and keep dashboards/snappy logic.</p>
+                </div>
+            </section>
+
+            <!-- PART III -->
+            <section id="part3">
+                <div class="part-header">
+                    <span class="part-label">Part III</span>
+                    <h2 class="part-title">Installation, Configuration & Environments</h2>
+                </div>
+
+                <div id="chap8">
+                    <h3 class="chapter-title">Chapter 8 – Environments</h3>
+                    <div class="data-table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Env</th>
+                                    <th>Mode</th>
+                                    <th>Behavior</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><code>development</code></td>
+                                    <td>Local, dev DB, paper broker</td>
+                                    <td>Verbose logs, paper trading only, relaxed risk defaults</td>
+                                </tr>
+                                <tr>
+                                    <td><code>paper</code></td>
+                                    <td>Live data, simulated orders</td>
+                                    <td>Real‑time, no real money; full risk model, reports</td>
+                                </tr>
+                                <tr>
+                                    <td><code>live</code></td>
+                                    <td>Real broker + real capital</td>
+                                    <td>Strict risk enforcement, conservative defaults, alerts</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="code-container">
+                        <div class="code-header"><span class="code-lang">BASH</span> <button class="copy-btn">COPY</button></div>
+                        <pre><code>ENVIRONMENT=development   # or paper, production/live
+LOG_LEVEL=DEBUG           # dev
+ENABLE_PAPER_TRADING=true
+ENABLE_REAL_TRADING=false</code></pre>
+                    </div>
+                    <p>Production uses <code>ENVIRONMENT=production</code>, <code>LOG_LEVEL=INFO</code>, <code>ENABLE_REAL_TRADING=true</code>, <code>ENABLE_PAPER_TRADING=false</code> with real broker keys.</p>
+                </div>
+
+                <div id="chap9">
+                    <h3 class="chapter-title">Chapter 9 – First‑Time Setup (Summary)</h3>
+                    <p>Full step‑by‑step is in <code>01_quick_start_install.md</code>; here’s the conceptual summary:</p>
+                    <ul>
+                        <li><strong>Python & venv:</strong> create and activate venv, install <code>requirements.txt</code>.</li>
+                        <li><strong>Database:</strong> install PostgreSQL, create <code>alpha_prime</code> DB, run migrations via <code>scripts/setup.sh --db-only</code>.</li>
+                        <li><strong>Redis:</strong> install and run Redis (<code>brew services start redis</code> / <code>systemctl start redis</code>).</li>
+                        <li><strong>Configs:</strong> copy <code>.env.example</code> → <code>.env</code>, fill credentials; tune <code>risk_config.yaml</code> and strategy YAMLs.</li>
+                        <li><strong>Smoke tests:</strong> run <code>pytest tests/smoke/ -v</code> before any live experiments.</li>
+                    </ul>
+                </div>
+
+                <div id="chap10">
+                    <h3 class="chapter-title">Chapter 10 – Configuration System</h3>
+                    <h4>10.1 Environment variables (.env)</h4>
+                    <p>Captures: DATABASE_URL, REDIS_URL, Broker keys, Email/Telegram config, Feature flags.</p>
+
+                    <h4>10.2 Risk config (config/risk_config.yaml)</h4>
+                    <p>Your main presets:</p>
+                    <ul>
+                        <li><strong>Dev/playground:</strong> higher per‑trade risk allowed, but <code>ENABLE_REAL_TRADING=false</code>.</li>
+                        <li><strong>Prop challenge:</strong> 0.25% per trade, daily max loss ≈ 40% of firm limit, total max DD ≈ 40% of firm limit, strong circuit breakers.</li>
+                        <li><strong>Live personal:</strong> similar settings, but drawdown and scaling per your personal rules.</li>
+                    </ul>
+
+                    <h4>10.3 Strategy configs (config/strategies/*.yaml)</h4>
+                    <p>Describe each strategy’s symbols, parameters, overrides, trading hours, and minimal liquidity/spread conditions.</p>
+
+                    <h4>10.4 Trading hours & holidays (trading_hours.yaml)</h4>
+                    <p>Central source of truth for <code>is_market_open</code> logic and blocking trading on holidays/special days.</p>
+                </div>
+            </section>
+
+            <!-- PART IV -->
+            <section id="part4">
+                <div class="part-header">
+                    <span class="part-label">Part IV</span>
+                    <h2 class="part-title">Operation & Runbooks</h2>
+                </div>
+
+                <div id="chap11">
+                    <h3 class="chapter-title">Chapter 11 – Daily Operations Overview</h3>
+                    <p>A “healthy” day with ALPHA‑PRIME looks like:</p>
+                    <ul>
+                        <li><strong>Pre‑market (8:45–9:15):</strong> environment checks, <code>health_check.py</code>, broker verification, risk config sanity, strategy selection for today; see <code>02_daily_startup_checklist.md</code>.</li>
+                        <li><strong>Market hours (9:15–3:30):</strong> engine in monitor → live, dashboard running, periodic monitoring (every 10–30 minutes), only intervening on true incidents.</li>
+                        <li><strong>End‑of‑day (3:25–4:00):</strong> stop new trades, close intraday positions, generate daily report and backup, optionally journal.</li>
+                    </ul>
+                </div>
+
+                <div id="chap12">
+                    <h3 class="chapter-title">Chapter 12 – Runbooks</h3>
+                    <p>Each runbook: Goal → Inputs → Steps → Outputs.</p>
+
+                    <h4>12.1 Morning Startup Runbook (short form)</h4>
+                    <ul>
+                        <li><strong>Goal:</strong> from powered‑off to READY TO TRADE in ~10 minutes.</li>
+                        <li><strong>Inputs:</strong> powered machine, internet, broker credentials, DB + Redis installed.</li>
+                        <li><strong>Steps:</strong> see <code>02_daily_startup_checklist.md</code> for exact checkboxes and commands.</li>
+                        <li><strong>Outputs:</strong> engine in monitor/live mode, dashboard up, no critical errors, risk and strategy configs verified.</li>
+                    </ul>
+
+                    <h4>12.2 Intraday Monitoring Runbook</h4>
+                    <ul>
+                        <li><strong>Goal:</strong> ensure the system is behaving as expected; intervene only on incident‑class events.</li>
+                        <li><strong>Checks:</strong> Engine logs (no ERROR/CRITICAL), Dashboard (TRADING ACTIVE), Risk logs (no frequent warnings).</li>
+                        <li><strong>Actions:</strong> follow Chapter 28 incident playbooks.</li>
+                    </ul>
+
+                    <h4>12.3 End‑of‑Day Shutdown & Reconciliation</h4>
+                    <ul>
+                        <li><strong>Goal:</strong> cleanly end trading, reconcile with broker, persist artifacts.</li>
+                        <li><strong>Steps:</strong> Stop new trades, Generate report, Run backup, Stop engine.</li>
+                        <li><strong>Outputs:</strong> no open positions/orders, reports generated, backup stored.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- PART V -->
+            <section id="part5">
+                <div class="part-header">
+                    <span class="part-label">Part V</span>
+                    <h2 class="part-title">Strategies, Research & Backtesting</h2>
+                </div>
+
+                <div id="chap13">
+                    <h3 class="chapter-title">Chapter 13 – Strategy Framework</h3>
+                    <p><code>strategies/base_strategy.py</code> defines the contract:</p>
+                    <ul>
+                        <li>Lifecycle: <code>on_start()</code>, <code>on_bar()</code>, <code>on_tick()</code>, <code>on_stop()</code>.</li>
+                        <li>Input: data slices (bars, ticks, indicators), config parameters.</li>
+                        <li>Output: signal objects (direction, size hint or risk, stop loss, take profit, metadata).</li>
+                    </ul>
+                    <p>Strategies do not talk to the broker, DB, or Redis directly; they only emit signals to the strategy engine, which forwards them into risk + execution.</p>
+                </div>
+
+                <div id="chap14">
+                    <h3 class="chapter-title">Chapter 14 – Built‑in Strategies</h3>
+                    <ul>
+                        <li><strong>Mean Reversion (NIFTY/BANKNIFTY):</strong> Uses deviations from moving average, enters when price > N std dev away, exits near mean or stop. Strong in range/choppy regimes, weak in trending breakouts.</li>
+                        <li><strong>Breakout Scalper:</strong> Uses breakout of recent ranges with tight stops and small R multiple. Works best in moderate volatility, gets whipsawed in noisy chop.</li>
+                        <li><strong>Momentum/Trend:</strong> Slower timeframes, uses higher‑highs/lowers, but you typically avoid this in prop challenge due to higher DD.</li>
+                    </ul>
+                </div>
+
+                <div id="chap15">
+                    <h3 class="chapter-title">Chapter 15 – Backtesting Engine</h3>
+                    <p><code>scripts/backtest.py</code>: Reads historical data, instantiates strategies, simulates fills.</p>
+                    <div class="code-container">
+                        <div class="code-header"><span class="code-lang">BASH</span> <button class="copy-btn">COPY</button></div>
+                        <pre><code>python scripts/backtest.py --strategy MeanReversion_NIFTY50 \
+  --start 2023-01-01 \
+  --end 2026-02-11 \
+  --metrics all \
+  --report detailed</code></pre>
+                    </div>
+                    <p>Supports: Portfolio tests, Walk-forward (`--walk-forward`), Monte Carlo (`--monte-carlo`).</p>
+                </div>
+
+                <div id="chap16">
+                    <h3 class="chapter-title">Chapter 16 – Research Workflow</h3>
+                    <p>End‑to‑end path:</p>
+                    <ol>
+                        <li>Idea → pseudo‑code and quick prototype in <code>strategies/dev/</code>.</li>
+                        <li>Backtest (3+ years) with realistic costs and slippage.</li>
+                        <li>Walk‑forward (multiple rolling windows) to avoid overfitting.</li>
+                        <li>Regime tests (bull, bear, sideways).</li>
+                        <li>Monte Carlo to estimate distribution of returns and drawdowns.</li>
+                        <li>Paper trading (30+ days) in <code>mode paper</code>.</li>
+                        <li>Graduated live rollout (10% → 25% → 50% → 100% risk allocation).</li>
+                    </ol>
+                </div>
+            </section>
+
+            <!-- PART VI -->
+            <section id="part6">
+                <div class="part-header">
+                    <span class="part-label">Part VI</span>
+                    <h2 class="part-title">Risk, Prop Firms & Capital Management</h2>
+                </div>
+
+                <div id="chap17">
+                    <h3 class="chapter-title">Chapter 17 – Risk Model</h3>
+                    <p>Core quantities:</p>
+                    <ul>
+                        <li><strong>Per‑trade risk:</strong> % of equity at risk per trade (loss if SL hit).</li>
+                        <li><strong>Daily max loss:</strong> % of equity allowed to be lost in a single day.</li>
+                        <li><strong>Total max drawdown:</strong> % from equity peak beyond which trading stops.</li>
+                        <li><strong>Correlation limits:</strong> number of correlated exposures allowed simultaneously.</li>
+                        <li><strong>Kill switches:</strong> immediate stops when thresholds are breached.</li>
+                    </ul>
+                    <p><code>core/risk_manager.py</code> enforces these via per-signal checks, DB/Redis state checks, and time/volatility filters.</p>
+                </div>
+
+                <div id="chap18">
+                    <h3 class="chapter-title">Chapter 18 – Prop Firm Constraints</h3>
+                    <p>Abstract prop rules: Daily loss limit (e.g. 5%), Max drawdown (e.g. 10%).</p>
+                    <p><strong>Mapping into <code>risk_config.yaml</code>:</strong></p>
+                    <ul>
+                        <li>Set <code>daily_max_loss</code> ≈ 40% of firm daily limit (2% for a 5% firm limit).</li>
+                        <li>Set <code>max_drawdown</code> ≈ 40% of firm total DD (4% for a 10% limit).</li>
+                        <li>Configure <code>kill_switch</code> thresholds slightly below these to stop early.</li>
+                    </ul>
+                </div>
+
+                <div id="chap19">
+                    <h3 class="chapter-title">Chapter 19 – Position Sizing</h3>
+                    <ul>
+                        <li><strong>Fixed fractional sizing:</strong> risk a fixed % of current equity each trade (default).</li>
+                        <li><strong>Kelly criterion:</strong> used only to inform upper bounds (trade 25-50% of Kelly).</li>
+                    </ul>
+                    <div class="code-container">
+                        <div class="code-header"><span class="code-lang">YAML</span> <button class="copy-btn">COPY</button></div>
+                        <pre><code>position_sizing:
+  method: "fixed_fractional"
+  kelly_fraction: 0.5</code></pre>
+                    </div>
+                </div>
+
+                <div id="chap20">
+                    <h3 class="chapter-title">Chapter 20 – Profit Extraction & Scaling</h3>
+                    <ul>
+                        <li>Scale up risk <strong>only</strong> after stable performance over 3–6 months.</li>
+                        <li>Increase per‑trade risk by at most 0.05% per month.</li>
+                        <li>Withdraw 50–70% of monthly profits to lock gains.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <!-- PART VII -->
+            <section id="part7">
+                <div class="part-header">
+                    <span class="part-label">Part VII</span>
+                    <h2 class="part-title">Performance, Monitoring & Observability</h2>
+                </div>
+
+                <div id="chap21">
+                    <h3 class="chapter-title">Chapter 21 – Logging & Metrics</h3>
+                    <p>Use <code>tail -f logs/alpha_prime.log</code> for overall events. Treat <code>logs/errors.log</code> as high-signal. Use <code>logs/risk.log</code> for rejections.</p>
+                </div>
+
+                <div id="chap22">
+                    <h3 class="chapter-title">Chapter 22 – Dashboards & Reports</h3>
+                    <p>Dashboard pages include Overview, Strategies, Performance, and Settings. Reports are generated via <code>scripts/generate_report.py</code> and stored in <code>reports/</code>.</p>
+                </div>
+
+                <div id="chap23">
+                    <h3 class="chapter-title">Chapter 23 – Health & Stress Testing</h3>
+                    <p><code>health_check.py</code> verifies DB, Redis, Broker, Disk, Memory. <code>stress_test.py</code> simulates heavy load. Run health checks daily, stress tests quarterly.</p>
+                </div>
+            </section>
+
+            <!-- PART VIII -->
+            <section id="part8">
+                <div class="part-header">
+                    <span class="part-label">Part VIII</span>
+                    <h2 class="part-title">Maintenance, Testing & Deployment</h2>
+                </div>
+
+                <div id="chap24">
+                    <h3 class="chapter-title">Chapter 24 – Test Suite</h3>
+                    <ul>
+                        <li><strong>Smoke:</strong> Quick checks (<code>tests/smoke</code>).</li>
+                        <li><strong>Unit:</strong> Component logic.</li>
+                        <li><strong>Integration:</strong> End-to-end flows.</li>
+                    </ul>
+                    <div class="code-container">
+                        <div class="code-header"><span class="code-lang">BASH</span> <button class="copy-btn">COPY</button></div>
+                        <pre><code>pytest tests/smoke/ -v
+pytest tests/unit/ -v
+pytest tests/integration/ -v</code></pre>
+                    </div>
+                </div>
+
+                <div id="chap25">
+                    <h3 class="chapter-title">Chapter 25 – Maintenance Routines</h3>
+                    <ul>
+                        <li><strong>Daily:</strong> report review, error log scan, journal update.</li>
+                        <li><strong>Weekly:</strong> weekly report, performance review, log cleanup, weekly backup.</li>
+                        <li><strong>Monthly:</strong> health audit, DB maintenance, dependency review, API key rotations check, monthly backup.</li>
+                        <li><strong>Quarterly:</strong> system audit, stress test, re‑backtest, disaster recovery drill, security audit.</li>
+                    </ul>
+                </div>
+
+                <div id="chap26">
+                    <h3 class="chapter-title">Chapter 26 – Deployment Patterns</h3>
+                    <p>Recommended: Single local machine (venv + CLI) or VPS (systemd/tmux). Rolling updates: Pull -> Test -> Restart (non-market hours).</p>
+                </div>
+            </section>
+
+            <!-- PART IX -->
+            <section id="part9">
+                <div class="part-header">
+                    <span class="part-label">Part IX</span>
+                    <h2 class="part-title">Troubleshooting & Incident Response</h2>
+                </div>
+
+                <div id="chap27">
+                    <h3 class="chapter-title">Chapter 27 – Troubleshooting Index</h3>
+                    <div class="data-table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Symptom</th>
+                                    <th>Likely Cause</th>
+                                    <th>Reference</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Cannot connect to DB</td><td>Postgres down / wrong .env</td><td>DB errors</td></tr>
+                                <tr><td>Redis WRONGTYPE / OOM</td><td>Key mismatch / memory</td><td>Redis errors</td></tr>
+                                <tr><td>TokenException</td><td>Expired/invalid token</td><td>Broker API</td></tr>
+                                <tr><td>No trades (signals exist)</td><td>Risk rejection</td><td>Risk logs</td></tr>
+                                <tr><td>Dashboard port in use</td><td>Old process bound</td><td>System errors</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div id="chap28">
+                    <h3 class="chapter-title">Chapter 28 – Incident Playbooks</h3>
+                    <p>For each scenario define: Immediate actions, Diagnostics, Long-term fix. (See <code>04_additional_notes.md</code> for emergency flatten).</p>
+                </div>
+
+                <div id="chap29">
+                    <h3 class="chapter-title">Chapter 29 – Post‑Mortems</h3>
+                    <p>Template: Incident name, Date, Duration, Impact, Timeline, Root Causes (Technical/Process/Human), Permanent Fixes.</p>
+                </div>
+            </section>
+
+            <!-- PART X -->
+            <section id="part10">
+                <div class="part-header">
+                    <span class="part-label">Part X</span>
+                    <h2 class="part-title">Security, Compliance & Secrets</h2>
+                </div>
+
+                <div id="chap30">
+                    <h3 class="chapter-title">Chapter 30 – Secrets Management</h3>
+                    <p>Handled via <code>.env</code>. Permission: <code>chmod 600 .env</code>. Rotate broker keys every 90 days, DB passwords 180 days.</p>
+                </div>
+
+                <div id="chap31">
+                    <h3 class="chapter-title">Chapter 31 – Operational Security</h3>
+                    <p>Locked OS. Encrypted disk. Protect broker credentials/TOTP.</p>
+                </div>
+
+                <div id="chap32">
+                    <h3 class="chapter-title">Chapter 32 – Compliance & Record‑Keeping</h3>
+                    <p>ALPHA‑PRIME stores all trades/orders in DB tables, equity curve, strategy metrics, logs, and reports. This meets basic audit needs.</p>
+                </div>
+            </section>
+
+            <!-- PART XI -->
+            <section id="part11">
+                <div class="part-header">
+                    <span class="part-label">Part XI</span>
+                    <h2 class="part-title">Extension, Customization & Roadmap</h2>
+                </div>
+
+                <div id="chap33">
+                    <h3 class="chapter-title">Chapter 33 – Adding New Strategies</h3>
+                    <p>Create new class in <code>strategies/</code>, subclass <code>BaseStrategy</code>, add config YAML, wire into engine. Follow testing pipeline.</p>
+                </div>
+
+                <div id="chap34">
+                    <h3 class="chapter-title">Chapter 34 – New Broker Integrations</h3>
+                    <p>Follow <code>integrations/zerodha</code> pattern. Implement standardized client methods and auth flow.</p>
+                </div>
+
+                <div id="chap35">
+                    <h3 class="chapter-title">Chapter 35 – Feature Roadmap</h3>
+                    <p>Living list: Additional markets (BSE, FX), ML-based signals, Better dashboard UX (heatmaps), CI/CD for tests.</p>
+                </div>
+            </section>
+
+            <!-- PART XII -->
+            <section id="part12">
+                <div class="part-header">
+                    <span class="part-label">Part XII</span>
+                    <h2 class="part-title">Personal Playbook & Journal Templates</h2>
+                </div>
+                <p>This part aggregates all personal templates from <code>03_profit_maximization_guide.md</code> and <code>04_additional_notes.md</code>. Use those templates directly in your local repo.</p>
+            </section>
+
+            <!-- APPENDICES -->
+            <section id="appendices">
+                <div class="part-header">
+                    <span class="part-label">References</span>
+                    <h2 class="part-title">Appendices</h2>
+                </div>
+                
+                <h4>Appendix A – Glossary</h4>
+                <p>Populate using terms from <code>04_additional_notes.md</code>: signal, order, fill, slippage, drawdown, Kelly, risk‑of‑ruin.</p>
+
+                <h4>Appendix B – CLI Cheat Sheet</h4>
+                <p>Summarize <code>scripts/*.py</code> usage.</p>
+
+                <h4>Appendix C – Config Reference</h4>
+                <p>Explanations for <code>risk_config.yaml</code> fields, strategy keys, and <code>.env</code> variables.</p>
+
+                <h4>Appendix D – Diagrams Collection</h4>
+                <p>Copy ASCII diagrams (system architecture, data flow) here for recall.</p>
+
+                <h4>Appendix E – FAQ</h4>
+                <p>Seed ideas from troubleshooting sections: “What if DB is down?”, “Can I run on VPS?”.</p>
+            </section>
+
+        </div>
+    </main>
+
+    <!-- Menu Toggle (Mobile) -->
+    <div class="menu-toggle" id="menuToggle">☰</div>
+
+    <script>
+        // --- DATA STRUCTURE FOR NAVIGATION ---
+        const navStructure = [
+            { id: "part1", title: "Part I: Executive Overview", chapters: [
+                {id: "chap1", title: "1. What is ALPHA-PRIME"},
+                {id: "chap2", title: "2. Design Principles"},
+                {id: "chap3", title: "3. High-Level Data Flow"}
+            ]},
+            { id: "part2", title: "Part II: Architecture", chapters: [
+                {id: "chap4", title: "4. Component Map"},
+                {id: "chap5", title: "5. Directory Structure"},
+                {id: "chap6", title: "6. Execution Model"},
+                {id: "chap7", title: "7. Data Model"}
+            ]},
+            { id: "part3", title: "Part III: Install & Config", chapters: [
+                {id: "chap8", title: "8. Environments"},
+                {id: "chap9", title: "9. First-Time Setup"},
+                {id: "chap10", title: "10. Configuration"}
+            ]},
+            { id: "part4", title: "Part IV: Operations", chapters: [
+                {id: "chap11", title: "11. Daily Ops"},
+                {id: "chap12", title: "12. Runbooks"}
+            ]},
+            { id: "part5", title: "Part V: Strategies", chapters: [
+                {id: "chap13", title: "13. Framework"},
+                {id: "chap14", title: "14. Built-in Strategies"},
+                {id: "chap15", title: "15. Backtesting"},
+                {id: "chap16", title: "16. Research Workflow"}
+            ]},
+            { id: "part6", title: "Part VI: Risk & Capital", chapters: [
+                {id: "chap17", title: "17. Risk Model"},
+                {id: "chap18", title: "18. Prop Firm Rules"},
+                {id: "chap19", title: "19. Position Sizing"},
+                {id: "chap20", title: "20. Profit & Scaling"}
+            ]},
+            { id: "part7", title: "Part VII: Monitoring", chapters: [
+                {id: "chap21", title: "21. Logging & Metrics"},
+                {id: "chap22", title: "22. Dashboards"},
+                {id: "chap23", title: "23. Health Checks"}
+            ]},
+            { id: "part8", title: "Part VIII: Maintenance", chapters: [
+                {id: "chap24", title: "24. Test Suite"},
+                {id: "chap25", title: "25. Maintenance"},
+                {id: "chap26", title: "26. Deployment"}
+            ]},
+            { id: "part9", title: "Part IX: Troubleshooting", chapters: [
+                {id: "chap27", title: "27. Index"},
+                {id: "chap28", title: "28. Playbooks"},
+                {id: "chap29", title: "29. Post-Mortems"}
+            ]},
+            { id: "part10", title: "Part X: Security", chapters: [
+                {id: "chap30", title: "30. Secrets"},
+                {id: "chap31", title: "31. OpSec"},
+                {id: "chap32", title: "32. Compliance"}
+            ]},
+            { id: "part11", title: "Part XI: Roadmap", chapters: [
+                {id: "chap33", title: "33. New Strategies"},
+                {id: "chap34", title: "34. New Brokers"},
+                {id: "chap35", title: "35. Features"}
+            ]},
+            { id: "part12", title: "Part XII: Playbook", chapters: []},
+            { id: "appendices", title: "Appendices", chapters: []}
+        ];
+
+        // --- RENDER NAVIGATION ---
+        const navTree = document.getElementById('nav-tree');
+
+        function renderNav(filter = "") {
+            navTree.innerHTML = "";
+            navStructure.forEach(part => {
+                const partMatch = part.title.toLowerCase().includes(filter.toLowerCase());
+                const chapMatch = part.chapters.some(c => c.title.toLowerCase().includes(filter.toLowerCase()));
+                
+                if (filter === "" || partMatch || chapMatch) {
+                    const partDiv = document.createElement('div');
+                    partDiv.className = "nav-part";
+                    
+                    const titleDiv = document.createElement('div');
+                    titleDiv.className = "nav-part-title";
+                    titleDiv.innerText = part.title;
+                    titleDiv.onclick = () => {
+                        const chaptersDiv = partDiv.querySelector('.nav-chapters');
+                        chaptersDiv.style.display = chaptersDiv.style.display === 'none' ? 'block' : 'none';
+                    };
+                    partDiv.appendChild(titleDiv);
+
+                    const chaptersDiv = document.createElement('div');
+                    chaptersDiv.className = "nav-chapters";
+                    
+                    // Auto-expand if searching
+                    if(filter !== "") chaptersDiv.style.display = 'block';
+
+                    part.chapters.forEach(chap => {
+                        if (filter === "" || chap.title.toLowerCase().includes(filter.toLowerCase()) || partMatch) {
+                            const link = document.createElement('a');
+                            link.className = "nav-link";
+                            link.innerText = chap.title;
+                            link.href = "#" + chap.id;
+                            link.onclick = (e) => {
+                                e.preventDefault();
+                                document.getElementById(chap.id).scrollIntoView({ behavior: 'smooth' });
+                                if(window.innerWidth <= 1024) toggleSidebar();
+                            };
+                            chaptersDiv.appendChild(link);
+                        }
+                    });
+                    
+                    partDiv.appendChild(chaptersDiv);
+                    navTree.appendChild(partDiv);
+                }
+            });
+        }
+
+        renderNav();
+
+        // --- SEARCH FUNCTION ---
+        document.getElementById('search').addEventListener('input', (e) => {
+            renderNav(e.target.value);
+        });
+
+        // --- SCROLL SPY & PROGRESS ---
+        const viewport = document.getElementById('viewport');
+        const progressBar = document.getElementById('progress');
+        
+        viewport.addEventListener('scroll', () => {
+            // Progress Bar
+            const scrollTop = viewport.scrollTop;
+            const scrollHeight = viewport.scrollHeight - viewport.clientHeight;
+            const progress = (scrollTop / scrollHeight) * 100;
+            progressBar.style.width = progress + "%";
+
+            // Scroll Spy
+            let currentId = "";
+            const sections = document.querySelectorAll('div[id^="chap"], section[id^="part"]');
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop - 150; // Offset for header
+                if (scrollTop >= sectionTop) {
+                    currentId = section.getAttribute('id');
+                }
+            });
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('active');
+                if (link.getAttribute('href') === "#" + currentId) {
+                    link.classList.add('active');
+                    // Auto-scroll sidebar to active link
+                    // link.scrollIntoView({ block: 'nearest' });
+                }
+            });
+        });
+
+        // --- MOBILE MENU ---
+        const sidebar = document.getElementById('sidebar');
+        const menuToggle = document.getElementById('menuToggle');
+
+        function toggleSidebar() {
+            sidebar.classList.toggle('open');
+            menuToggle.innerText = sidebar.classList.contains('open') ? '✕' : '☰';
+        }
+
+        menuToggle.addEventListener('click', toggleSidebar);
+
+        // --- COPY CODE FUNCTION ---
+        document.querySelectorAll('.copy-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const codeBlock = btn.parentElement.nextElementSibling;
+                const code = codeBlock.innerText;
+                navigator.clipboard.writeText(code).then(() => {
+                    const original = btn.innerText;
+                    btn.innerText = "COPIED";
+                    btn.style.color = "var(--neon-green)";
+                    btn.style.borderColor = "var(--neon-green)";
+                    setTimeout(() => {
+                        btn.innerText = original;
+                        btn.style.color = "";
+                        btn.style.borderColor = "";
+                    }, 2000);
+                });
+            });
+        });
+
+    </script>
+</body>
+</html>

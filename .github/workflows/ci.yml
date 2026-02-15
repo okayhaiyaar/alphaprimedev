@@ -1,0 +1,422 @@
+# ============================================================
+# ALPHA-PRIME v2.0 - CI/CD Pipeline
+# ============================================================
+# Automated testing, linting, security scanning, and validation.
+#
+# Runs on:
+# - Push to main/develop branches
+# - Pull requests into main/develop
+# - Manual trigger (workflow_dispatch)
+# - Scheduled weekly security run
+#
+# Jobs:
+# 1. Code quality (black, isort, flake8, mypy)
+# 2. Security scanning (bandit, secrets, deps)
+# 3. Unit & integration tests (pytest, coverage)
+# 4. Docker build & image validation
+# 5. Docker Compose validation
+# 6. Dependency audit
+# 7. Optional deploy
+# 8. Notifications
+# ============================================================
+
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.gitignore'
+      - 'LICENSE'
+
+  pull_request:
+    branches:
+      - main
+      - develop
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+
+  workflow_dispatch:
+    inputs:
+      skip_tests:
+        description: 'Skip test jobs'
+        required: false
+        default: 'false'
+
+  # Optional: weekly security scan (Sunday 00:00 UTC)
+  schedule:
+    - cron: '0 0 * * 0'
+
+# Cancel in-progress runs of same workflow on same ref
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  PYTHON_VERSION: '3.11'
+
+
+jobs:
+  # ──────────────────────────────────────────────────────────
+  # JOB 1: CODE QUALITY
+  # ──────────────────────────────────────────────────────────
+  code-quality:
+    name: Code Quality Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Install code quality dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install black isort flake8 mypy
+
+      - name: Check code formatting (black)
+        run: |
+          black --check --diff .
+
+      - name: Check import sorting (isort)
+        run: |
+          isort --check-only --diff .
+
+      - name: Lint with flake8
+        run: |
+          flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
+          flake8 . --count --exit-zero --max-complexity=10 --max-line-length=100 --statistics
+
+      - name: Type check with mypy
+        run: |
+          mypy --install-types --non-interactive --ignore-missing-imports .
+        continue-on-error: true  # So CI is not blocked while types mature
+
+
+  # ──────────────────────────────────────────────────────────
+  # JOB 2: SECURITY SCANNING
+  # ──────────────────────────────────────────────────────────
+  security-scan:
+    name: Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install bandit
+        run: |
+          python -m pip install --upgrade pip
+          pip install "bandit[toml]"
+
+      - name: Run bandit security scan
+        run: |
+          bandit -r . -ll -x tests/,venv/,.venv/
+
+      - name: Run TruffleHog secret detection
+        uses: trufflesecurity/trufflehog@v3.80.3
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+
+      - name: Check dependencies for vulnerabilities (safety)
+        run: |
+          pip install safety
+          safety check --full-report || true
+
+
+  # ──────────────────────────────────────────────────────────
+  # JOB 3: TESTING (MATRIX)
+  # ──────────────────────────────────────────────────────────
+  test:
+    name: Test (Python ${{ matrix.python-version }} on ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    if: github.event.inputs.skip_tests != 'true'
+    needs: [code-quality]
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        python-version: ['3.10', '3.11', '3.12']
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: 'pip'
+
+      - name: Install system dependencies (Linux / Playwright)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            libnss3 \
+            libnspr4 \
+            libatk1.0-0 \
+            libatk-bridge2.0-0 \
+            libcups2 \
+            libdrm2 \
+            libdbus-1-3 \
+            libxkbcommon0 \
+            libxcomposite1 \
+            libxdamage1 \
+            libxfixes3 \
+            libxrandr2 \
+            libgbm1 \
+            libasound2 \
+            libpango-1.0-0 \
+            libcairo2
+
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
+          pip install pytest pytest-cov pytest-xdist pytest-timeout
+
+      - name: Install Playwright browsers
+        run: |
+          playwright install chromium --with-deps
+
+      - name: Create test .env file
+        run: |
+          cat > .env << 'EOF'
+          OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY_TEST }}
+          MOCK_API_CALLS=true
+          TESTING=true
+          LOG_LEVEL=DEBUG
+          PAPER_TRADING_ONLY=true
+          EOF
+
+      - name: Run unit tests
+        run: |
+          pytest tests/unit/ -v -m "not slow" --tb=short
+
+      - name: Run integration tests
+        run: |
+          pytest tests/integration/ -v --tb=short
+        continue-on-error: true  # Integration can be flaky with external deps
+
+      - name: Run full test suite with coverage
+        run: |
+          pytest --cov=. --cov-report=xml --cov-report=term-missing
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          flags: unittests
+          name: codecov-${{ matrix.python-version }}
+          fail_ci_if_error: false
+
+
+  # ──────────────────────────────────────────────────────────
+  # JOB 4: DOCKER BUILD & IMAGE VALIDATION
+  # ──────────────────────────────────────────────────────────
+  docker-build:
+    name: Docker Build & Validation
+    runs-on: ubuntu-latest
+    needs: [code-quality, test]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: alpha-prime:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Smoke test Docker image (Python & config)
+        run: |
+          docker run --rm alpha-prime:test python --version
+          docker run --rm alpha-prime:test python config.py
+
+      - name: Scan Docker image with Trivy
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          image-ref: alpha-prime:test
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          exit-code: '0'   # Do not fail entire build yet
+
+      - name: Upload Trivy results to GitHub Security
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+
+  # ──────────────────────────────────────────────────────────
+  # JOB 5: DOCKER COMPOSE VALIDATION
+  # ──────────────────────────────────────────────────────────
+  docker-compose:
+    name: Docker Compose Validation
+    runs-on: ubuntu-latest
+    needs: [docker-build]
+
+    services:
+      docker:
+        image: docker:24.0.7-dind
+        privileged: true
+        options: >-
+          --dns 8.8.8.8
+        ports:
+          - 2375:2375
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker CLI
+        uses: docker/setup-buildx-action@v3
+
+      - name: Create test .env file
+        run: |
+          cp .env.example .env
+          echo "OPENAI_API_KEY=test_key" >> .env
+          echo "PAPER_TRADING_ONLY=true" >> .env
+
+      - name: Validate docker-compose.yml
+        run: |
+          docker-compose config
+
+      - name: Start services
+        run: |
+          docker-compose up -d
+
+      - name: Wait for services
+        run: |
+          sleep 40
+
+      - name: Check service health
+        run: |
+          docker-compose ps
+          curl -f http://localhost:8501/_stcore/health || exit 1
+
+      - name: Stop services and cleanup
+        run: |
+          docker-compose down -v
+
+
+  # ──────────────────────────────────────────────────────────
+  # JOB 6: DEPENDENCY AUDIT
+  # ──────────────────────────────────────────────────────────
+  dependency-check:
+    name: Dependency Audit
+    runs-on: ubuntu-latest
+    needs: [code-quality]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - name: Install pip-audit
+        run: |
+          python -m pip install --upgrade pip
+          pip install pip-audit
+
+      - name: Audit Python dependencies
+        run: |
+          pip-audit --requirement requirements.txt
+        continue-on-error: true  # Report but don't fail entire workflow yet
+
+
+  # ──────────────────────────────────────────────────────────
+  # JOB 7: DEPLOY (EXAMPLE / PLACEHOLDER)
+  # ──────────────────────────────────────────────────────────
+  deploy:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    needs: [code-quality, security-scan, test, docker-build]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deployment placeholder
+        run: |
+          echo "Deployment step placeholder."
+          echo "Wire this job to your preferred deployment target (ECS, Cloud Run, etc.)."
+
+      # Example: Deploy to Docker Hub (commented)
+      # - name: Login to Docker Hub
+      #   uses: docker/login-action@v3
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+      #
+      # - name: Build & push production image
+      #   uses: docker/build-push-action@v5
+      #   with:
+      #     context: .
+      #     push: true
+      #     tags: |
+      #       yourusername/alpha-prime:latest
+      #       yourusername/alpha-prime:${{ github.sha }}
+
+
+  # ──────────────────────────────────────────────────────────
+  # JOB 8: NOTIFICATION
+  # ──────────────────────────────────────────────────────────
+  notify:
+    name: CI Status Notification
+    runs-on: ubuntu-latest
+    needs: [code-quality, security-scan, test, docker-build]
+    if: always()
+
+    steps:
+      - name: Send Discord notification
+        if: secrets.DISCORD_WEBHOOK_CI != ''
+        uses: sarisia/actions-status-discord@v1
+        with:
+          webhook: ${{ secrets.DISCORD_WEBHOOK_CI }}
+          status: ${{ job.status }}
+          title: "ALPHA-PRIME CI Pipeline"
+          description: "Run #${{ github.run_number }} on ref ${{ github.ref }}"
+          color: 0x00ff00
+          username: "ALPHA-PRIME CI"
+
+
+# ============================================================
+# REQUIRED SECRETS (GitHub → Settings → Secrets and variables)
+# ============================================================
+# OPENAI_API_KEY_TEST : Test/sandbox OpenAI key (limited)
+# CODECOV_TOKEN       : Token from codecov.io
+# DISCORD_WEBHOOK_CI  : Discord webhook for CI notifications
+# DOCKERHUB_USERNAME  : Docker Hub username (if deploying)
+# DOCKERHUB_TOKEN     : Docker Hub token (if deploying)
+# ============================================================

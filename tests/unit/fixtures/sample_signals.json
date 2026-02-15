@@ -1,0 +1,1783 @@
+{
+  "metadata": {
+    "version": "2.0.0",
+    "generated_at": "2026-02-11T20:30:00Z",
+    "total_signals": 50,
+    "description": "Test fixture signals for ALPHA-PRIME v2.0"
+  },
+  "signals": [
+    {
+      "signal_id": "SIG_001_BUY_HIGH_CONF",
+      "timestamp": "2026-02-11T09:15:00Z",
+      "symbol": "AAPL",
+      "exchange": "NASDAQ",
+      "action": "BUY",
+      "confidence": 0.89,
+      "strategy_id": "EMA_Cross_Momentum_v2",
+      "entry_price": 150.25,
+      "target_price": 155.50,
+      "stop_loss": 147.00,
+      "quantity": 100,
+      "timeframe": "15m",
+      "indicators": {
+        "rsi": 58.3,
+        "macd": {
+          "macd": 1.25,
+          "signal": 0.85,
+          "histogram": 0.40
+        },
+        "ema_fast": 149.80,
+        "ema_slow": 148.20,
+        "adx": 32.5,
+        "atr": 2.15,
+        "volume_ratio": 1.45
+      },
+      "regime": "BULL",
+      "risk_reward_ratio": 1.59,
+      "metadata": {
+        "signal_strength": "STRONG",
+        "pattern": "breakout",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_002_BUY_MOMENTUM_HIGH_CONF",
+      "timestamp": "2026-02-11T09:20:00Z",
+      "symbol": "MSFT",
+      "exchange": "NASDAQ",
+      "action": "BUY",
+      "confidence": 0.92,
+      "strategy_id": "Momentum_Trend_v3",
+      "entry_price": 410.50,
+      "target_price": 420.80,
+      "stop_loss": 405.00,
+      "quantity": 80,
+      "timeframe": "15m",
+      "indicators": {
+        "rsi": 64.2,
+        "macd": {
+          "macd": 1.85,
+          "signal": 1.20,
+          "histogram": 0.65
+        },
+        "ema_fast": 409.80,
+        "ema_slow": 404.20,
+        "adx": 35.1,
+        "atr": 3.80,
+        "volume_ratio": 1.72
+      },
+      "regime": "BULL",
+      "risk_reward_ratio": 2.06,
+      "metadata": {
+        "signal_strength": "STRONG",
+        "pattern": "breakout",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_003_BUY_PULLBACK_MED_CONF",
+      "timestamp": "2026-02-11T09:25:00Z",
+      "symbol": "GOOGL",
+      "exchange": "NASDAQ",
+      "action": "BUY",
+      "confidence": 0.68,
+      "strategy_id": "Pullback_Trend_v1",
+      "entry_price": 142.30,
+      "target_price": 146.80,
+      "stop_loss": 140.00,
+      "quantity": 120,
+      "timeframe": "30m",
+      "indicators": {
+        "rsi": 54.7,
+        "macd": {
+          "macd": 0.85,
+          "signal": 0.60,
+          "histogram": 0.25
+        },
+        "ema_fast": 142.10,
+        "ema_slow": 141.20,
+        "adx": 24.5,
+        "atr": 1.90,
+        "volume_ratio": 1.18
+      },
+      "regime": "BULL",
+      "risk_reward_ratio": 2.00,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "pullback",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_004_BUY_PULLBACK_MED_CONF",
+      "timestamp": "2026-02-11T09:30:00Z",
+      "symbol": "AMZN",
+      "exchange": "NASDAQ",
+      "action": "BUY",
+      "confidence": 0.62,
+      "strategy_id": "MeanReversion_v2",
+      "entry_price": 155.40,
+      "target_price": 160.20,
+      "stop_loss": 152.50,
+      "quantity": 90,
+      "timeframe": "1h",
+      "indicators": {
+        "rsi": 49.3,
+        "macd": {
+          "macd": 0.45,
+          "signal": 0.30,
+          "histogram": 0.15
+        },
+        "ema_fast": 155.10,
+        "ema_slow": 154.40,
+        "adx": 21.2,
+        "atr": 2.40,
+        "volume_ratio": 1.05
+      },
+      "regime": "SIDEWAYS",
+      "risk_reward_ratio": 1.93,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "pullback",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_005_BUY_LOW_CONF",
+      "timestamp": "2026-02-11T09:35:00Z",
+      "symbol": "NFLX",
+      "exchange": "NASDAQ",
+      "action": "BUY",
+      "confidence": 0.56,
+      "strategy_id": "Discretionary_Swing_v1",
+      "entry_price": 505.10,
+      "target_price": 512.00,
+      "stop_loss": 500.00,
+      "quantity": 40,
+      "timeframe": "1h",
+      "indicators": {
+        "rsi": 51.8,
+        "macd": {
+          "macd": 0.35,
+          "signal": 0.28,
+          "histogram": 0.07
+        },
+        "ema_fast": 504.20,
+        "ema_slow": 503.50,
+        "adx": 19.5,
+        "atr": 4.80,
+        "volume_ratio": 0.98
+      },
+      "regime": "SIDEWAYS",
+      "risk_reward_ratio": 1.37,
+      "metadata": {
+        "signal_strength": "WEAK",
+        "pattern": "continuation",
+        "confirmation": false
+      }
+    },
+    {
+      "signal_id": "SIG_006_BUY_BREAKOUT",
+      "timestamp": "2026-02-11T09:40:00Z",
+      "symbol": "NVDA",
+      "exchange": "NASDAQ",
+      "action": "BUY",
+      "confidence": 0.87,
+      "strategy_id": "Breakout_v3",
+      "entry_price": 780.00,
+      "target_price": 800.00,
+      "stop_loss": 770.00,
+      "quantity": 30,
+      "timeframe": "5m",
+      "indicators": {
+        "rsi": 69.2,
+        "macd": {
+          "macd": 4.20,
+          "signal": 3.10,
+          "histogram": 1.10
+        },
+        "ema_fast": 778.50,
+        "ema_slow": 770.80,
+        "adx": 38.7,
+        "atr": 10.20,
+        "volume_ratio": 2.10
+      },
+      "regime": "BULL",
+      "risk_reward_ratio": 2.00,
+      "metadata": {
+        "signal_strength": "STRONG",
+        "pattern": "breakout",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_007_BUY_SUPPORT_BOUNCE",
+      "timestamp": "2026-02-11T09:45:00Z",
+      "symbol": "META",
+      "exchange": "NASDAQ",
+      "action": "BUY",
+      "confidence": 0.74,
+      "strategy_id": "Support_Bounce_v1",
+      "entry_price": 380.00,
+      "target_price": 390.00,
+      "stop_loss": 375.00,
+      "quantity": 60,
+      "timeframe": "30m",
+      "indicators": {
+        "rsi": 52.4,
+        "macd": {
+          "macd": 1.15,
+          "signal": 0.90,
+          "histogram": 0.25
+        },
+        "ema_fast": 379.50,
+        "ema_slow": 377.80,
+        "adx": 23.0,
+        "atr": 4.10,
+        "volume_ratio": 1.33
+      },
+      "regime": "BULL",
+      "risk_reward_ratio": 2.00,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "pullback",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_008_BUY_MA_CROSSOVER",
+      "timestamp": "2026-02-11T09:50:00Z",
+      "symbol": "AAPL",
+      "exchange": "NASDAQ",
+      "action": "BUY",
+      "confidence": 0.79,
+      "strategy_id": "SMA_Crossover_v1",
+      "entry_price": 151.00,
+      "target_price": 156.00,
+      "stop_loss": 148.50,
+      "quantity": 120,
+      "timeframe": "1h",
+      "indicators": {
+        "rsi": 60.1,
+        "macd": {
+          "macd": 1.10,
+          "signal": 0.80,
+          "histogram": 0.30
+        },
+        "ema_fast": 150.90,
+        "ema_slow": 149.40,
+        "adx": 29.4,
+        "atr": 2.30,
+        "volume_ratio": 1.30
+      },
+      "regime": "BULL",
+      "risk_reward_ratio": 2.00,
+      "metadata": {
+        "signal_strength": "STRONG",
+        "pattern": "breakout",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_009_BUY_RSI_OVERSOLD",
+      "timestamp": "2026-02-11T09:55:00Z",
+      "symbol": "INTC",
+      "exchange": "NASDAQ",
+      "action": "BUY",
+      "confidence": 0.71,
+      "strategy_id": "RSI_Oversold_v1",
+      "entry_price": 38.20,
+      "target_price": 40.00,
+      "stop_loss": 37.20,
+      "quantity": 300,
+      "timeframe": "30m",
+      "indicators": {
+        "rsi": 29.4,
+        "macd": {
+          "macd": -0.15,
+          "signal": -0.25,
+          "histogram": 0.10
+        },
+        "ema_fast": 38.10,
+        "ema_slow": 38.80,
+        "adx": 20.8,
+        "atr": 0.85,
+        "volume_ratio": 1.40
+      },
+      "regime": "SIDEWAYS",
+      "risk_reward_ratio": 1.80,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "reversal",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_010_BUY_MULTI_TIMEFRAME",
+      "timestamp": "2026-02-11T10:00:00Z",
+      "symbol": "AAPL",
+      "exchange": "NASDAQ",
+      "action": "BUY",
+      "confidence": 0.93,
+      "strategy_id": "MTF_TrendAlign_v1",
+      "entry_price": 151.20,
+      "target_price": 158.00,
+      "stop_loss": 148.00,
+      "quantity": 150,
+      "timeframe": "1h",
+      "indicators": {
+        "rsi": 65.7,
+        "macd": {
+          "macd": 1.95,
+          "signal": 1.30,
+          "histogram": 0.65
+        },
+        "ema_fast": 150.90,
+        "ema_slow": 149.00,
+        "adx": 37.2,
+        "atr": 2.50,
+        "volume_ratio": 1.80
+      },
+      "regime": "BULL",
+      "risk_reward_ratio": 2.27,
+      "metadata": {
+        "signal_strength": "STRONG",
+        "pattern": "continuation",
+        "confirmation": true
+      }
+    },
+
+    {
+      "signal_id": "SIG_011_SELL_MOMENTUM_HIGH_CONF",
+      "timestamp": "2026-02-11T10:05:00Z",
+      "symbol": "AAPL",
+      "exchange": "NASDAQ",
+      "action": "SELL",
+      "confidence": 0.90,
+      "strategy_id": "Momentum_TakeProfit_v1",
+      "entry_price": 156.00,
+      "target_price": 151.50,
+      "stop_loss": 158.00,
+      "quantity": 100,
+      "timeframe": "15m",
+      "indicators": {
+        "rsi": 73.4,
+        "macd": {
+          "macd": 2.10,
+          "signal": 2.00,
+          "histogram": 0.10
+        },
+        "ema_fast": 155.90,
+        "ema_slow": 153.20,
+        "adx": 34.1,
+        "atr": 2.60,
+        "volume_ratio": 1.60
+      },
+      "regime": "BULL",
+      "risk_reward_ratio": 2.25,
+      "metadata": {
+        "signal_strength": "STRONG",
+        "pattern": "reversal",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_012_SELL_RESISTANCE_REJECTION",
+      "timestamp": "2026-02-11T10:10:00Z",
+      "symbol": "MSFT",
+      "exchange": "NASDAQ",
+      "action": "SELL",
+      "confidence": 0.82,
+      "strategy_id": "Resistance_Rejection_v1",
+      "entry_price": 422.00,
+      "target_price": 412.00,
+      "stop_loss": 426.00,
+      "quantity": 70,
+      "timeframe": "30m",
+      "indicators": {
+        "rsi": 68.2,
+        "macd": {
+          "macd": 1.40,
+          "signal": 1.55,
+          "histogram": -0.15
+        },
+        "ema_fast": 421.80,
+        "ema_slow": 416.50,
+        "adx": 27.9,
+        "atr": 4.40,
+        "volume_ratio": 1.32
+      },
+      "regime": "BULL",
+      "risk_reward_ratio": 2.50,
+      "metadata": {
+        "signal_strength": "STRONG",
+        "pattern": "reversal",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_013_SELL_MA_DEATH_CROSS",
+      "timestamp": "2026-02-11T10:15:00Z",
+      "symbol": "GOOGL",
+      "exchange": "NASDAQ",
+      "action": "SELL",
+      "confidence": 0.77,
+      "strategy_id": "MA_DeathCross_v1",
+      "entry_price": 143.00,
+      "target_price": 138.50,
+      "stop_loss": 145.50,
+      "quantity": 110,
+      "timeframe": "1h",
+      "indicators": {
+        "rsi": 55.1,
+        "macd": {
+          "macd": -0.35,
+          "signal": -0.20,
+          "histogram": -0.15
+        },
+        "ema_fast": 142.80,
+        "ema_slow": 144.20,
+        "adx": 22.6,
+        "atr": 1.95,
+        "volume_ratio": 1.10
+      },
+      "regime": "SIDEWAYS",
+      "risk_reward_ratio": 1.80,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "reversal",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_014_SELL_RSI_OVERBOUGHT",
+      "timestamp": "2026-02-11T10:20:00Z",
+      "symbol": "NVDA",
+      "exchange": "NASDAQ",
+      "action": "SELL",
+      "confidence": 0.80,
+      "strategy_id": "RSI_Overbought_v1",
+      "entry_price": 802.00,
+      "target_price": 785.00,
+      "stop_loss": 810.00,
+      "quantity": 25,
+      "timeframe": "30m",
+      "indicators": {
+        "rsi": 78.3,
+        "macd": {
+          "macd": 4.80,
+          "signal": 4.60,
+          "histogram": 0.20
+        },
+        "ema_fast": 800.50,
+        "ema_slow": 790.00,
+        "adx": 40.2,
+        "atr": 11.40,
+        "volume_ratio": 1.95
+      },
+      "regime": "BULL",
+      "risk_reward_ratio": 1.89,
+      "metadata": {
+        "signal_strength": "STRONG",
+        "pattern": "reversal",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_015_SELL_MACD_BEARISH",
+      "timestamp": "2026-02-11T10:25:00Z",
+      "symbol": "META",
+      "exchange": "NASDAQ",
+      "action": "SELL",
+      "confidence": 0.73,
+      "strategy_id": "MACD_Bearish_v1",
+      "entry_price": 392.00,
+      "target_price": 382.00,
+      "stop_loss": 397.00,
+      "quantity": 55,
+      "timeframe": "1h",
+      "indicators": {
+        "rsi": 63.0,
+        "macd": {
+          "macd": -0.75,
+          "signal": -0.50,
+          "histogram": -0.25
+        },
+        "ema_fast": 391.50,
+        "ema_slow": 387.20,
+        "adx": 25.8,
+        "atr": 4.00,
+        "volume_ratio": 1.28
+      },
+      "regime": "BULL",
+      "risk_reward_ratio": 2.00,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "reversal",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_016_SELL_TAKE_PROFIT",
+      "timestamp": "2026-02-11T10:30:00Z",
+      "symbol": "AAPL",
+      "exchange": "NASDAQ",
+      "action": "SELL",
+      "confidence": 0.76,
+      "strategy_id": "TakeProfit_v1",
+      "entry_price": 158.00,
+      "target_price": 153.00,
+      "stop_loss": 160.00,
+      "quantity": 100,
+      "timeframe": "15m",
+      "indicators": {
+        "rsi": 70.2,
+        "macd": {
+          "macd": 2.50,
+          "signal": 2.30,
+          "histogram": 0.20
+        },
+        "ema_fast": 157.80,
+        "ema_slow": 154.50,
+        "adx": 33.0,
+        "atr": 2.80,
+        "volume_ratio": 1.50
+      },
+      "regime": "BULL",
+      "risk_reward_ratio": 2.50,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "continuation",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_017_SELL_TRAILING_STOP",
+      "timestamp": "2026-02-11T10:35:00Z",
+      "symbol": "MSFT",
+      "exchange": "NASDAQ",
+      "action": "SELL",
+      "confidence": 0.70,
+      "strategy_id": "TrailingStop_v1",
+      "entry_price": 425.00,
+      "target_price": 417.00,
+      "stop_loss": 428.00,
+      "quantity": 60,
+      "timeframe": "15m",
+      "indicators": {
+        "rsi": 66.1,
+        "macd": {
+          "macd": 1.60,
+          "signal": 1.55,
+          "histogram": 0.05
+        },
+        "ema_fast": 424.60,
+        "ema_slow": 420.10,
+        "adx": 28.4,
+        "atr": 4.90,
+        "volume_ratio": 1.25
+      },
+      "regime": "BULL",
+      "risk_reward_ratio": 2.67,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "continuation",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_018_SELL_REBALANCING",
+      "timestamp": "2026-02-11T10:40:00Z",
+      "symbol": "GOOGL",
+      "exchange": "NASDAQ",
+      "action": "SELL",
+      "confidence": 0.65,
+      "strategy_id": "Portfolio_Rebalance_v1",
+      "entry_price": 145.00,
+      "target_price": 141.50,
+      "stop_loss": 147.00,
+      "quantity": 80,
+      "timeframe": "1d",
+      "indicators": {
+        "rsi": 55.4,
+        "macd": {
+          "macd": 0.20,
+          "signal": 0.25,
+          "histogram": -0.05
+        },
+        "ema_fast": 144.80,
+        "ema_slow": 143.00,
+        "adx": 19.8,
+        "atr": 2.10,
+        "volume_ratio": 0.95
+      },
+      "regime": "SIDEWAYS",
+      "risk_reward_ratio": 1.75,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "continuation",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_019_SELL_RISK_REDUCTION",
+      "timestamp": "2026-02-11T10:45:00Z",
+      "symbol": "NFLX",
+      "exchange": "NASDAQ",
+      "action": "SELL",
+      "confidence": 0.61,
+      "strategy_id": "Risk_Reduction_v1",
+      "entry_price": 510.00,
+      "target_price": 502.00,
+      "stop_loss": 514.00,
+      "quantity": 40,
+      "timeframe": "4h",
+      "indicators": {
+        "rsi": 59.0,
+        "macd": {
+          "macd": 0.65,
+          "signal": 0.70,
+          "histogram": -0.05
+        },
+        "ema_fast": 509.20,
+        "ema_slow": 505.30,
+        "adx": 22.0,
+        "atr": 5.30,
+        "volume_ratio": 1.05
+      },
+      "regime": "VOLATILE",
+      "risk_reward_ratio": 2.00,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "continuation",
+        "confirmation": false
+      }
+    },
+    {
+      "signal_id": "SIG_020_SELL_MULTI_TIMEFRAME",
+      "timestamp": "2026-02-11T10:50:00Z",
+      "symbol": "NVDA",
+      "exchange": "NASDAQ",
+      "action": "SELL",
+      "confidence": 0.88,
+      "strategy_id": "MTF_TopSignal_v1",
+      "entry_price": 810.00,
+      "target_price": 790.00,
+      "stop_loss": 820.00,
+      "quantity": 35,
+      "timeframe": "4h",
+      "indicators": {
+        "rsi": 79.5,
+        "macd": {
+          "macd": 5.20,
+          "signal": 5.00,
+          "histogram": 0.20
+        },
+        "ema_fast": 808.50,
+        "ema_slow": 795.00,
+        "adx": 42.0,
+        "atr": 12.50,
+        "volume_ratio": 2.05
+      },
+      "regime": "BULL",
+      "risk_reward_ratio": 2.00,
+      "metadata": {
+        "signal_strength": "STRONG",
+        "pattern": "reversal",
+        "confirmation": true
+      }
+    },
+
+    {
+      "signal_id": "SIG_021_SHORT_BREAKDOWN",
+      "timestamp": "2026-02-11T10:30:00Z",
+      "symbol": "TSLA",
+      "exchange": "NASDAQ",
+      "action": "SHORT",
+      "confidence": 0.82,
+      "strategy_id": "Breakdown_Short_v1",
+      "entry_price": 195.50,
+      "target_price": 188.00,
+      "stop_loss": 199.00,
+      "quantity": 50,
+      "timeframe": "1h",
+      "indicators": {
+        "rsi": 42.1,
+        "macd": {
+          "macd": -0.95,
+          "signal": -0.45,
+          "histogram": -0.50
+        },
+        "ema_fast": 196.20,
+        "ema_slow": 198.50,
+        "adx": 28.7,
+        "atr": 4.25,
+        "volume_ratio": 1.82
+      },
+      "regime": "BEAR",
+      "risk_reward_ratio": 2.14,
+      "metadata": {
+        "signal_strength": "STRONG",
+        "pattern": "breakdown",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_022_SHORT_RESISTANCE_REJECT",
+      "timestamp": "2026-02-11T10:35:00Z",
+      "symbol": "AMD",
+      "exchange": "NASDAQ",
+      "action": "SHORT",
+      "confidence": 0.78,
+      "strategy_id": "Resistance_Short_v1",
+      "entry_price": 142.00,
+      "target_price": 136.50,
+      "stop_loss": 144.50,
+      "quantity": 80,
+      "timeframe": "1h",
+      "indicators": {
+        "rsi": 63.5,
+        "macd": {
+          "macd": -0.60,
+          "signal": -0.30,
+          "histogram": -0.30
+        },
+        "ema_fast": 141.80,
+        "ema_slow": 144.00,
+        "adx": 27.0,
+        "atr": 3.60,
+        "volume_ratio": 1.35
+      },
+      "regime": "BEAR",
+      "risk_reward_ratio": 2.20,
+      "metadata": {
+        "signal_strength": "STRONG",
+        "pattern": "reversal",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_023_SHORT_BEAR_FLAG",
+      "timestamp": "2026-02-11T10:40:00Z",
+      "symbol": "META",
+      "exchange": "NASDAQ",
+      "action": "SHORT",
+      "confidence": 0.75,
+      "strategy_id": "BearFlag_Short_v1",
+      "entry_price": 388.00,
+      "target_price": 378.00,
+      "stop_loss": 392.00,
+      "quantity": 60,
+      "timeframe": "4h",
+      "indicators": {
+        "rsi": 48.2,
+        "macd": {
+          "macd": -0.45,
+          "signal": -0.15,
+          "histogram": -0.30
+        },
+        "ema_fast": 387.50,
+        "ema_slow": 390.20,
+        "adx": 26.5,
+        "atr": 4.60,
+        "volume_ratio": 1.20
+      },
+      "regime": "BEAR",
+      "risk_reward_ratio": 2.50,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "continuation",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_024_SHORT_HIGH_VOL",
+      "timestamp": "2026-02-11T10:45:00Z",
+      "symbol": "RIOT",
+      "exchange": "NASDAQ",
+      "action": "SHORT",
+      "confidence": 0.80,
+      "strategy_id": "HighVol_Short_v1",
+      "entry_price": 19.50,
+      "target_price": 17.50,
+      "stop_loss": 20.30,
+      "quantity": 400,
+      "timeframe": "15m",
+      "indicators": {
+        "rsi": 55.8,
+        "macd": {
+          "macd": -0.35,
+          "signal": 0.00,
+          "histogram": -0.35
+        },
+        "ema_fast": 19.60,
+        "ema_slow": 20.20,
+        "adx": 31.0,
+        "atr": 1.20,
+        "volume_ratio": 2.30
+      },
+      "regime": "VOLATILE",
+      "risk_reward_ratio": 2.50,
+      "metadata": {
+        "signal_strength": "STRONG",
+        "pattern": "breakdown",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_025_SHORT_CORRELATION_BREAK",
+      "timestamp": "2026-02-11T10:50:00Z",
+      "symbol": "XLF",
+      "exchange": "NYSE",
+      "action": "SHORT",
+      "confidence": 0.72,
+      "strategy_id": "CorrBreak_Short_v1",
+      "entry_price": 39.20,
+      "target_price": 37.80,
+      "stop_loss": 40.00,
+      "quantity": 500,
+      "timeframe": "1h",
+      "indicators": {
+        "rsi": 47.5,
+        "macd": {
+          "macd": -0.25,
+          "signal": -0.10,
+          "histogram": -0.15
+        },
+        "ema_fast": 39.10,
+        "ema_slow": 39.80,
+        "adx": 23.5,
+        "atr": 0.90,
+        "volume_ratio": 1.10
+      },
+      "regime": "BEAR",
+      "risk_reward_ratio": 2.33,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "continuation",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_026_SHORT_SECTOR_ROTATION",
+      "timestamp": "2026-02-11T10:55:00Z",
+      "symbol": "XLY",
+      "exchange": "NYSE",
+      "action": "SHORT",
+      "confidence": 0.69,
+      "strategy_id": "SectorRotation_Short_v1",
+      "entry_price": 172.00,
+      "target_price": 166.50,
+      "stop_loss": 175.00,
+      "quantity": 70,
+      "timeframe": "4h",
+      "indicators": {
+        "rsi": 53.0,
+        "macd": {
+          "macd": -0.40,
+          "signal": -0.20,
+          "histogram": -0.20
+        },
+        "ema_fast": 171.50,
+        "ema_slow": 173.20,
+        "adx": 24.0,
+        "atr": 2.80,
+        "volume_ratio": 1.05
+      },
+      "regime": "BEAR",
+      "risk_reward_ratio": 1.83,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "continuation",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_027_SHORT_CONTRARIAN",
+      "timestamp": "2026-02-11T11:00:00Z",
+      "symbol": "ARKK",
+      "exchange": "NYSE",
+      "action": "SHORT",
+      "confidence": 0.66,
+      "strategy_id": "Contrarian_Short_v1",
+      "entry_price": 54.50,
+      "target_price": 51.00,
+      "stop_loss": 56.00,
+      "quantity": 200,
+      "timeframe": "1d",
+      "indicators": {
+        "rsi": 62.0,
+        "macd": {
+          "macd": -0.30,
+          "signal": 0.05,
+          "histogram": -0.35
+        },
+        "ema_fast": 54.40,
+        "ema_slow": 53.00,
+        "adx": 22.2,
+        "atr": 1.60,
+        "volume_ratio": 1.40
+      },
+      "regime": "VOLATILE",
+      "risk_reward_ratio": 2.33,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "reversal",
+        "confirmation": false
+      }
+    },
+    {
+      "signal_id": "SIG_028_SHORT_HIGH_CONF",
+      "timestamp": "2026-02-11T11:05:00Z",
+      "symbol": "QQQ",
+      "exchange": "NASDAQ",
+      "action": "SHORT",
+      "confidence": 0.88,
+      "strategy_id": "Index_Short_v1",
+      "entry_price": 420.00,
+      "target_price": 408.00,
+      "stop_loss": 426.00,
+      "quantity": 120,
+      "timeframe": "1h",
+      "indicators": {
+        "rsi": 71.5,
+        "macd": {
+          "macd": -0.80,
+          "signal": -0.30,
+          "histogram": -0.50
+        },
+        "ema_fast": 419.50,
+        "ema_slow": 423.00,
+        "adx": 33.5,
+        "atr": 3.80,
+        "volume_ratio": 1.60
+      },
+      "regime": "CRISIS",
+      "risk_reward_ratio": 2.00,
+      "metadata": {
+        "signal_strength": "STRONG",
+        "pattern": "breakdown",
+        "confirmation": true
+      }
+    },
+
+    {
+      "signal_id": "SIG_029_COVER_SUPPORT_BOUNCE",
+      "timestamp": "2026-02-11T11:10:00Z",
+      "symbol": "TSLA",
+      "exchange": "NASDAQ",
+      "action": "COVER",
+      "confidence": 0.79,
+      "strategy_id": "Cover_Short_v1",
+      "entry_price": 187.50,
+      "target_price": 190.00,
+      "stop_loss": 185.00,
+      "quantity": 50,
+      "timeframe": "30m",
+      "indicators": {
+        "rsi": 31.0,
+        "macd": {
+          "macd": 0.15,
+          "signal": -0.10,
+          "histogram": 0.25
+        },
+        "ema_fast": 187.80,
+        "ema_slow": 190.50,
+        "adx": 29.5,
+        "atr": 4.10,
+        "volume_ratio": 1.70
+      },
+      "regime": "BEAR",
+      "risk_reward_ratio": 1.67,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "reversal",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_030_COVER_SHORT_SQUEEZE",
+      "timestamp": "2026-02-11T11:15:00Z",
+      "symbol": "GME",
+      "exchange": "NYSE",
+      "action": "COVER",
+      "confidence": 0.85,
+      "strategy_id": "ShortSqueeze_Cover_v1",
+      "entry_price": 24.00,
+      "target_price": 26.00,
+      "stop_loss": 23.00,
+      "quantity": 200,
+      "timeframe": "5m",
+      "indicators": {
+        "rsi": 75.0,
+        "macd": {
+          "macd": 1.20,
+          "signal": 0.80,
+          "histogram": 0.40
+        },
+        "ema_fast": 24.20,
+        "ema_slow": 23.50,
+        "adx": 38.0,
+        "atr": 1.80,
+        "volume_ratio": 3.20
+      },
+      "regime": "VOLATILE",
+      "risk_reward_ratio": 2.00,
+      "metadata": {
+        "signal_strength": "STRONG",
+        "pattern": "breakout",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_031_COVER_STOP_LOSS",
+      "timestamp": "2026-02-11T11:20:00Z",
+      "symbol": "RIOT",
+      "exchange": "NASDAQ",
+      "action": "COVER",
+      "confidence": 0.72,
+      "strategy_id": "Short_StopLoss_v1",
+      "entry_price": 20.00,
+      "target_price": 21.00,
+      "stop_loss": 19.50,
+      "quantity": 300,
+      "timeframe": "15m",
+      "indicators": {
+        "rsi": 65.3,
+        "macd": {
+          "macd": 0.70,
+          "signal": 0.50,
+          "histogram": 0.20
+        },
+        "ema_fast": 20.10,
+        "ema_slow": 19.60,
+        "adx": 30.0,
+        "atr": 1.10,
+        "volume_ratio": 2.00
+      },
+      "regime": "VOLATILE",
+      "risk_reward_ratio": 2.00,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "reversal",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_032_COVER_PROFIT_TARGET",
+      "timestamp": "2026-02-11T11:25:00Z",
+      "symbol": "ARKK",
+      "exchange": "NYSE",
+      "action": "COVER",
+      "confidence": 0.76,
+      "strategy_id": "Short_TakeProfit_v1",
+      "entry_price": 52.00,
+      "target_price": 53.50,
+      "stop_loss": 51.00,
+      "quantity": 150,
+      "timeframe": "1h",
+      "indicators": {
+        "rsi": 36.5,
+        "macd": {
+          "macd": 0.20,
+          "signal": -0.05,
+          "histogram": 0.25
+        },
+        "ema_fast": 52.10,
+        "ema_slow": 53.20,
+        "adx": 24.7,
+        "atr": 1.50,
+        "volume_ratio": 1.60
+      },
+      "regime": "BEAR",
+      "risk_reward_ratio": 1.50,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "continuation",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_033_COVER_TIME_BASED",
+      "timestamp": "2026-02-11T11:30:00Z",
+      "symbol": "QQQ",
+      "exchange": "NASDAQ",
+      "action": "COVER",
+      "confidence": 0.69,
+      "strategy_id": "TimeExit_Short_v1",
+      "entry_price": 410.00,
+      "target_price": 412.00,
+      "stop_loss": 408.00,
+      "quantity": 80,
+      "timeframe": "1d",
+      "indicators": {
+        "rsi": 45.0,
+        "macd": {
+          "macd": 0.10,
+          "signal": 0.00,
+          "histogram": 0.10
+        },
+        "ema_fast": 409.80,
+        "ema_slow": 412.50,
+        "adx": 18.5,
+        "atr": 3.20,
+        "volume_ratio": 1.10
+      },
+      "regime": "SIDEWAYS",
+      "risk_reward_ratio": 1.00,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "continuation",
+        "confirmation": false
+      }
+    },
+    {
+      "signal_id": "SIG_034_COVER_RISK_MGMT",
+      "timestamp": "2026-02-11T11:35:00Z",
+      "symbol": "XLF",
+      "exchange": "NYSE",
+      "action": "COVER",
+      "confidence": 0.74,
+      "strategy_id": "RiskMgmt_Short_v1",
+      "entry_price": 38.00,
+      "target_price": 39.00,
+      "stop_loss": 37.50,
+      "quantity": 300,
+      "timeframe": "4h",
+      "indicators": {
+        "rsi": 49.5,
+        "macd": {
+          "macd": 0.05,
+          "signal": -0.05,
+          "histogram": 0.10
+        },
+        "ema_fast": 38.10,
+        "ema_slow": 38.80,
+        "adx": 21.0,
+        "atr": 0.80,
+        "volume_ratio": 1.25
+      },
+      "regime": "SIDEWAYS",
+      "risk_reward_ratio": 2.00,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "reversal",
+        "confirmation": true
+      }
+    },
+
+    {
+      "signal_id": "SIG_035_EDGE_LOW_CONFIDENCE",
+      "timestamp": "2026-02-11T14:45:00Z",
+      "symbol": "XYZ",
+      "exchange": "NYSE",
+      "action": "BUY",
+      "confidence": 0.32,
+      "strategy_id": "Experimental_v1",
+      "entry_price": 25.50,
+      "target_price": 26.00,
+      "stop_loss": 24.80,
+      "quantity": 200,
+      "timeframe": "5m",
+      "indicators": {
+        "rsi": 52.1,
+        "macd": {
+          "macd": 0.05,
+          "signal": 0.03,
+          "histogram": 0.02
+        },
+        "ema_fast": 25.45,
+        "ema_slow": 25.40,
+        "adx": 18.2,
+        "atr": 0.35,
+        "volume_ratio": 0.92
+      },
+      "regime": "SIDEWAYS",
+      "risk_reward_ratio": 0.71,
+      "metadata": {
+        "signal_strength": "WEAK",
+          "pattern": "none",
+          "confirmation": false
+      }
+    },
+    {
+      "signal_id": "SIG_036_EDGE_CONFLICTING_INDICATORS",
+      "timestamp": "2026-02-11T14:50:00Z",
+      "symbol": "ABC",
+      "exchange": "NYSE",
+      "action": "BUY",
+      "confidence": 0.55,
+      "strategy_id": "Conflicting_Indicators_v1",
+      "entry_price": 42.00,
+      "target_price": 44.00,
+      "stop_loss": 41.00,
+      "quantity": 150,
+      "timeframe": "15m",
+      "indicators": {
+        "rsi": 72.0,
+        "macd": {
+          "macd": -0.40,
+          "signal": -0.10,
+          "histogram": -0.30
+        },
+        "ema_fast": 42.10,
+        "ema_slow": 41.80,
+        "adx": 15.0,
+        "atr": 0.90,
+        "volume_ratio": 0.85
+      },
+      "regime": "VOLATILE",
+      "risk_reward_ratio": 2.00,
+      "metadata": {
+        "signal_strength": "WEAK",
+        "pattern": "reversal",
+        "confirmation": false
+      }
+    },
+    {
+      "signal_id": "SIG_037_EDGE_MISSING_TARGET_STOP",
+      "timestamp": "2026-02-11T14:55:00Z",
+      "symbol": "DEF",
+      "exchange": "NYSE",
+      "action": "SELL",
+      "confidence": 0.60,
+      "strategy_id": "Incomplete_v1",
+      "entry_price": 30.00,
+      "target_price": 0.00,
+      "stop_loss": 0.00,
+      "quantity": 100,
+      "timeframe": "5m",
+      "indicators": {
+        "rsi": 50.0,
+        "macd": {
+          "macd": 0.00,
+          "signal": 0.00,
+          "histogram": 0.00
+        },
+        "ema_fast": 30.00,
+        "ema_slow": 30.00,
+        "adx": 10.0,
+        "atr": 0.20,
+        "volume_ratio": 0.50
+      },
+      "regime": "SIDEWAYS",
+      "risk_reward_ratio": 0.00,
+      "metadata": {
+        "signal_strength": "WEAK",
+        "pattern": "none",
+        "confirmation": false
+      }
+    },
+    {
+      "signal_id": "SIG_038_EDGE_AFTER_HOURS",
+      "timestamp": "2026-02-11T21:10:00Z",
+      "symbol": "AAPL",
+      "exchange": "NASDAQ",
+      "action": "BUY",
+      "confidence": 0.58,
+      "strategy_id": "AfterHours_v1",
+      "entry_price": 152.00,
+      "target_price": 155.00,
+      "stop_loss": 150.00,
+      "quantity": 70,
+      "timeframe": "5m",
+      "indicators": {
+        "rsi": 53.0,
+        "macd": {
+          "macd": 0.40,
+          "signal": 0.35,
+          "histogram": 0.05
+        },
+        "ema_fast": 151.90,
+        "ema_slow": 150.80,
+        "adx": 17.5,
+        "atr": 1.80,
+        "volume_ratio": 0.40
+      },
+      "regime": "SIDEWAYS",
+      "risk_reward_ratio": 1.50,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "continuation",
+        "confirmation": false
+      }
+    },
+    {
+      "signal_id": "SIG_039_EDGE_LOW_LIQUIDITY",
+      "timestamp": "2026-02-11T15:00:00Z",
+      "symbol": "LOWVOL",
+      "exchange": "NYSE",
+      "action": "BUY",
+      "confidence": 0.57,
+      "strategy_id": "LowLiquidity_v1",
+      "entry_price": 8.50,
+      "target_price": 9.10,
+      "stop_loss": 8.10,
+      "quantity": 1000,
+      "timeframe": "15m",
+      "indicators": {
+        "rsi": 55.0,
+        "macd": {
+          "macd": 0.08,
+          "signal": 0.06,
+          "histogram": 0.02
+        },
+        "ema_fast": 8.48,
+        "ema_slow": 8.40,
+        "adx": 14.0,
+        "atr": 0.25,
+        "volume_ratio": 0.30
+      },
+      "regime": "SIDEWAYS",
+      "risk_reward_ratio": 1.50,
+      "metadata": {
+        "signal_strength": "WEAK",
+        "pattern": "breakout",
+        "confirmation": false
+      }
+    },
+    {
+      "signal_id": "SIG_040_EDGE_EXTREME_PRICE",
+      "timestamp": "2026-02-11T15:05:00Z",
+      "symbol": "PENNY",
+      "exchange": "NYSE",
+      "action": "BUY",
+      "confidence": 0.52,
+      "strategy_id": "PennyStock_v1",
+      "entry_price": 0.75,
+      "target_price": 0.90,
+      "stop_loss": 0.60,
+      "quantity": 5000,
+      "timeframe": "5m",
+      "indicators": {
+        "rsi": 63.0,
+        "macd": {
+          "macd": 0.02,
+          "signal": 0.01,
+          "histogram": 0.01
+        },
+        "ema_fast": 0.74,
+        "ema_slow": 0.70,
+        "adx": 30.0,
+        "atr": 0.08,
+        "volume_ratio": 3.50
+      },
+      "regime": "VOLATILE",
+      "risk_reward_ratio": 1.00,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "breakout",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_041_EDGE_GAP_SIGNAL",
+      "timestamp": "2026-02-11T09:00:00Z",
+      "symbol": "GAPD",
+      "exchange": "NYSE",
+      "action": "SELL",
+      "confidence": 0.71,
+      "strategy_id": "GapDown_Sell_v1",
+      "entry_price": 32.00,
+      "target_price": 29.00,
+      "stop_loss": 33.50,
+      "quantity": 200,
+      "timeframe": "1d",
+      "indicators": {
+        "rsi": 41.0,
+        "macd": {
+          "macd": -0.50,
+          "signal": -0.20,
+          "histogram": -0.30
+        },
+        "ema_fast": 32.10,
+        "ema_slow": 34.00,
+        "adx": 27.0,
+        "atr": 2.50,
+        "volume_ratio": 2.20
+      },
+      "regime": "VOLATILE",
+      "risk_reward_ratio": 2.00,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "breakdown",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_042_EDGE_EARNINGS",
+      "timestamp": "2026-02-11T13:20:00Z",
+      "symbol": "AAPL",
+      "exchange": "NASDAQ",
+      "action": "BUY",
+      "confidence": 0.77,
+      "strategy_id": "EarningsMomentum_v1",
+      "entry_price": 154.00,
+      "target_price": 162.00,
+      "stop_loss": 150.00,
+      "quantity": 130,
+      "timeframe": "1h",
+      "indicators": {
+        "rsi": 67.0,
+        "macd": {
+          "macd": 1.60,
+          "signal": 1.10,
+          "histogram": 0.50
+        },
+        "ema_fast": 153.80,
+        "ema_slow": 151.50,
+        "adx": 36.0,
+        "atr": 3.50,
+        "volume_ratio": 3.10
+      },
+      "regime": "BULL",
+      "risk_reward_ratio": 2.00,
+      "metadata": {
+        "signal_strength": "STRONG",
+        "pattern": "breakout",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_043_EDGE_HIGH_CORRELATION",
+      "timestamp": "2026-02-11T13:25:00Z",
+      "symbol": "SPY",
+      "exchange": "NYSE",
+      "action": "BUY",
+      "confidence": 0.65,
+      "strategy_id": "Index_Corr_v1",
+      "entry_price": 510.00,
+      "target_price": 520.00,
+      "stop_loss": 505.00,
+      "quantity": 60,
+      "timeframe": "1h",
+      "indicators": {
+        "rsi": 59.0,
+        "macd": {
+          "macd": 0.90,
+          "signal": 0.70,
+          "histogram": 0.20
+        },
+        "ema_fast": 509.80,
+        "ema_slow": 503.00,
+        "adx": 28.0,
+        "atr": 3.00,
+        "volume_ratio": 1.70
+      },
+      "regime": "BULL",
+      "risk_reward_ratio": 2.00,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "continuation",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_044_EDGE_INVALID_MALFORMED",
+      "timestamp": "2026-02-11T13:30:00Z",
+      "symbol": "",
+      "exchange": "NYSE",
+      "action": "BUY",
+      "confidence": -0.10,
+      "strategy_id": "Invalid_v1",
+      "entry_price": -10.00,
+      "target_price": -5.00,
+      "stop_loss": -12.00,
+      "quantity": -100,
+      "timeframe": "1m",
+      "indicators": {
+        "rsi": 150.0,
+        "macd": {
+          "macd": 999.0,
+          "signal": 999.0,
+          "histogram": 0.0
+        },
+        "ema_fast": -10.00,
+        "ema_slow": -10.50,
+        "adx": -5.0,
+        "atr": -1.00,
+        "volume_ratio": -0.50
+      },
+      "regime": "CRISIS",
+      "risk_reward_ratio": -1.00,
+      "metadata": {
+        "signal_strength": "WEAK",
+        "pattern": "none",
+        "confirmation": false
+      }
+    },
+
+    {
+      "signal_id": "SIG_045_INDIAN_RELIANCE_BUY",
+      "timestamp": "2026-02-11T04:00:00Z",
+      "symbol": "RELIANCE.NS",
+      "exchange": "NSE",
+      "action": "BUY",
+      "confidence": 0.78,
+      "strategy_id": "India_Blue_Chip_v1",
+      "entry_price": 2850.00,
+      "target_price": 2920.00,
+      "stop_loss": 2800.00,
+      "quantity": 35,
+      "timeframe": "1d",
+      "indicators": {
+        "rsi": 61.5,
+        "macd": {
+          "macd": 15.30,
+          "signal": 12.80,
+          "histogram": 2.50
+        },
+        "ema_fast": 2845.00,
+        "ema_slow": 2820.00,
+        "adx": 26.3,
+        "atr": 45.20,
+        "volume_ratio": 1.15
+      },
+      "regime": "BULL",
+      "risk_reward_ratio": 1.40,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "pullback",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_046_INDIAN_TCS_BUY",
+      "timestamp": "2026-02-11T04:05:00Z",
+      "symbol": "TCS.NS",
+      "exchange": "NSE",
+      "action": "BUY",
+      "confidence": 0.81,
+      "strategy_id": "India_IT_Trend_v1",
+      "entry_price": 3850.00,
+      "target_price": 3950.00,
+      "stop_loss": 3800.00,
+      "quantity": 20,
+      "timeframe": "1d",
+      "indicators": {
+        "rsi": 64.0,
+        "macd": {
+          "macd": 18.50,
+          "signal": 15.20,
+          "histogram": 3.30
+        },
+        "ema_fast": 3840.00,
+        "ema_slow": 3805.00,
+        "adx": 29.0,
+        "atr": 52.00,
+        "volume_ratio": 1.25
+      },
+      "regime": "BULL",
+      "risk_reward_ratio": 2.00,
+      "metadata": {
+        "signal_strength": "STRONG",
+        "pattern": "continuation",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_047_INDIAN_INFY_BUY",
+      "timestamp": "2026-02-11T04:10:00Z",
+      "symbol": "INFY.NS",
+      "exchange": "NSE",
+      "action": "BUY",
+      "confidence": 0.73,
+      "strategy_id": "India_IT_Swing_v1",
+      "entry_price": 1650.00,
+      "target_price": 1710.00,
+      "stop_loss": 1620.00,
+      "quantity": 50,
+      "timeframe": "4h",
+      "indicators": {
+        "rsi": 59.5,
+        "macd": {
+          "macd": 8.10,
+          "signal": 6.80,
+          "histogram": 1.30
+        },
+        "ema_fast": 1645.00,
+        "ema_slow": 1620.00,
+        "adx": 24.0,
+        "atr": 32.00,
+        "volume_ratio": 1.10
+      },
+      "regime": "BULL",
+      "risk_reward_ratio": 2.00,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "pullback",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_048_FUTURES_NIFTY_LONG",
+      "timestamp": "2026-02-11T04:15:00Z",
+      "symbol": "NIFTY_FUT",
+      "exchange": "NSE",
+      "action": "BUY",
+      "confidence": 0.84,
+      "strategy_id": "Index_Futures_v1",
+      "entry_price": 24500.00,
+      "target_price": 24750.00,
+      "stop_loss": 24350.00,
+      "quantity": 50,
+      "timeframe": "15m",
+      "indicators": {
+        "rsi": 63.0,
+        "macd": {
+          "macd": 45.00,
+          "signal": 38.00,
+          "histogram": 7.00
+        },
+        "ema_fast": 24480.00,
+        "ema_slow": 24320.00,
+        "adx": 31.0,
+        "atr": 120.00,
+        "volume_ratio": 1.40
+      },
+      "regime": "BULL",
+      "risk_reward_ratio": 2.00,
+      "metadata": {
+        "signal_strength": "STRONG",
+        "pattern": "breakout",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_049_FUTURES_BANKNIFTY_SHORT",
+      "timestamp": "2026-02-11T04:20:00Z",
+      "symbol": "BANKNIFTY_FUT",
+      "exchange": "NSE",
+      "action": "SHORT",
+      "confidence": 0.79,
+      "strategy_id": "BankNifty_Short_v1",
+      "entry_price": 52000.00,
+      "target_price": 51250.00,
+      "stop_loss": 52350.00,
+      "quantity": 25,
+      "timeframe": "15m",
+      "indicators": {
+        "rsi": 55.0,
+        "macd": {
+          "macd": -60.00,
+          "signal": -40.00,
+          "histogram": -20.00
+        },
+        "ema_fast": 51980.00,
+        "ema_slow": 52200.00,
+        "adx": 33.0,
+        "atr": 180.00,
+        "volume_ratio": 1.60
+      },
+      "regime": "CRISIS",
+      "risk_reward_ratio": 2.50,
+      "metadata": {
+        "signal_strength": "STRONG",
+        "pattern": "breakdown",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_050_FOREX_USDINR_LONG",
+      "timestamp": "2026-02-11T04:25:00Z",
+      "symbol": "USDINR",
+      "exchange": "NSE",
+      "action": "BUY",
+      "confidence": 0.71,
+      "strategy_id": "FX_Trend_v1",
+      "entry_price": 83.20,
+      "target_price": 83.60,
+      "stop_loss": 83.00,
+      "quantity": 1000,
+      "timeframe": "1h",
+      "indicators": {
+        "rsi": 57.0,
+        "macd": {
+          "macd": 0.08,
+          "signal": 0.04,
+          "histogram": 0.04
+        },
+        "ema_fast": 83.18,
+        "ema_slow": 83.05,
+        "adx": 22.0,
+        "atr": 0.12,
+        "volume_ratio": 1.05
+      },
+      "regime": "SIDEWAYS",
+      "risk_reward_ratio": 2.00,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "continuation",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_051_COMMODITY_GOLD_LONG",
+      "timestamp": "2026-02-11T04:30:00Z",
+      "symbol": "GOLD",
+      "exchange": "COMEX",
+      "action": "BUY",
+      "confidence": 0.75,
+      "strategy_id": "Gold_Swing_v1",
+      "entry_price": 2050.00,
+      "target_price": 2085.00,
+      "stop_loss": 2035.00,
+      "quantity": 3,
+      "timeframe": "4h",
+      "indicators": {
+        "rsi": 59.0,
+        "macd": {
+          "macd": 8.00,
+          "signal": 6.00,
+          "histogram": 2.00
+        },
+        "ema_fast": 2048.00,
+        "ema_slow": 2035.00,
+        "adx": 27.0,
+        "atr": 18.00,
+        "volume_ratio": 1.20
+      },
+      "regime": "BULL",
+      "risk_reward_ratio": 2.33,
+      "metadata": {
+        "signal_strength": "MODERATE",
+        "pattern": "breakout",
+        "confirmation": true
+      }
+    },
+    {
+      "signal_id": "SIG_052_CRYPTO_BTCUSDT_LONG",
+      "timestamp": "2026-02-11T04:35:00Z",
+      "symbol": "BTCUSDT",
+      "exchange": "BINANCE",
+      "action": "BUY",
+      "confidence": 0.83,
+      "strategy_id": "Crypto_Trend_v2",
+      "entry_price": 52000.00,
+      "target_price": 54000.00,
+      "stop_loss": 51000.00,
+      "quantity": 0.5,
+      "timeframe": "1h",
+      "indicators": {
+        "rsi": 63.5,
+        "macd": {
+          "macd": 450.0,
+          "signal": 380.0,
+          "histogram": 70.0
+        },
+        "ema_fast": 51900.00,
+        "ema_slow": 51000.00,
+        "adx": 35.0,
+        "atr": 900.00,
+        "volume_ratio": 1.80
+      },
+      "regime": "VOLATILE",
+      "risk_reward_ratio": 2.00,
+      "metadata": {
+        "signal_strength": "STRONG",
+        "pattern": "continuation",
+        "confirmation": true
+      }
+    }
+  ]
+}
