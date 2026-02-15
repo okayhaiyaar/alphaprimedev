@@ -55,6 +55,8 @@
 .\scripts\bootstrap_windows.ps1
 ```
 
+Detailed Windows 11 + Python 3.12.7 local runbook: `docs/SETUP_WINDOWS_3127.html`.
+
 Offline (if `./wheelhouse` is present):
 
 ```powershell

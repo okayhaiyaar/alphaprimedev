@@ -10,6 +10,38 @@ param(
     [bool]$Mock = $true
 )
 
+function Set-EnvValueInFile {
+    param(
+        [string]$Path,
+        [string]$Key,
+        [string]$Value
+    )
+
+    $line = "$Key=$Value"
+    if (!(Test-Path $Path)) {
+        Set-Content -Path $Path -Value $line
+        return
+    }
+
+    $content = Get-Content -Path $Path
+    $pattern = "^$([Regex]::Escape($Key))="
+    $updated = $false
+
+    for ($i = 0; $i -lt $content.Length; $i++) {
+        if ($content[$i] -match $pattern) {
+            $content[$i] = $line
+            $updated = $true
+            break
+        }
+    }
+
+    if (-not $updated) {
+        $content += $line
+    }
+
+    Set-Content -Path $Path -Value $content
+}
+
 $repoRoot = Split-Path -Parent $PSScriptRoot
 Push-Location $repoRoot
 try {
@@ -82,9 +114,10 @@ if (!(Test-Path ".env")) {
 }
 
 if ($Mock) {
-    if (-not $env:MOCK_API_CALLS) { $env:MOCK_API_CALLS = "true" }
-    if (-not $env:OPENAI_API_KEY) { $env:OPENAI_API_KEY = "sk-test" }
-    if (-not $env:PAPER_TRADING_ONLY) { $env:PAPER_TRADING_ONLY = "true" }
+    Write-Host "==> Enforcing MOCK mode defaults in .env"
+    Set-EnvValueInFile -Path ".env" -Key "MOCK_API_CALLS" -Value "true"
+    Set-EnvValueInFile -Path ".env" -Key "OPENAI_API_KEY" -Value "sk-test"
+    Set-EnvValueInFile -Path ".env" -Key "PAPER_TRADING_ONLY" -Value "true"
 }
 
 Write-Host "==> Running self-check"
@@ -97,18 +130,19 @@ Write-Host "UI URL:  http://127.0.0.1:$PortUI"
 if ($StartAPI) { Write-Host "API URL: http://127.0.0.1:$PortAPI" }
 Write-Host ""
 Write-Host "Next commands:" -ForegroundColor Cyan
-Write-Host "  alphaprime-ui --port $PortUI"
-Write-Host "  alphaprime-api --port $PortAPI --reload"
+Write-Host "  .\scripts\run_ui.ps1 -Port $PortUI"
+Write-Host "  .\scripts\run_api.ps1 -Port $PortAPI"
+Write-Host "  .\scripts\run_scheduler.ps1 -Mode once"
 Write-Host "  alphaprime doctor"
 Write-Host ""
 
 if ($StartAPI) {
-    Write-Host "==> Starting API in background"
+    Write-Host "==> Starting API in background on port $PortAPI"
     Start-Process -FilePath $python -ArgumentList "-m uvicorn dashboard.app_v2:create_app --factory --reload --port $PortAPI" -NoNewWindow
 }
 
 if ($StartUI) {
-    Write-Host "==> Starting Streamlit UI"
+    Write-Host "==> Starting Streamlit UI on port $PortUI"
     & $python -m streamlit run app.py --server.port $PortUI --server.address 127.0.0.1
 }
 }
