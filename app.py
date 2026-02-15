@@ -41,6 +41,7 @@ Navigation:
 from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
+import platform
 from typing import Dict, List, Optional, Tuple
 
 import pandas as pd
@@ -50,7 +51,9 @@ import streamlit as st
 
 from alerts import send_discord_alert
 from brain import consult_oracle
-from config import get_logger, get_settings
+from alphaprime import __version__
+from alphaprime.cli import collect_doctor_info
+from config import get_logger, get_run_id, get_settings
 from data_engine import calculate_hard_technicals, get_market_data
 from portfolio import PaperTrader
 from research_engine import get_god_tier_intel
@@ -152,7 +155,11 @@ def get_cached_intel(ticker: str) -> Dict[str, object]:
 @st.cache_data(ttl=300)
 def get_cached_market_data(ticker: str, period: str, interval: str) -> pd.DataFrame:
     """Fetch and cache market data."""
-    return get_market_data(ticker.upper(), period, interval)
+    try:
+        return get_market_data(ticker.upper(), period, interval)
+    except Exception as exc:  # noqa: BLE001
+        logger.warning("Market data fetch failed for %s: %s", ticker, exc)
+        return pd.DataFrame(columns=["Date", "Open", "High", "Low", "Close", "Volume"])
 
 
 @st.cache_data(ttl=600)
@@ -184,6 +191,29 @@ def get_action_emoji(action: str) -> str:
         "SKIP": "⏸️",
         "ERROR": "❌",
     }.get(action.upper(), "❓")
+
+
+def render_diagnostics_panel() -> None:
+    """Render lightweight diagnostics summary for common setup issues."""
+    with st.expander("🩺 Diagnostics", expanded=False):
+        try:
+            info = collect_doctor_info()
+            st.write(
+                {
+                    "version": __version__,
+                    "python": info.get("python"),
+                    "platform": platform.platform(),
+                    "run_id": info.get("run_id"),
+                    "mock_mode": info.get("mock_mode"),
+                    "api_deps_installed": info.get("api_deps_installed"),
+                    "wheelhouse_present": info.get("wheelhouse_present"),
+                }
+            )
+            if not info.get("api_deps_installed", False):
+                st.info("API dependencies are optional for UI. Install requirements-api.txt to run API.")
+            st.caption("Need help? Run `alphaprime doctor` in PowerShell for full diagnostics.")
+        except Exception as exc:  # noqa: BLE001
+            st.warning(f"Diagnostics unavailable: {exc}. Try `alphaprime doctor`.")
 
 
 # ──────────────────────────────────────────────────────────
@@ -376,7 +406,8 @@ def render_sidebar(trader: PaperTrader) -> None:
         st.caption(f"Oracle model: {settings.openai_model}")
         mode_label = "Paper Trading" if getattr(settings, "paper_trading_only", True) else "LIVE"
         st.caption(f"Mode: {mode_label}")
-        st.caption("Version: v2.0.0")
+        st.caption(f"Version: {__version__}")
+        st.caption(f"RUN_ID: {get_run_id()}")
 
 
 # ──────────────────────────────────────────────────────────
@@ -390,7 +421,7 @@ def render_home_tab(trader: PaperTrader) -> None:
 
     col1, col2 = st.columns([2, 1])
     with col1:
-        ticker = st.text_input("Ticker", value="AAPL", max_chars=10).upper().strip()
+        ticker = st.text_input("Ticker", value="AAPL", max_chars=10, key="home_ticker").upper().strip()
     with col2:
         mover_limit = st.selectbox("Scan Movers (N)", [5, 10, 15, 20], index=1)
 
@@ -404,7 +435,7 @@ def render_home_tab(trader: PaperTrader) -> None:
             if chosen:
                 ticker = chosen
         except Exception as exc:  # noqa: BLE001
-            st.error(f"Scanner error: {exc}")
+            st.error("Scanner temporarily unavailable. Try again or run `alphaprime doctor` to check network/proxy settings.")
             logger.error("Scanner error in dashboard: %s", exc, exc_info=True)
 
     c1, c2, c3 = st.columns(3)
@@ -424,6 +455,9 @@ def render_home_tab(trader: PaperTrader) -> None:
             try:
                 intel = get_cached_intel(ticker)
                 df = get_cached_market_data(ticker, period, interval)
+                if df.empty:
+                    st.warning("No market data returned. Check network/proxy and try again. For offline setup help, run `alphaprime doctor`.")
+                    return
                 technicals = calculate_hard_technicals(df, ticker=ticker, timeframe=interval)
                 decision = consult_oracle(
                     ticker=ticker,
@@ -665,7 +699,7 @@ def render_research_tab() -> None:
 
     c1, c2 = st.columns([2, 1])
     with c1:
-        ticker = st.text_input("Ticker", value="AAPL", max_chars=10).upper().strip()
+        ticker = st.text_input("Ticker", value="AAPL", max_chars=10, key="research_ticker").upper().strip()
     with c2:
         analyze = st.button("Fetch Intelligence")
 
@@ -716,7 +750,8 @@ def render_research_tab() -> None:
                     )
 
             except Exception as exc:  # noqa: BLE001
-                st.error(f"Error loading intelligence: {exc}")
+                st.error("Intelligence feed unavailable. The UI can continue without it.")
+                st.caption("Try `alphaprime doctor` and check proxy settings if you are on a restricted network.")
                 logger.error("Research tab error: %s", exc, exc_info=True)
 
 
@@ -733,7 +768,7 @@ def render_execute_tab(trader: PaperTrader) -> None:
     with c1:
         action = st.selectbox("Action", ["BUY", "SELL"])
     with c2:
-        ticker = st.text_input("Ticker", value="AAPL", max_chars=10).upper().strip()
+        ticker = st.text_input("Ticker", value="AAPL", max_chars=10, key="execute_ticker").upper().strip()
     with c3:
         price = st.number_input("Price", min_value=0.0, value=150.0, step=0.01)
     with c4:
@@ -768,7 +803,7 @@ def render_execute_tab(trader: PaperTrader) -> None:
         st.metric("Size by Risk", f"{qty_by_risk} shares")
 
     st.markdown("---")
-    note = st.text_input("Notes", value="Manual trade via dashboard")
+    note = st.text_input("Notes", value="Manual trade via dashboard", key="execute_notes")
 
     if st.button("Submit Trade", type="primary"):
         if quantity <= 0:
@@ -855,6 +890,7 @@ def main() -> None:
     trader: PaperTrader = st.session_state["trader"]
 
     render_sidebar(trader)
+    render_diagnostics_panel()
 
     tabs = st.tabs(
         [

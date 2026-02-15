@@ -62,13 +62,40 @@ from typing import Dict, List, Literal, Optional
 from openai import OpenAI
 from tenacity import retry, stop_after_attempt, wait_exponential
 
-from config import get_logger, get_settings
+from config import get_logger, get_settings, is_mock_mode
 
 logger = get_logger(__name__)
 settings = get_settings()
-client = OpenAI(api_key=settings.openai_api_key)
+client: Optional[OpenAI] = None
 
 ORACLE_VERSION = "v2.0.0"
+
+
+def _get_openai_client() -> OpenAI:
+    """Lazy OpenAI client creation to avoid unnecessary initialization in mock mode."""
+    global client
+    if client is None:
+        client = OpenAI(api_key=settings.openai_api_key)
+    return client
+
+
+def _mock_oracle_response(ticker: str) -> Dict[str, object]:
+    """Deterministic Oracle stub used when MOCK_API_CALLS is enabled."""
+    logger.info("MOCK_API_CALLS=true; returning deterministic oracle stub for %s.", ticker)
+    return {
+        "action": "WAIT",
+        "confidence": 51,
+        "time_horizon": "DAY",
+        "rationale": [
+            "Mock mode enabled for local/demo execution.",
+            "No external OpenAI API call was made.",
+            "Defaulting to WAIT for safe paper-trading behavior.",
+        ],
+        "risk_notes": ["Mock decision; not for live trading."],
+        "evidence_links": [],
+        "tags": ["mock_mode"],
+    }
+
 
 
 # ──────────────────────────────────────────────────────────
@@ -454,7 +481,7 @@ def call_gpt4o_oracle(
     logger.info("Consulting Oracle (GPT-4o) for %s...", ticker.upper())
 
     try:
-        completion = client.chat.completions.create(
+        completion = _get_openai_client().chat.completions.create(
             model=settings.openai_model,
             messages=[
                 {"role": "system", "content": SYSTEM_PROMPT},
@@ -636,12 +663,15 @@ def consult_oracle(
     all_source_urls = _extract_all_source_urls(intel)
     context["available_evidence_urls"] = all_source_urls
 
-    # STEP 3: Call GPT-4o
-    ai_response = call_gpt4o_oracle(
-        ticker=symbol,
-        context=context,
-        risk_params={"BUY": risk_params_buy, "SELL": risk_params_sell},
-    )
+    # STEP 3: Call GPT-4o (or deterministic mock in local mode)
+    if is_mock_mode():
+        ai_response = _mock_oracle_response(symbol)
+    else:
+        ai_response = call_gpt4o_oracle(
+            ticker=symbol,
+            context=context,
+            risk_params={"BUY": risk_params_buy, "SELL": risk_params_sell},
+        )
 
     preliminary_action: str = ai_response.get("action", "WAIT")
     confidence: int = int(ai_response.get("confidence", 0))

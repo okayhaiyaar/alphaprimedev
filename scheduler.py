@@ -22,6 +22,7 @@ Workflow:
 Usage:
     # Scheduled mode (runs daily at market open)
     python scheduler.py scheduled
+  python scheduler.py scheduled --armed
 
     # One-time run (immediate)
     python scheduler.py once
@@ -191,6 +192,7 @@ def scan_market_movers(limit: int = 10, min_volume: int = 1_000_000) -> List[str
                 period="2d",
                 interval="1d",
                 progress=False,
+                timeout=int(getattr(settings, "request_timeout_seconds", 30)),
             )
             if df.empty or len(df) < 2:
                 continue
@@ -229,6 +231,10 @@ def scan_market_movers(limit: int = 10, min_volume: int = 1_000_000) -> List[str
     movers.sort(key=lambda m: m["score"], reverse=True)
     top = movers[:limit]
     top_tickers = [m["ticker"] for m in top]
+
+    if not top_tickers:
+        logger.warning("No movers found; using watchlist fallback for resilience.")
+        top_tickers = watchlist[: max(1, min(limit, len(watchlist)))]
 
     logger.info("Top movers: %s", ", ".join(top_tickers))
     for mover in top:
@@ -378,12 +384,13 @@ def process_ticker(
             try:
                 from risk.position_sizer import calculate_position_size
 
-                quantity = calculate_position_size(
+                size_result = calculate_position_size(
                     portfolio_value=portfolio_value,
                     risk_per_trade_pct=getattr(settings, "max_risk_per_trade_pct", 1.0),
                     entry_price=last_price,
                     stop_loss=float(decision.stop_loss),
                 )
+                quantity = int(size_result.shares)
             except ImportError:
                 quantity = int((portfolio_value * 0.1) / last_price) if last_price > 0 else 0
             except Exception as exc:  # noqa: BLE001
@@ -468,12 +475,35 @@ def process_ticker(
         )
 
 
+
+def _scheduler_is_armed(explicit_armed: bool = False) -> bool:
+    """Return True only when scheduler execution is explicitly armed."""
+    env_armed = os.getenv("SCHEDULER_ARMED", "false").strip().lower() in ("1", "true", "yes", "on")
+    return bool(explicit_armed or env_armed)
+
+
+def _resolve_execute_trades(requested_execute: bool, explicit_armed: bool = False) -> bool:
+    """Safe-by-default execution gate for scheduler trade execution."""
+    if not requested_execute:
+        return False
+
+    if not _scheduler_is_armed(explicit_armed):
+        logger.warning("Scheduler execution requested but not armed; running analysis-only mode.")
+        return False
+
+    if not bool(getattr(settings, "paper_trading_only", True)):
+        logger.warning("PAPER_TRADING_ONLY is false. Refusing execution in scheduler safety mode.")
+        return False
+
+    return True
+
+
 # ──────────────────────────────────────────────────────────
 # DAILY CYCLE ORCHESTRATION
 # ──────────────────────────────────────────────────────────
 
 
-def run_daily_cycle(limit: int = 10, execute_trades: bool = True) -> DailyCycleResult:
+def run_daily_cycle(limit: int = 10, execute_trades: bool = False) -> DailyCycleResult:
     """
     Execute the complete daily trading cycle on the top market movers.
 
@@ -576,7 +606,15 @@ def start_scheduler(mode: str = "scheduled", **kwargs) -> None:
 
     if mode == "scheduled":
         market_open = getattr(settings, "market_open_time", "09:30")
-        schedule.every().day.at(market_open).do(run_daily_cycle)
+        execute_trades = _resolve_execute_trades(
+            bool(kwargs.get("execute", False)),
+            bool(kwargs.get("armed", False)),
+        )
+        schedule.every().day.at(market_open).do(
+            run_daily_cycle,
+            limit=int(kwargs.get("limit", 10)),
+            execute_trades=execute_trades,
+        )
 
         logger.info(
             "Scheduled daily run at %s %s.",
@@ -597,7 +635,7 @@ def start_scheduler(mode: str = "scheduled", **kwargs) -> None:
         logger.info("Running one-time daily cycle...")
         result = run_daily_cycle(
             limit=int(kwargs.get("limit", 10)),
-            execute_trades=bool(kwargs.get("execute", True)),
+            execute_trades=_resolve_execute_trades(bool(kwargs.get("execute", False)), bool(kwargs.get("armed", False))),
         )
         logger.info(
             "One-time cycle completed: %d processed, actions=%s.",
@@ -617,7 +655,7 @@ def start_scheduler(mode: str = "scheduled", **kwargs) -> None:
         result = process_ticker(
             ticker=ticker,
             trader=trader,
-            execute_trades=bool(kwargs.get("execute", True)),
+            execute_trades=_resolve_execute_trades(bool(kwargs.get("execute", False)), bool(kwargs.get("armed", False))),
         )
         logger.info(
             "Single ticker result for %s: %s (msg=%s).",
@@ -672,6 +710,8 @@ if __name__ == "__main__":
 
     mode = sys.argv[1].lower()
     kwargs: Dict[str, object] = {}
+    kwargs["armed"] = "--armed" in sys.argv
+    kwargs["execute"] = kwargs["armed"] or ("--execute" in sys.argv)
 
     if mode == "once":
         if "--limit" in sys.argv:

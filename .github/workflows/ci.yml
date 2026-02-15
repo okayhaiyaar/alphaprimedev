@@ -192,6 +192,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip setuptools wheel
           pip install -r requirements.txt
+          pip install -r requirements-api.txt
           pip install pytest pytest-cov pytest-xdist pytest-timeout
 
       - name: Install Playwright browsers
@@ -230,6 +231,105 @@ jobs:
           name: codecov-${{ matrix.python-version }}
           fail_ci_if_error: false
 
+
+
+
+  # ──────────────────────────────────────────────────────────
+  # JOB Y: LINUX INSTALL/IMPORT SMOKE
+  # ──────────────────────────────────────────────────────────
+  linux-smoke:
+    name: Linux Smoke (install + selfcheck)
+    runs-on: ubuntu-latest
+    if: github.event.inputs.skip_tests != 'true'
+    env:
+      OPENAI_API_KEY: sk-test
+      MOCK_API_CALLS: 'true'
+      PAPER_TRADING_ONLY: 'true'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
+          pip install -r requirements-api.txt
+
+      - name: Install editable package
+        run: |
+          pip install --no-build-isolation --no-deps -e .
+          alphaprime-version
+
+      - name: Self-check (UI + API)
+        run: |
+          python scripts/selfcheck.py
+          python scripts/selfcheck.py --api
+
+      - name: Compile smoke check
+        run: |
+          python -m compileall -q app.py config.py data_engine.py portfolio.py scheduler.py dashboard/app_v2.py scripts/selfcheck.py
+
+      - name: Run pytest (offline-safe runtime tests)
+        run: |
+          PYTHONPATH=. pytest -q -c /dev/null tests_runtime/test_runtime_reliability.py
+
+  # ──────────────────────────────────────────────────────────
+  # JOB X: WINDOWS INSTALL/IMPORT SMOKE
+  # ──────────────────────────────────────────────────────────
+  windows-smoke:
+    name: Windows Smoke (install + selfcheck)
+    runs-on: windows-latest
+    if: github.event.inputs.skip_tests != 'true'
+    env:
+      OPENAI_API_KEY: sk-test
+      MOCK_API_CALLS: 'true'
+      PAPER_TRADING_ONLY: 'true'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: 'pip'
+
+      - name: Install dependencies
+        shell: pwsh
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
+          pip install -r requirements-api.txt
+
+      - name: Install editable package
+        shell: pwsh
+        run: |
+          pip install --no-build-isolation --no-deps -e .
+          alphaprime-version
+
+      - name: Self-check (UI + API)
+        shell: pwsh
+        run: |
+          python scripts/selfcheck.py
+          python scripts/selfcheck.py --api
+
+      - name: Compile smoke check
+        shell: pwsh
+        run: |
+          python -m compileall -q app.py config.py data_engine.py portfolio.py scheduler.py dashboard/app_v2.py scripts/selfcheck.py
+
+      - name: Run pytest (offline-safe runtime tests)
+        shell: pwsh
+        run: |
+          pytest -q -c NUL tests_runtime/test_runtime_reliability.py
 
   # ──────────────────────────────────────────────────────────
   # JOB 4: DOCKER BUILD & IMAGE VALIDATION

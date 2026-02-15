@@ -27,9 +27,11 @@ CLI Validation:
 import logging
 import logging.handlers
 import os
+import uuid
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Optional
+from urllib.parse import urlsplit
 
 from dotenv import load_dotenv
 
@@ -144,8 +146,7 @@ class Settings:
             raise ValueError(
                 "CRITICAL ERROR: OPENAI_API_KEY not set.\n"
                 "ALPHA-PRIME cannot function without this key.\n"
-                "Get your key at: https://platform.openai.com/api-keys\n"
-                "Add it to your .env file as OPENAI_API_KEY=sk-..."
+                "For first boot demo use: OPENAI_API_KEY=sk-test and MOCK_API_CALLS=true."
             )
 
         # Basic format validation (do not log full key)
@@ -153,6 +154,11 @@ class Settings:
             raise ValueError(
                 "INVALID OPENAI_API_KEY format.\n"
                 "Key should start with 'sk-' or 'sk-proj-'."
+            )
+
+        if not self.mock_api_calls and self.openai_api_key.strip().lower() == "sk-test":
+            raise ValueError(
+                "OPENAI_API_KEY=sk-test is only allowed when MOCK_API_CALLS=true."
             )
 
         # Validate log level
@@ -183,6 +189,48 @@ class Settings:
 
 _SETTINGS: Optional[Settings] = None
 _LOGGER_INITIALIZED: bool = False
+_RUN_ID: str = os.getenv("RUN_ID", str(uuid.uuid4()))
+
+
+def get_run_id() -> str:
+    """Return process-level run id for correlating diagnostics and logs."""
+    return _RUN_ID
+
+
+def mask_openai_key(value: Optional[str]) -> str:
+    """Mask OpenAI key as prefix + last 4 characters."""
+    if not value:
+        return "(not set)"
+    cleaned = value.strip()
+    if len(cleaned) <= 7:
+        return "***"
+    prefix = "sk-" if cleaned.startswith("sk-") else "***"
+    return f"{prefix}...{cleaned[-4:]}"
+
+
+def mask_webhook_url(value: Optional[str]) -> str:
+    """Mask webhook URL path/query/fragment while preserving scheme+host."""
+    if not value:
+        return "(not set)"
+    try:
+        parsed = urlsplit(value.strip())
+        if not parsed.scheme or not parsed.netloc:
+            return "***"
+        return f"{parsed.scheme}://{parsed.netloc}/***"
+    except Exception:  # noqa: BLE001
+        return "***"
+
+
+def mask_secret_value(name: str, value: Optional[str]) -> str:
+    """Mask known secret value types for safe diagnostics/logging."""
+    key = (name or "").strip().upper()
+    if "OPENAI" in key and "KEY" in key:
+        return mask_openai_key(value)
+    if "WEBHOOK" in key or "URL" in key:
+        return mask_webhook_url(value)
+    if not value:
+        return "(not set)"
+    return "***"
 
 
 def _parse_bool(value: str, default: bool) -> bool:
@@ -385,13 +433,22 @@ def setup_logging() -> None:
     root_logger.handlers.clear()
 
     formatter = logging.Formatter(
-        "[%(asctime)s] [%(levelname)-8s] %(name)s - %(message)s",
+        "[%(asctime)s] [%(levelname)-8s] [run=%(run_id)s] %(name)s - %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
+
+    class _RunIdFilter(logging.Filter):
+        def filter(self, record: logging.LogRecord) -> bool:
+            if not hasattr(record, "run_id"):
+                record.run_id = get_run_id()
+            return True
+
+    run_filter = _RunIdFilter()
 
     console_handler = logging.StreamHandler()
     console_handler.setLevel(logging.INFO)
     console_handler.setFormatter(formatter)
+    console_handler.addFilter(run_filter)
     root_logger.addHandler(console_handler)
 
     file_handler = logging.handlers.RotatingFileHandler(
@@ -402,6 +459,7 @@ def setup_logging() -> None:
     )
     file_handler.setLevel(logging.DEBUG)
     file_handler.setFormatter(formatter)
+    file_handler.addFilter(run_filter)
     root_logger.addHandler(file_handler)
 
     _LOGGER_INITIALIZED = True
@@ -410,6 +468,7 @@ def setup_logging() -> None:
     root_logger.info("ALPHA-PRIME Logging System Initialized")
     root_logger.info("Log Level: %s", settings.log_level)
     root_logger.info("Log File: %s", log_dir / "alpha_prime.log")
+    root_logger.info("RUN_ID: %s", get_run_id())
     root_logger.info("=" * 70)
 
 
@@ -429,6 +488,12 @@ def get_logger(name: str = "alpha_prime") -> logging.Logger:
     if name == "alpha_prime":
         return logging.getLogger("alpha_prime")
     return logging.getLogger("alpha_prime").getChild(name)
+
+
+
+def is_mock_mode() -> bool:
+    """Return True when MOCK_API_CALLS is enabled in loaded settings."""
+    return bool(get_settings().mock_api_calls)
 
 
 # ──────────────────────────────────────────────────────────
@@ -457,12 +522,10 @@ def validate_environment() -> bool:
         settings = get_settings()
         logger.info("Settings loaded successfully.")
 
-        # Log partial key only (first 6 chars)
-        masked_key = f"{settings.openai_api_key[:6]}***"
-        logger.info("OpenAI API key: %s", masked_key)
+        logger.info("OpenAI API key: %s", mask_openai_key(settings.openai_api_key))
 
         if settings.discord_webhook_url:
-            logger.info("Discord webhook configured.")
+            logger.info("Discord webhook: %s", mask_webhook_url(settings.discord_webhook_url))
         else:
             logger.warning(
                 "Discord webhook NOT configured. High-confidence alerts will be disabled."
@@ -521,11 +584,8 @@ def _print_summary(settings: Settings) -> None:
     """
     print("\nConfiguration Summary:")
     print(f"  - OpenAI Model: {settings.openai_model}")
-    print(f"  - OpenAI Key: {'SET' if settings.openai_api_key else 'MISSING'}")
-    print(
-        f"  - Discord Webhook: "
-        f"{'SET' if settings.discord_webhook_url else 'NOT SET'}"
-    )
+    print(f"  - OpenAI Key: {mask_openai_key(settings.openai_api_key)}")
+    print(f"  - Discord Webhook: {mask_webhook_url(settings.discord_webhook_url)}")
     print(f"  - Log Level: {settings.log_level}")
     print(f"  - Portfolio Path: {settings.portfolio_path}")
     print(f"  - Trade History Path: {settings.trade_history_path}")
